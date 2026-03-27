@@ -6,14 +6,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "resourses")
 public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String type;
     private String description;
     private String availabilityStatus;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    @JsonIgnore
     private Event event;
+
+    public Resource() {
+    }
+
     public Resource(long id, String type, String description, String availabilityStatus, Event event) {
         this.id = id;
         this.type = type;
@@ -21,7 +29,7 @@ public class Resource {
         this.availabilityStatus = availabilityStatus;
         this.event = event;
     }
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public void setId(long id) {

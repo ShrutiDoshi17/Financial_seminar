@@ -9,9 +9,23 @@ public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    @JsonIgnore
     private Event event;
     private String status;
+
+
+    public Enrollment() {
+    }
+
+
     public Enrollment(User user, Event event, String status) {
         this.user = user;
         this.event = event;

@@ -7,15 +7,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long institutionId;
+    private Long id;
+    private Long institutionId;
     private String title;
     private String schedule;
     private String location;
     private String status;
+
+    public Event() {
+    }
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Resource> resorces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Enrollment> enrollments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinColumn(
+        name = "event_professionals"
+        //joinColumns = @JoinColumn(name = "event_id"),
+        //inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> professionals = new ArrayList<>();
+
     public Event(long institutionId, String title, String schedule, String location, String status) {
         this.institutionId = institutionId;
         this.title = title;
@@ -23,7 +45,7 @@ public class Event {
         this.location = location;
         this.status = status;
     }
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public void setId(long id) {

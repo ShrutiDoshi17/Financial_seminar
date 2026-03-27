@@ -14,21 +14,40 @@ import java.util.Set;
 
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String username;
     private String password;
     private String email;
     private String role;
+    //@JsonIgnore;
+    
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Feedback> feedbacks = new HashSet<>();
+
+    @OneToMany
+    private List<Event> events = new ArrayList<>();
+
+
+
+     public User() {
+    }
+
     public User(String username, String password, String email, String role) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
     }
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
     public void setId(long id) {
