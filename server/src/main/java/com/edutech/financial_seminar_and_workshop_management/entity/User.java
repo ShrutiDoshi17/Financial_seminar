@@ -35,9 +35,7 @@ public class User {
     @OneToMany
     private List<Event> events = new ArrayList<>();
 
-
-
-     public User() {
+    public User() {
     }
 
     public User(String username, String password, String email, String role) {
