@@ -35,17 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    /**
-     * 1. Authentication Configuration Method
-     */
+    
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
-    /**
-     * 2. HTTP Security Configuration Method
-     */
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -56,11 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests()
 
-            /* Public APIs */
+            
             .antMatchers("/api/user/register").permitAll()
             .antMatchers("/api/user/login").permitAll()
 
-            /* Institution APIs */
+            
             .antMatchers("POST", "/api/institution/event").hasAuthority("INSTITUTION")
             .antMatchers("PUT", "/api/institution/event/*").hasAuthority("INSTITUTION")
             .antMatchers("GET", "/api/institution/events").hasAuthority("INSTITUTION")
@@ -68,12 +64,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("GET", "/api/institution/event/professionals").hasAuthority("INSTITUTION")
             .antMatchers("POST", "/api/institution/event/*/professional").hasAuthority("INSTITUTION")
 
-            /* Professional APIs */
+            
             .antMatchers("GET", "/api/professional/events").hasAuthority("PROFESSIONAL")
             .antMatchers("PUT", "/api/professional/event/*/status").hasAuthority("PROFESSIONAL")
             .antMatchers("POST", "/api/professional/event/*/feedback").hasAuthority("PROFESSIONAL")
 
-            /* Participant APIs */
+            
             .antMatchers("GET", "/api/participant/events").hasAuthority("PARTICIPANT")
             .antMatchers("POST", "/api/participant/event/*/enroll").hasAuthority("PARTICIPANT")
             .antMatchers("GET", "/api/participant/event/*/status").hasAuthority("PARTICIPANT")
@@ -81,13 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .anyRequest().authenticated();
 
-        /* JWT Filter */
+        
         http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    /**
-     * 3. Authentication Manager Bean Method
-     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
