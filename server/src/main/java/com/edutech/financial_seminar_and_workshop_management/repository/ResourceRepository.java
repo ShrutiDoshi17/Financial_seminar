@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
-    @Query("SELECT r FROM Resource WHERE event.id = :eventId")
+    @Query("SELECT r FROM Resource r WHERE event.id = :eventId")
     List<Resource>findByEventId(@Param("eventId") Long eventId);
     
 }

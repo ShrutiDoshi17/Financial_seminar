@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-
+@Component
 public class JwtRequestFilter  {
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
@@ -36,6 +36,7 @@ public class JwtRequestFilter  {
         this.jwtUtil = jwtUtil;
     }
 
+    @Override
     protected void doFilterInternal(
         HttpServletRequest request,
         HttpServletResponse response,

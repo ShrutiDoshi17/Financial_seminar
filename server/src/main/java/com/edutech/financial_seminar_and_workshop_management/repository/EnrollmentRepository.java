@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
-    @Query("SELECT e FROM Enrollment WHERE user.id = :userId")
+    @Query("SELECT e FROM Enrollment e WHERE user.id = :userId")
     List<Enrollment>findByUserId(@Param("userId") Long userId);
 
-    @Query("SELECT e FROM Enrollment WHERE event.id = :eventId")
+    @Query("SELECT e FROM Enrollment e WHERE event.id = :eventId")
     List<Enrollment>findByEventId(@Param("eventId") Long eventId);
     
 }
