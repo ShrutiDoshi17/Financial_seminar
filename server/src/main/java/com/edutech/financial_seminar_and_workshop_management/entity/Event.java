@@ -14,6 +14,7 @@ public class Event {
     private Long id;
     private Long institutionId;
     private String title;
+    private String desciption;
     private String schedule;
     private String location;
     private String status;
@@ -22,7 +23,7 @@ public class Event {
     }
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Resource> resorces = new ArrayList<>();
+    private List<Resource> resources = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Enrollment> enrollments = new ArrayList<>();
@@ -38,9 +39,10 @@ public class Event {
     )
     private List<User> professionals = new ArrayList<>();
 
-    public Event(long institutionId, String title, String schedule, String location, String status) {
+    public Event(long institutionId, String title, String desciption, String schedule, String location, String status) {
         this.institutionId = institutionId;
         this.title = title;
+        this.desciption = desciption;
         this.schedule = schedule;
         this.location = location;
         this.status = status;
@@ -81,7 +83,38 @@ public class Event {
     public void setStatus(String status) {
         this.status = status;
     }
+    public String getDesciption() {
+        return desciption;
+    }
+    public void setDesciption(String desciption) {
+        this.desciption = desciption;
+    }
+    public List<Resource> getResources() {
+        return resources;
+    }
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+    }
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+    public List<User> getProfessionals() {
+        return professionals;
+    }
+    public void setProfessionals(List<User> professionals) {
+        this.professionals = professionals;
+    }
 
+    
     
 
 }

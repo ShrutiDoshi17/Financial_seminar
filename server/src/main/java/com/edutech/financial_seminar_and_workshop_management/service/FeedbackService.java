@@ -12,8 +12,23 @@ import com.edutech.financial_seminar_and_workshop_management.repository.EventRep
 import com.edutech.financial_seminar_and_workshop_management.repository.FeedbackRepository;
 import com.edutech.financial_seminar_and_workshop_management.repository.UserRepository;
 
-
+@Service
 public class FeedbackService {
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public Feedback createFeedback(Long eventId, Long userId, Feedback feedback) {
+        Event event = eventRepository.findById(eventId).get();
+        User user = userRepository.findById(userId).get();
+        feedback.setEvent(event);
+        feedback.setUser(user);
+        return feedbackRepository.save(feedback);
+    }
   
 }
