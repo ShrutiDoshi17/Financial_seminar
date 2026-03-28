@@ -34,13 +34,17 @@ public class JwtUtil {
         .compact();
     }
 
-    public String extractAllClaims(String token){
-        return Jwts.parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(token)
-        .getBody()
-        .getSubject();
+    public Claims extractAllClaims(String token){
+        return Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token)
+                    .getBody();
+        // return Jwts.parserBuilder()
+        // .setSigningKey(key)
+        // .build()
+        // .parseClaimsJws(token)
+        // .getBody()
+        // .getSubject();
     }
 
     private boolean isTokenExpired(String token){
@@ -62,8 +66,8 @@ public class JwtUtil {
             .getSubject();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails, String username){
-       return extractUserame(token).equals(username) && !isTokenExpired(token);
+    public boolean validateToken(String token, UserDetails userDetails){
+       return extractUserame(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
   

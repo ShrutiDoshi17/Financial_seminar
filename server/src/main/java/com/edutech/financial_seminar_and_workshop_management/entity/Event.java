@@ -14,7 +14,7 @@ public class Event {
     private Long id;
     private Long institutionId;
     private String title;
-    private String desciption;
+    private String description;
     private String schedule;
     private String location;
     private String status;
@@ -39,10 +39,10 @@ public class Event {
     )
     private List<User> professionals = new ArrayList<>();
 
-    public Event(long institutionId, String title, String desciption, String schedule, String location, String status) {
+    public Event(long institutionId, String title, String description, String schedule, String location, String status) {
         this.institutionId = institutionId;
         this.title = title;
-        this.desciption = desciption;
+        this.description = description;
         this.schedule = schedule;
         this.location = location;
         this.status = status;
@@ -83,11 +83,11 @@ public class Event {
     public void setStatus(String status) {
         this.status = status;
     }
-    public String getDesciption() {
-        return desciption;
+    public String getDescription() {
+        return description;
     }
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
     public List<Resource> getResources() {
         return resources;
