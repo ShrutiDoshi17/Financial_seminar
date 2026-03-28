@@ -8,7 +8,79 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class HttpService {
-  
-  
-  
+  private apiUrl = environment.apiUrl
+  httpOptions: { headers: HttpHeaders }
+
+  constructor(private http: HttpClient, private service:AuthService) {
+    const token = service.getToken()
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    }
+  }
+  Login(details: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/user/login`, details)
+  }
+
+  registerUser(details: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/user/register`, details)
+  }
+
+  getEventByProfessional(id: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/professional/events?userId=${id}`, this.httpOptions)
+  }
+
+  getAllProfessionals(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/institution/events/professional`, this.httpOptions)
+  }
+
+  getEventByInstituionId(id: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/institution/events?institutionId=${id}`, this.httpOptions)
+  }
+
+  getAllEvents(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
+  }
+
+  viewAllEvents(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
+  }
+
+  viewEventStatus(id: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/event/participant/${id}/status`, this.httpOptions)
+  }
+
+  EnrollParticipant(eventId: any, userId: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, {}, this.httpOptions)
+  }
+
+  createEvent(details: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/institution/event`, details, this.httpOptions)
+  }
+
+  updateEvent(eventId: any, details: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/api/institution/event/${eventId}`, details, this.httpOptions)
+  }
+
+  addResource(details: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/institution/event/${details.eventId}/resource`, details, this.httpOptions)
+  }
+
+  assignProfessionals(eventId: any, userId: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/institution/event/${eventId}/professional?userId=${userId}`, {}, this.httpOptions)
+  }
+
+  updateEventStatus(eventId: any, status: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/api/professional/event/${eventId}/status?status=${status}`, {}, this.httpOptions)
+  }
+
+  addFeedback(eventId: any, userId: any, details: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/professional/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
+  }
+
+  AddFeedbackByParticipants(eventId: any, userId: any, details: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
+  }
 }

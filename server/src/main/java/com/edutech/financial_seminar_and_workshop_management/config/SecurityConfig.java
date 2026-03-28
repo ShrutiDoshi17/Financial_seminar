@@ -24,10 +24,7 @@ import com.edutech.financial_seminar_and_workshop_management.jwt.JwtRequestFilte
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+public class SecurityConfig  {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -36,10 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
+   
 
     
     @Override
