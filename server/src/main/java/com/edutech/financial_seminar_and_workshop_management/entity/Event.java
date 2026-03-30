@@ -2,6 +2,7 @@ package com.edutech.financial_seminar_and_workshop_management.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class Event {
         //joinColumns = @JoinColumn(name = "event_id"),
         //inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonIgnore
     private List<User> professionals = new ArrayList<>();
 
     public Event(long institutionId, String title, String description, String schedule, String location, String status) {

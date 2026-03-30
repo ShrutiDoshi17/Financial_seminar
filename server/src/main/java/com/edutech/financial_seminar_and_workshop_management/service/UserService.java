@@ -22,8 +22,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // public User registerUser(User user) {
+    public User registerUser(User user) {
+        user.setPassword(passwordEncoder.encode((user.getPassword())));
+        return userRepository.save(user);
+    }
 
-    // }
+    public List<User> getProfessionalsList(){
+        return userRepository.findByRole("PROFESSIONAL");
+    }
+
+
     
 }

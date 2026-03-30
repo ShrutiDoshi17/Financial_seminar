@@ -49,10 +49,10 @@ public class InstitutionController {
     }
 
     
-// @GetMapping("/event/professionals")
-//     public ResponseEntity<List<User>> getProfessionalsList() {
-//         return ResponseEntity.ok(userService.getProfessionalsList());
-//     }
+    @GetMapping("/event/professionals")
+    public ResponseEntity<List<User>> getProfessionalsList() {
+        return ResponseEntity.ok(userService.getProfessionalsList());
+    }
 
     @PostMapping("/event/{eventId}/professional")
     public ResponseEntity<?> assignProfessionalToEvent(
