@@ -11,6 +11,34 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent  {
+export class LoginComponent implements OnInit{
+  itemForm: FormGroup
+  formModel: any = {}
+  showError: boolean = false
+  errorMessage: any
+
+  constructor(private fb: FormBuilder,private httpService: HttpService, private authService: AuthService, private router: Router) {
+    this.itemForm = fb.group({
+      username: ['',[Validators.required]],
+      password: ['',[Validators.required]],
+    })
+  }
   
+  ngOnInit(): void {}
+
+  onLogin() {
+    if(this.itemForm.valid){
+      this.httpService.Login(this.itemForm.value).subscribe({
+        next:(data)=>{
+          this.authService.setRole(data.role)
+          this.authService.saveToken(data.token)
+          this.authService.saveUserId(data.userid)
+        }
+      })
+    }
+  }
+
+  registration(){
+    this.router.navigate(['/app-registration'])
+  }
 }
