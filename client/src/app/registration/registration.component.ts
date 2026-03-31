@@ -16,7 +16,7 @@ export class RegistrationComponent implements OnInit{
   showMessage: boolean = false
   responseMessage: any
 
-  constructor(private fb: FormBuilder, private httpService : HttpService){
+  constructor(private fb: FormBuilder, private httpService : HttpService, private router: Router){
     this.itemForm = fb.group({
       email: ['',[Validators.required, Validators.email]],
       password: ['',[Validators.required]],
@@ -34,9 +34,14 @@ export class RegistrationComponent implements OnInit{
           this.responseMessage = "User Registered Successfully"
           this.showMessage = true
           this.itemForm.reset()
+          this.router.navigate(['/login'])
         }
       })
     }
+  }
+
+  login(): void {
+    this.router.navigate(['/login'])
   }
 
 

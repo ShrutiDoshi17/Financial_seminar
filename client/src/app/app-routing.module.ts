@@ -20,22 +20,20 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'dashboard', component: DashbaordComponent },
-  { path: 'create-event', component: CreateEventComponent },  
-  { path: 'add-resource', component: AddResourceComponent }, 
-  { path: 'assign-professional', component: AssignProfessionalComponent },  
-  { path: 'update-event-status', component: UpdateEventStatusComponent }, 
-  { path: 'add-feedback', component: AddFeedbackComponent }, 
-  { path: 'view-events', component: ViewEventsComponent },  
-  
-  
- 
-  // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'create-event', component: CreateEventComponent },
+  { path: 'add-resource', component: AddResourceComponent },
+  { path: 'assign-professional', component: AssignProfessionalComponent },
+  { path: 'update-event-status', component: UpdateEventStatusComponent },
+  { path: 'add-feedback', component: AddFeedbackComponent },
+  { path: 'view-events', component: ViewEventsComponent },
 
-  // { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
