@@ -11,78 +11,118 @@ import { HttpService } from '../../services/http.service';
   styleUrls: ['./add-feedback.component.scss'],
   providers: [DatePipe]
 })
-export class AddFeedbackComponent implements OnInit  {
+export class AddFeedbackComponent implements OnInit {
 
-  formModel: any={status:null};
-  showError:boolean=false;
-  errorMessage:any;
-  eventList:any=[];
-  assignModel:any={};
-  selectedEvent:any={};
+  formModel: any = { status: null };
+  showError: boolean = false;
+  errorMessage: any;
+  eventList: any = [];
+  assignModel: any = {};
+  selectedEvent: any = {};
   showMessage: any;
-  updateId:any;
-  isAddRemarks:boolean=false;
+  responseMessage: any
+  updateId: any;
+  isAddRemarks: boolean = false;
 
   constructor(
     private httpService: HttpService,
     private authService: AuthService
-  ){
-    this.formModel.status = "ACTIVE";
+  ) {
+    // this.formModel.status = "ACTIVE";
   }
 
   ngOnInit(): void {
     this.getEvent();
   }
 
-  getEvent(){
-    const userid = this.authService.getLoginStatus;
-    if(!userid){
+  getEvent() {
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
       this.showError = true;
-      this.errorMessage = 'User session expired. Please login again.';
+      this.errorMessage = 'User ID not found';
       return;
     }
 
+    this.httpService.getEventByProfessional(userId).subscribe({
+      next: (data: any) => {
+        this.eventList = data
+        this.showError = false
+      },
+      error: (err: any) => {
+        this.showError = true
+        if (err.status === 401) {
+          this.errorMessage = 'Unauthorized user. Please log in again.'
+        }
+        else if (err.status === 404) {
+          this.errorMessage = 'No events found for this professional.'
+        }
+        else {
+          this.errorMessage = 'Failed to load events. Please try again.'
+        }
+      }
+    })
+
   }
 
-   addRemarks(val:any): void{
-    if(!val || !val.id){
+  addRemarks(val: any): void {
+    if (!val || !val.id) {
       this.showError = true;
       this.errorMessage = 'Invalid event selected';
       return;
     }
     this.selectedEvent = val;
     this.updateId = val.id;
-   // this.isAddRemarks = true;
+    this.isAddRemarks = true;
     this.showError = false;
 
-   }
+  }
 
-   saveFeedBack(){
-     const userid = this.authService.getLoginStatus;
-    if(!userid){
+  saveFeedBack() {
+    // const userId = this.authService.getLoginStatus;
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
       this.showError = true;
-      this.errorMessage = 'User session expired. Please login again.';
+      this.errorMessage = 'User ID not found';
       return;
     }
 
-    if(!this.updateId){
+    if (!this.updateId) {
       this.showError = true;
       this.errorMessage = 'No event selected for feedback.';
       return;
     }
 
-    if(!this.formModel.content || this.formModel.trim() === ''){
+    if (!this.formModel.content || this.formModel.content.trim() === '') {
       this.showError = true;
       this.errorMessage = 'Feedback content cannot be empty.'
       return;
     }
 
+    this.httpService.AddFeedback(this.updateId, userId, this.formModel).subscribe({
+      next: () => {
+        this.showMessage = true
+        this.showError = false
+        this.responseMessage = 'Feedback added successfully!'
+        this.formModel = {status: null}
+        this.isAddRemarks = false
+        this.selectedEvent = {}
+        this.updateId = null
+      },
+      error: (err: any) => {
+        this.showError = true
+        this.showMessage = false
+        if(err.status === 401) {
+          this.errorMessage = 'Unauthorized. Please log in again'
+        }
+        else if(err.status === 404) {
+          this.errorMessage = 'Event not found'
+        }
+        else {
+          this.errorMessage = 'Failed to submit feedback'
+        }
+      }
+    })
+  }
 
-   }
 
-
-  
-
-
- 
 }
