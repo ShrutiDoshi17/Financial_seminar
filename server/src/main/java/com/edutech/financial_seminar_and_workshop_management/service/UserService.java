@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import com.edutech.financial_seminar_and_workshop_management.entity.User;
 import com.edutech.financial_seminar_and_workshop_management.repository.UserRepository;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+// import java.util.Coorg.springframework.security.core.userdetailections;
 import java.util.List;
 
 
@@ -31,6 +35,23 @@ public class UserService {
         return userRepository.findByRole("PROFESSIONAL");
     }
 
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(()->
+        new UsernameNotFoundException("User not found: " + username)
+    );
+    }
+
+    public UserDetails loadUserByUsername(String username)throws UserPrincipalNotFoundException{
+        User user = getUserByUsername(username);
+        return new 
+        org.springframework.security.core.userdetails.User(
+            user.getUsername(),
+            user.getPassword(),
+           Collections.singleton(()->
+            user.getRole())
+        );
+
+    }
 
     
 }
