@@ -33,7 +33,7 @@ export class RegistrationComponent implements OnInit{
         next:(data)=>{
           this.responseMessage = "User Registered Successfully"
           this.showMessage = true
-          this.itemForm.reset
+          this.itemForm.reset()
         }
       })
     }
