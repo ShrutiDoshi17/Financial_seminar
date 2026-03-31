@@ -1,6 +1,7 @@
 package com.edutech.financial_seminar_and_workshop_management.config;
 
 import javax.servlet.Filter;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -49,12 +50,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .csrf().disable()
-            .cors().and()
-
+            .cors()
+            
+            .and()
+            .exceptionHandling()
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                })  
+            
+            .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
 
+            .and()
             .authorizeRequests()
 
             

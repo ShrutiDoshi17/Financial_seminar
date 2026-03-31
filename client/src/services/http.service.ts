@@ -33,7 +33,7 @@ export class HttpService {
   }
 
   GetAllProfessionals(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/institution/events/professional`, this.httpOptions)
+    return this.http.get<any>(`${this.apiUrl}/api/institution/event/professionals`, this.httpOptions)
   }
 
   getEventByInstitutionId(id: any): Observable<any> {
@@ -41,7 +41,8 @@ export class HttpService {
   }
 
   GetAllevents(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
+    // return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
+    return this.http.get<any>(`${this.apiUrl}/api/finance/events`, this.httpOptions)
   }
 
   viewAllEvents(): Observable<any> {
@@ -49,7 +50,7 @@ export class HttpService {
   }
 
   viewEventStatus(id: any): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/event/participant/${id}/status`, this.httpOptions)
+    return this.http.get<any>(`${this.apiUrl}/api/participant/event/${id}/status`, this.httpOptions)
   }
 
   EnrollParticipant(eventId: any, userId: any): Observable<any> {

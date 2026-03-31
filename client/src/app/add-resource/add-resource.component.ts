@@ -13,7 +13,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class AddResourceComponent implements OnInit {
   itemForm: FormGroup
-  formModel: any = { status: null }
+  formModel: any = {}
   showError: boolean = false
   errorMessage: any = {}
   showMessage: any
@@ -22,23 +22,23 @@ export class AddResourceComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
     this.itemForm = this.fb.group({
-      type: ['', Validators.required],
-      description: ['', Validators.required],
-      availabilityStatus: ['', Validators.required]
+      eventId: [undefined, Validators.required],
+      type: [undefined, Validators.required],
+      description: [undefined, Validators.required],
+      availabilityStatus: [undefined, Validators.required]
     })
 
-    this.formModel = {
-      status: null,
-      eventId: null,
-      type: '',
-      description: '',
-      availabilityStatus: ''
-    }
+    // this.formModel = {
+    //   status: null,
+    //   eventId: null,
+    //   type: '',
+    //   description: '',
+    //   availabilityStatus: ''
+    // }
   }
 
   ngOnInit(): void {
     this.getEvent()
-    this.formModel.availabilityStatus = ''
   }
 
   getEvent(): void {
@@ -78,7 +78,7 @@ export class AddResourceComponent implements OnInit {
     }
 
     const userId = localStorage.getItem("userId");
-    if(!userId) {
+    if (!userId) {
       this.showError = true
       this.errorMessage = 'User ID not found.'
       return

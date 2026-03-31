@@ -11,7 +11,7 @@ import { scheduled } from 'rxjs';
   templateUrl: './create-event.component.html',
   styleUrls: ['./create-event.component.scss']
 })
-export class CreateEventComponent implements OnInit{
+export class CreateEventComponent implements OnInit {
   itemForm: FormGroup;
   formModel: any = { status: null };
   showError: boolean = false;
@@ -23,12 +23,12 @@ export class CreateEventComponent implements OnInit{
   updateId: any;
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
-    this.itemForm = fb.group({
-      title: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      schedule: ['', [Validators.required]],
-      location: ['', [Validators.required]],
-      status: ['', [Validators.required]],
+    this.itemForm = this.fb.group({
+      title: [null, [Validators.required]],
+      description: [null, [Validators.required]],
+      schedule: [null, [Validators.required]],
+      location: [null, [Validators.required]],
+      status: [null, [Validators.required]]
     })
   }
 
@@ -37,21 +37,21 @@ export class CreateEventComponent implements OnInit{
   }
 
   getEvent() {
-    const userId =  localStorage.getItem('userId')
+    const userId = localStorage.getItem('userId')
 
-    if(!userId){
+    if (!userId) {
       this.showError = true
       this.errorMessage = 'User ID not found'
     }
 
     this.httpService.getEventByInstitutionId(userId).subscribe({
-      next: (data)=>{
+      next: (data) => {
         this.eventList = data
         this.showError = false
       },
-      error: (err)=>{
+      error: (err) => {
         this.showError = true
-        if(err.status === 403){
+        if (err.status === 403) {
           this.errorMessage = 'You are not authorized'
         } else if (err.status === 404) {
           this.errorMessage = 'No event found'
@@ -63,7 +63,7 @@ export class CreateEventComponent implements OnInit{
   }
 
   edit(val: any) {
-    if(!val || !val.id) {
+    if (!val || !val.id) {
       this.showError = true
       this.errorMessage = 'Invalid event selected'
     }
@@ -83,10 +83,10 @@ export class CreateEventComponent implements OnInit{
     this.showError = false
     this.showMessage = false
 
-    if(this.itemForm.valid) {
+    if (this.itemForm.valid) {
       const userId = localStorage.getItem('userId')
 
-      if(!userId){
+      if (!userId) {
         this.showError = true
         this.errorMessage = 'User ID not found'
         return
@@ -97,18 +97,18 @@ export class CreateEventComponent implements OnInit{
         institutionId: userId
       }
 
-      if(this.updateId){
-        this.httpService.updateEvent(this.updateId,eventData).subscribe({
-          next:(data)=>{
+      if (this.updateId) {
+        this.httpService.updateEvent(this.updateId, eventData).subscribe({
+          next: (data) => {
             this.showMessage = true
             this.responseMessage = 'Event added successfully'
             this.updateId = null
             this.itemForm.reset()
             this.getEvent()
           },
-          error:(err)=>{
+          error: (err) => {
             this.showError = true
-            if(err.status === 401) {
+            if (err.status === 401) {
               this.errorMessage = 'You are not authorized'
             } else if (err.status === 404) {
               this.errorMessage = 'Institution not found'

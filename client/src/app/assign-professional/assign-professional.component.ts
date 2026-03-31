@@ -23,8 +23,8 @@ export class AssignProfessionalComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private authService: AuthService, private httpService: HttpService) {
     this.itemForm = fb.group({
-      eventId: ['', [Validators.required]],
-      userId: ['', [Validators.required]]
+      eventId: [null, Validators.required],
+      userId: [null, Validators.required]
     })
   }
 
