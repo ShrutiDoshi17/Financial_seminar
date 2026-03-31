@@ -40,7 +40,7 @@ export class HttpService {
     return this.http.get<any>(`${this.apiUrl}/api/institution/events?institutionId=${id}`, this.httpOptions)
   }
 
-  getAllEvents(): Observable<any> {
+  GetAllevents(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
   }
 
@@ -72,11 +72,11 @@ export class HttpService {
     return this.http.post<any>(`${this.apiUrl}/api/institution/event/${eventId}/professional?userId=${userId}`, {}, this.httpOptions)
   }
 
-  updateEventStatus(eventId: any, status: any): Observable<any> {
+  UpdateEventStatus(eventId: any, status: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/api/professional/event/${eventId}/status?status=${status}`, {}, this.httpOptions)
   }
 
-  addFeedback(eventId: any, userId: any, details: any): Observable<any> {
+  AddFeedback(eventId: any, userId: any, details: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/professional/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
   }
 
