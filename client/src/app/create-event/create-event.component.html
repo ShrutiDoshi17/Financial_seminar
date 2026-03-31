@@ -1,1 +1,140 @@
 <!--To complete the code here!!-->
+<div class="container mt-4 create-event-container">
+  <h3 class="mb-3 text-center">
+    {{ updateId ? 'Update Event' : 'Create Event' }}
+  </h3>
+
+  <!-- Success Message -->
+  <div *ngIf="showMessage" class="alert alert-success">
+    {{ responseMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="showError" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Event Form -->
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        id="title"
+        type="text"
+        class="form-control"
+        formControlName="title"
+        placeholder="Enter event title" />
+
+      <small class="text-danger"
+        *ngIf="itemForm.get('title')?.touched && itemForm.get('title')?.invalid">
+        Title is required
+      </small>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        id="description"
+        rows="3"
+        class="form-control"
+        formControlName="description"
+        placeholder="Enter event description">
+      </textarea>
+
+      <small class="text-danger"
+        *ngIf="itemForm.get('description')?.touched && itemForm.get('description')?.invalid">
+        Description is required
+      </small>
+    </div>
+
+    <div class="mb-3">
+      <label for="schedule" class="form-label">Schedule</label>
+      <input
+        id="schedule"
+        type="datetime-local"
+        class="form-control"
+        formControlName="schedule" />
+
+      <small class="text-danger"
+        *ngIf="itemForm.get('schedule')?.touched && itemForm.get('schedule')?.invalid">
+        Schedule is required
+      </small>
+    </div>
+
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input
+        id="location"
+        type="text"
+        class="form-control"
+        formControlName="location"
+        placeholder="Enter event location" />
+
+      <small class="text-danger"
+        *ngIf="itemForm.get('location')?.touched && itemForm.get('location')?.invalid">
+        Location is required
+      </small>
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select
+        id="status"
+        class="form-select"
+        formControlName="status">
+        <option value="">Select status</option>
+        <option value="ACTIVE">Active</option>
+        <option value="INACTIVE">Inactive</option>
+      </select>
+
+      <small class="text-danger"
+        *ngIf="itemForm.get('status')?.touched && itemForm.get('status')?.invalid">
+        Status is required
+      </small>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+      {{ updateId ? 'Update Event' : 'Create Event' }}
+    </button>
+  </form>
+
+  <!-- Existing Events Table -->
+  <div class="mt-5" *ngIf="eventList.length">
+    <h5>Existing Events</h5>
+
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Schedule</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let event of eventList">
+          <td>{{ event.title }}</td>
+          <td>{{ event.schedule }}</td>
+          <td>{{ event.location }}</td>
+          <td>{{ event.status }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-secondary"
+              (click)="edit(event)">
+              Edit
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="eventList.length === 0">
+          <td colspan="5" class="text-center">
+            No events found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

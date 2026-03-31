@@ -1,1 +1,80 @@
 <!--To complete the code here!!-->
+<div class="registration-wrapper">
+  <div class="registration-card">
+
+    <div class="top-border"></div>
+
+    <h2 class="title">
+      FINANCIAL SEMINAR AND<br />
+      WORKSHOP MANAGEMENT PLATFORM
+    </h2>
+
+    <p class="subtitle">
+      Please enter your details here
+    </p>
+
+    <!-- Success Message -->
+    <div *ngIf="showMessage" class="alert alert-success">
+      {{ responseMessage }}
+    </div>
+
+    <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          class="form-control"
+          formControlName="username"
+          placeholder="user1" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="testuser@abc.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          class="form-control"
+          formControlName="password"
+          placeholder="********" />
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select
+          id="role"
+          class="form-control"
+          formControlName="role">
+          <option value="">Select Role</option>
+          <option value="INSTITUTION">INSTITUTION</option>
+          <option value="PROFESSIONAL">PROFESSIONAL</option>
+          <option value="PARTICIPANT">PARTICIPANT</option>
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="itemForm.invalid">
+        Submit
+      </button>
+
+    </form>
+
+    <div class="login-link">
+      <a routerLink="/app-login">Go to Login</a>
+    </div>
+
+  </div>
+</div>

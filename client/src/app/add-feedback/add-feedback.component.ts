@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { HttpService } from '../../services/http.service';
@@ -12,6 +12,8 @@ import { HttpService } from '../../services/http.service';
   providers: [DatePipe]
 })
 export class AddFeedbackComponent implements OnInit {
+
+  feedbackForm!: FormGroup;
 
   formModel: any = { status: null };
   showError: boolean = false;
@@ -25,13 +27,18 @@ export class AddFeedbackComponent implements OnInit {
   isAddRemarks: boolean = false;
 
   constructor(
+    private fb: FormBuilder,
     private httpService: HttpService,
     private authService: AuthService
   ) {
     // this.formModel.status = "ACTIVE";
   }
+  
 
   ngOnInit(): void {
+    this.feedbackForm = this.fb.group({
+      content:['',[Validators.required]]
+    })
     this.getEvent();
   }
 
@@ -77,7 +84,16 @@ export class AddFeedbackComponent implements OnInit {
 
   }
 
-  saveFeedBack() {
+  saveFeedBack() :void{
+
+    if(this.feedbackForm.invalid){
+      this.showError = true;
+      this.errorMessage = 'Feedback content cannot be empty.';
+      return;
+    }
+
+
+
     // const userId = this.authService.getLoginStatus;
     const userId = localStorage.getItem('userId')
     if (!userId) {
@@ -85,6 +101,10 @@ export class AddFeedbackComponent implements OnInit {
       this.errorMessage = 'User ID not found';
       return;
     }
+
+    const payload={
+      content: this.feedbackForm.value.content
+    };
 
     if (!this.updateId) {
       this.showError = true;

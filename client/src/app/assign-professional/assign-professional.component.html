@@ -1,1 +1,65 @@
 <!--To complete the code here!!-->
+<div class="container mt-4 assign-professional-container">
+  <h3 class="mb-3">Assign Professional to Event</h3>
+
+  <!-- Success Message -->
+  <div *ngIf="showMessage" class="alert alert-success">
+    {{ responseMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="showError" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+
+    <!-- Event Selection -->
+    <div class="mb-3">
+      <label for="eventId" class="form-label">Select Event</label>
+      <select
+        id="eventId"
+        class="form-select"
+        formControlName="eventId">
+        <option value="">Select Event</option>
+        <option *ngFor="let event of eventList" [value]="event.id">
+          {{ event.title }}
+        </option>
+      </select>
+
+      <small class="text-danger"
+        *ngIf="itemForm.get('eventId')?.touched &&
+               itemForm.get('eventId')?.invalid">
+        Event is required
+      </small>
+    </div>
+
+    <!-- Professional Selection -->
+    <div class="mb-3">
+      <label for="userId" class="form-label">Select Professional</label>
+      <select
+        id="userId"
+        class="form-select"
+        formControlName="userId">
+        <option value="">Select Professional</option>
+        <option *ngFor="let prof of professionalsList" [value]="prof.id">
+          {{ prof.name }} ({{ prof.email }})
+        </option>
+      </select>
+
+<small class="text-danger"
+        *ngIf="itemForm.get('userId')?.touched &&
+               itemForm.get('userId')?.invalid">
+        Professional is required
+      </small>
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="itemForm.invalid">
+      Assign Professional
+    </button>
+
+  </form>
+</div>

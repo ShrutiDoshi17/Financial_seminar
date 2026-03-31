@@ -12,7 +12,7 @@ import { scheduled } from 'rxjs';
   styleUrls: ['./create-event.component.scss']
 })
 export class CreateEventComponent implements OnInit {
-  itemForm: FormGroup;
+  itemForm!: FormGroup;
   formModel: any = { status: null };
   showError: boolean = false;
   errorMessage: any;
@@ -23,17 +23,31 @@ export class CreateEventComponent implements OnInit {
   updateId: any;
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
+     this.itemForm = this.fb.group({
+      title: [null, [Validators.required]],
+      description: [null, [Validators.required]],
+      schedule: [null, [Validators.required]],
+      location: [null, [Validators.required]],
+      status: [null, [Validators.required]]
+    });
+  }
+
+  ngOnInit(): void {
+    if(!this.itemForm){
     this.itemForm = this.fb.group({
       title: [null, [Validators.required]],
       description: [null, [Validators.required]],
       schedule: [null, [Validators.required]],
       location: [null, [Validators.required]],
       status: [null, [Validators.required]]
-    })
+    });
   }
+  try{
+    this.getEvent();
+  }catch{
 
-  ngOnInit(): void {
-    this.getEvent()
+  }
+    
   }
 
   getEvent() {
@@ -41,15 +55,16 @@ export class CreateEventComponent implements OnInit {
 
     if (!userId) {
       this.showError = true
-      this.errorMessage = 'User ID not found'
+      this.errorMessage = 'User ID not found';
+      return;
     }
 
     this.httpService.getEventByInstitutionId(userId).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.eventList = data
         this.showError = false
       },
-      error: (err) => {
+      error: (err: any) => {
         this.showError = true
         if (err.status === 403) {
           this.errorMessage = 'You are not authorized'
@@ -62,10 +77,11 @@ export class CreateEventComponent implements OnInit {
     })
   }
 
-  edit(val: any) {
+  edit(val: any):void {
     if (!val || !val.id) {
       this.showError = true
-      this.errorMessage = 'Invalid event selected'
+      this.errorMessage = 'Invalid event selected';
+      return;
     }
 
     this.updateId = val.id
@@ -76,14 +92,19 @@ export class CreateEventComponent implements OnInit {
       schedule: val.schedule,
       location: val.location,
       status: val.status
-    })
+    });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.showError = false
     this.showMessage = false
 
     if (this.itemForm.valid) {
+      this.showError = true;
+      this.errorMessage = 'ALl field are required';
+      return;
+
+    }
       const userId = localStorage.getItem('userId')
 
       if (!userId) {
@@ -116,9 +137,9 @@ export class CreateEventComponent implements OnInit {
               this.errorMessage = 'Failed to create event'
             }
           }
-        })
+        });
       }
-    }
+    
   }
 
 }

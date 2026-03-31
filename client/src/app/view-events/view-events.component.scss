@@ -1,0 +1,41 @@
+.view-events-container {
+  max-width: 900px;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+h3 {
+  color: #333;
+}
+
+.table {
+  margin-top: 20px;
+}
+
+.event-details {
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.event-details p {
+  margin-bottom: 6px;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  min-width: 120px;
+}
+
+.alert {
+  margin-bottom: 15px;
+}

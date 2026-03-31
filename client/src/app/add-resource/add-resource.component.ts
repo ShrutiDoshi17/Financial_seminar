@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class AddResourceComponent implements OnInit {
-  itemForm: FormGroup
+  itemForm!: FormGroup
   formModel: any = {}
   showError: boolean = false
   errorMessage: any = {}
@@ -21,12 +21,12 @@ export class AddResourceComponent implements OnInit {
   eventList: any = []
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
-    this.itemForm = this.fb.group({
-      eventId: [undefined, Validators.required],
-      type: [undefined, Validators.required],
-      description: [undefined, Validators.required],
-      availabilityStatus: [undefined, Validators.required]
-    })
+     this.itemForm = this.fb.group({
+      eventId: ['', Validators.required],
+      type: ['', Validators.required],
+      description: ['', Validators.required],
+      availabilityStatus: ['', Validators.required]
+    });
 
     // this.formModel = {
     //   status: null,
@@ -38,8 +38,11 @@ export class AddResourceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getEvent()
+   // this.createForm();
+   // this.getEvent()
   }
+
+
 
   getEvent(): void {
     const userId = localStorage.getItem("userId")
@@ -47,7 +50,7 @@ export class AddResourceComponent implements OnInit {
     if (!userId) {
       this.showError = true
       this.errorMessage = 'User ID not found. Please log in again.'
-      return
+      return;
     }
 
     this.httpService.getEventByInstitutionId(userId).subscribe({
