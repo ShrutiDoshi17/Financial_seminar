@@ -29,7 +29,8 @@ export class AssignProfessionalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.getEvent()
+    this.getProfessionals()
   }
 
   getEvent() {
@@ -48,7 +49,7 @@ export class AssignProfessionalComponent implements OnInit {
       },
       error: (err) => {
         this.showError = true
-        if (err.status === 403) {
+        if (err.status === 401) {
           this.errorMessage = 'You are not authorized.'
         } else if (err.status === 404) {
           this.errorMessage = 'No events found.'
@@ -67,7 +68,7 @@ export class AssignProfessionalComponent implements OnInit {
       },
       error: (err) => {
         this.showError = true
-        if (err.status === 403) {
+        if (err.status === 401) {
           this.errorMessage = 'You are not authorized.'
         } else if (err.status === 404) {
           this.errorMessage = 'No professionals found.'
@@ -94,7 +95,7 @@ export class AssignProfessionalComponent implements OnInit {
         },
         error: (err) => {
           this.showError = true
-          if (err.status === 403) {
+          if (err.status === 401) {
             this.errorMessage = 'You are not authorized.'
           } else if (err.status === 404) {
             this.errorMessage = 'No professional or event found.'
