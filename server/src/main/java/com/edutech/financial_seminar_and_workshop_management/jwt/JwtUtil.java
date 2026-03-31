@@ -18,57 +18,48 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @Component
 public class JwtUtil {
 
+    
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final long EXPIRATION = 1000L * 60 * 60 * 24; //1 day
 
-    public String generateToken(String username, String role){
+    
+    private static final long EXPIRATION = 1000L * 60 * 60 * 24;
+
+    
+    public String generateToken(String username) {
         return Jwts.builder()
-        .setSubject(username)
-        .claim("role", role) // Add role to token
-        .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-        .signWith(key)
-        .compact();
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(key)
+                .compact();
     }
 
-    public Claims extractAllClaims(String token){
-        return Jwts.parser()
-                    .setSigningKey(key)
-                    .parseClaimsJws(token)
-                    .getBody();
-        // return Jwts.parserBuilder()
-        // .setSigningKey(key)
-        // .build()
-        // .parseClaimsJws(token)
-        // .getBody()
-        // .getSubject();
-    }
-
-    private boolean isTokenExpired(String token){
-        Date expiration = Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .getExpiration();
-        return expiration.before(new Date());
-    }
-
-    public String extractUserame(String token){
+    
+    Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails){
-       return extractUserame(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+   
+    public String extractUsername(String token) {
+        return extractAllClaims(token).getSubject();
     }
 
-  
-} 
+    
+    private boolean isTokenExpired(String token) {
+        return extractAllClaims(token).getExpiration().before(new Date());
+    }
+
+    
+    public boolean validateToken(String token, UserDetails userDetails) {
+        return extractUsername(token).equals(userDetails.getUsername())
+                && !isTokenExpired(token);
+    }
+}

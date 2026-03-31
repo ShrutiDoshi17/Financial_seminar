@@ -35,7 +35,8 @@ public class EventService {
         e.setStatus(eventDetails.getStatus());
         e.setSchedule(eventDetails.getSchedule());
         e.setLocation(eventDetails.getLocation());
-        e.setInstitutionId(eventDetails.getInstitutionId());
+        e.setDescription(eventDetails.getDescription());
+        // e.setInstitutionId(eventDetails.getInstitutionId());
         return eventRepository.save(e);
     }
 

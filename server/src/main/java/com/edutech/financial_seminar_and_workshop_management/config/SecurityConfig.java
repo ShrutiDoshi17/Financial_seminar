@@ -14,19 +14,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.edutech.financial_seminar_and_workshop_management.jwt.JwtRequestFilter;
 
 
+
 @Configuration
 @EnableWebSecurity
+@SuppressWarnings("deprecation")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // @Autowired
-    // // private UserDetailsService userDetailsService;
-    // private UserDetails userDetails;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,49 +39,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder);
     }
 
-    
+   
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
+        http
+            .csrf().disable()
             .cors().and()
+
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
+
             .authorizeRequests()
 
             
-            .antMatchers("/api/user/register").permitAll()
-            .antMatchers("/api/user/login").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/user/register").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/user/login").permitAll()
 
             
-            .antMatchers("POST", "/api/institution/event").hasAuthority("INSTITUTION")
-            .antMatchers("PUT", "/api/institution/event/*").hasAuthority("INSTITUTION")
-            .antMatchers("GET", "/api/institution/events").hasAuthority("INSTITUTION")
-            .antMatchers("POST", "/api/institution/event/*/resource").hasAuthority("INSTITUTION")
-            .antMatchers("GET", "/api/institution/event/professionals").hasAuthority("INSTITUTION")
-            .antMatchers("POST", "/api/institution/event/*/professional").hasAuthority("INSTITUTION")
+            .antMatchers(HttpMethod.POST, "/api/institution/event").hasAuthority("INSTITUTION")
+            .antMatchers(HttpMethod.PUT,  "/api/institution/event/*").hasAuthority("INSTITUTION")
+            .antMatchers(HttpMethod.GET,  "/api/institution/events").hasAuthority("INSTITUTION")
+            .antMatchers(HttpMethod.POST, "/api/institution/event/*/resource").hasAuthority("INSTITUTION")
+            .antMatchers(HttpMethod.GET,  "/api/institution/event/professionals").hasAuthority("INSTITUTION")
+            .antMatchers(HttpMethod.POST, "/api/institution/event/*/professional").hasAuthority("INSTITUTION")
 
             
-            .antMatchers("GET", "/api/professional/events").hasAuthority("PROFESSIONAL")
-            .antMatchers("PUT", "/api/professional/event/*/status").hasAuthority("PROFESSIONAL")
-            .antMatchers("POST", "/api/professional/event/*/feedback").hasAuthority("PROFESSIONAL")
+            .antMatchers(HttpMethod.GET,  "/api/professional/events").hasAuthority("PROFESSIONAL")
+            .antMatchers(HttpMethod.PUT,  "/api/professional/event/*/status").hasAuthority("PROFESSIONAL")
+            .antMatchers(HttpMethod.POST, "/api/professional/event/*/feedback").hasAuthority("PROFESSIONAL")
 
             
-            .antMatchers("GET", "/api/participant/events").hasAuthority("PARTICIPANT")
-            .antMatchers("POST", "/api/participant/event/*/enroll").hasAuthority("PARTICIPANT")
-            .antMatchers("GET", "/api/participant/event/*/status").hasAuthority("PARTICIPANT")
-            .antMatchers("POST", "/api/participant/event/*/feedback").hasAuthority("PARTICIPANT")
+            .antMatchers(HttpMethod.GET,  "/api/participant/events").hasAuthority("PARTICIPANT")
+            .antMatchers(HttpMethod.POST, "/api/participant/event/*/enroll").hasAuthority("PARTICIPANT")
+            .antMatchers(HttpMethod.GET,  "/api/participant/event/*/status").hasAuthority("PARTICIPANT")
+            .antMatchers(HttpMethod.POST, "/api/participant/event/*/feedback").hasAuthority("PARTICIPANT")
 
             .anyRequest().authenticated();
 
         
-        http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
+    
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

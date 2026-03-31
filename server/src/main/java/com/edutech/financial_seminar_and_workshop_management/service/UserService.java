@@ -1,6 +1,8 @@
 package com.edutech.financial_seminar_and_workshop_management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,39 +21,46 @@ import java.util.List;
 
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    
     public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode((user.getPassword())));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public List<User> getProfessionalsList(){
+    
+    public List<User> getProfessionalsList() {
         return userRepository.findByRole("PROFESSIONAL");
     }
 
-    public User getUserByUsername(String username){
-        return userRepository.findByUsername(username).orElseThrow(()->
-        new UsernameNotFoundException("User not found: " + username)
-    );
-    }
-
-    public UserDetails loadUserByUsername(String username)throws UserPrincipalNotFoundException{
-        User user = getUserByUsername(username);
-        return new 
-        org.springframework.security.core.userdetails.User(
-            user.getUsername(),
-            user.getPassword(),
-           Collections.singleton(()->
-            user.getRole())
-        );
-
+    
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found: " + username));
     }
 
     
+    @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+
+        User user = getUserByUsername(username);
+
+        GrantedAuthority authority =
+                new SimpleGrantedAuthority(user.getRole());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.singleton(authority)
+        );
+    }
 }

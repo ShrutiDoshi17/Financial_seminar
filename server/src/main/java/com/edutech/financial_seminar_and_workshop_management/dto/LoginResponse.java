@@ -7,8 +7,8 @@ public class LoginResponse {
 
     private String token;
     private String role;
-    private Long userId;
-    public LoginResponse(String token, String role, Long userId) {
+    private String userId;
+    public LoginResponse(String token, String role, String userId) {
         this.token = token;
         this.role = role;
         this.userId = userId;
@@ -27,10 +27,10 @@ public class LoginResponse {
     public void setRole(String role) {
         this.role = role;
     }
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

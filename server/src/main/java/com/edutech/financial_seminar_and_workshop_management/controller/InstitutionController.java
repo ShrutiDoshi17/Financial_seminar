@@ -29,9 +29,18 @@ public class InstitutionController {
     private UserService userService;
 
     @PostMapping("/event")
-    public ResponseEntity<Event> createEvent(@RequestBody Event event){
-        return new ResponseEntity<Event>(eventService.createEvent(event), HttpStatus.OK);
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+       Event savedEvent = eventService.createEvent(event);
+       return ResponseEntity.ok(savedEvent);
     }
+
+//     @PostMapping("/event")
+//     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+//       if (event.getInstitutionId() == null) {
+//         throw new RuntimeException("Institution ID is required");
+//       }
+//       return new ResponseEntity<>(eventService.createEvent(event),HttpStatus.OK);
+// }
 
     @PutMapping("/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails){
@@ -43,15 +52,24 @@ public class InstitutionController {
         return new ResponseEntity<List<Event>>(eventService.getEventsByInstitutionId(institutionId), HttpStatus.OK);
     }
 
-    @PostMapping("/event/proffesionals")
-    public ResponseEntity<Resource> addResourceToEvent(@PathVariable Long eventId, @RequestBody Resource resource){
-        return new ResponseEntity<Resource> (resourceService.addResourceToEvent(eventId, resource), HttpStatus.OK);
-    }
+    @PostMapping("/event/{eventId}/resource")
+public ResponseEntity<Resource> addResourceToEvent(
+        @PathVariable Long eventId,
+        @RequestBody Resource resource) {
+
+    Resource savedResource = resourceService.addResourceToEvent(eventId, resource);
+    return ResponseEntity.ok(savedResource);
+}
+
+    // @PostMapping("/event/proffesionals")
+    // public ResponseEntity<Resource> addResourceToEvent(@PathVariable Long eventId, @RequestBody Resource resource){
+    //     return new ResponseEntity<Resource> (resourceService.addResourceToEvent(eventId, resource), HttpStatus.OK);
+    // }
 
     
     @GetMapping("/event/professionals")
     public ResponseEntity<List<User>> getProfessionalsList() {
-        return ResponseEntity.ok(userService.getProfessionalsList());
+        return new ResponseEntity<List<User>>(userService.getProfessionalsList(),HttpStatus.OK);
     }
 
     @PostMapping("/event/{eventId}/professional")

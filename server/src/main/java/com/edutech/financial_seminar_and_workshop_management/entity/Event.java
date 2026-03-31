@@ -55,10 +55,10 @@ public class Event {
     public void setId(long id) {
         this.id = id;
     }
-    public long getInstitutionId() {
+    public Long getInstitutionId() {
         return institutionId;
     }
-    public void setInstitutionId(long institutionId) {
+    public void setInstitutionId(Long institutionId) {
         this.institutionId = institutionId;
     }
     public String getTitle() {
