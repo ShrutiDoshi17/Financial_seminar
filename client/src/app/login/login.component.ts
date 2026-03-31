@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit{
   errorMessage: any
 
   constructor(private fb: FormBuilder,private httpService: HttpService, private authService: AuthService, private router: Router) {
-    this.itemForm = fb.group({
+    this.itemForm = this.fb.group({
       username: ['',[Validators.required]],
       password: ['',[Validators.required]],
     })

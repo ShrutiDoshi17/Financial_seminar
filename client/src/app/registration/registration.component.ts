@@ -7,9 +7,37 @@ import { HttpService } from '../../services/http.service';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html'
- 
-})
-export class RegistrationComponent {
 
- 
+})
+export class RegistrationComponent implements OnInit{
+
+  itemForm: FormGroup
+  formModel: any = {role:null,email:",password:,username:"}
+  showMessage: boolean = false
+  responseMessage: any
+
+  constructor(private fb: FormBuilder, private httpService : HttpService){
+    this.itemForm = fb.group({
+      email: ['',[Validators.required, Validators.email]],
+      password: ['',[Validators.required]],
+      role: ['',[Validators.required]],
+      username: ['',[Validators.required]],
+    })
+  }
+
+  ngOnInit(): void {}
+
+  onRegister() {
+    if(this.itemForm.valid){
+      this.httpService.registerUser(this.itemForm.value).subscribe({
+        next:(data)=>{
+          this.responseMessage = "User Registered Successfully"
+          this.showMessage = true
+          this.itemForm.reset
+        }
+      })
+    }
+  }
+
+
 }

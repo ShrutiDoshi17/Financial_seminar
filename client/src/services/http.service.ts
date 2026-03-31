@@ -32,11 +32,11 @@ export class HttpService {
     return this.http.get<any>(`${this.apiUrl}/api/professional/events?userId=${id}`, this.httpOptions)
   }
 
-  getAllProfessionals(): Observable<any> {
+  GetAllProfessionals(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/api/institution/events/professional`, this.httpOptions)
   }
 
-  getEventByInstituionId(id: any): Observable<any> {
+  getEventByInstitutionId(id: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/api/institution/events?institutionId=${id}`, this.httpOptions)
   }
 
