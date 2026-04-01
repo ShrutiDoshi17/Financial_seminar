@@ -32,12 +32,12 @@
     </ul>
  
     <!-- Login/Logout buttons -->
-    <ul class="navbar-nav">
-      <li *ngIf="!IsLoggin" class="nav-item">
+    <ul class="navbar-nav ms-auto">
+      <!-- <li *ngIf="!IsLoggin" class="nav-item">
         <a class="nav-link" [routerLink]="['/login']">Login</a>
-      </li>
+      </li> -->
       <li *ngIf="IsLoggin" class="nav-item">
-        <a class="nav-link" (click)="logout()" [routerLink]="['/login']">Logout</a>
+        <a class="btn btn-danger" (click)="logout()" [routerLink]="['/login']">Logout</a>
       </li>
     </ul>
   </div>

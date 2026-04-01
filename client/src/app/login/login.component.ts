@@ -28,7 +28,7 @@ export class LoginComponent {
     if (this.itemForm.valid) {
       this.showError = false;
       this.httpService.Login(this.itemForm.value).subscribe((data: any) => {
-        if (data.userNo != 0) {
+        if (data. != 0) {
           // debugger;
 
           // localStorage.setItem('role', data.role);
