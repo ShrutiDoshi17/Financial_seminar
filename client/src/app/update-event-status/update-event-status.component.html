@@ -29,6 +29,10 @@
       </div>
     </div>
 
+    <div *ngIf = "showMessage" class="alert alert-success">
+      <span>{{ responseMessage }}</span>
+    </div>
+
     <div class="row mt-3">
       <div class="card">
         <div class="card-header">Event Information</div>
@@ -38,7 +42,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Sr#</th>
+                <th>Sr.</th>
                 <th>Title</th>
                 <th>Schedule</th>
                 <th>Location</th>
@@ -57,7 +61,7 @@
                 <td>{{event.description}}</td>
                 <td>
                   <button (click)="addStatus(event)" class="btn btn-warning mx-2">Update Status</button>
-                  <button (click)="addRemarks(event)" class="btn btn-primary">Add Remarks</button>
+                  <!-- <button (click)="addRemarks(event)" class="btn btn-primary">Add Remarks</button> -->
                 </td>
               </tr>
             </tbody>
@@ -67,7 +71,7 @@
     </div>
   </div>
   
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <div class="card">
       <div class="card-header">
         Add Remarks
@@ -93,5 +97,5 @@
         </form>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

@@ -57,9 +57,14 @@ export class UpdateEventStatusComponent implements OnInit {
     if (this.updateId != null) {
       this.showError = false;
       this.httpService.UpdateEventStatus(this.updateId, this.formModel.status).subscribe((data: any) => {
-
         this.getEvent();
         this.updateId = null;
+        this.showMessage = true
+        this.responseMessage = "Status updated successfully!"
+        setTimeout(() => {
+          this.showMessage = false
+          this.responseMessage = ''
+        }, 2000)
       }, error => {
         // Handle error
         this.showError = true;

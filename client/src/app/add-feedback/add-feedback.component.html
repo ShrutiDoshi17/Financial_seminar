@@ -14,7 +14,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Sr#</th>
+                <th>Sr.</th>
                 <th>Title</th>
                 <th>Schedule</th>
                 <th>Location</th>
@@ -41,11 +41,17 @@
       </div>
     </div>
   </div>
-  
-  <div class="col-md-4">
+
+  <div *ngIf = "updateId" class="col-md-4">
     <div class="card">
       <div class="card-header">
         Add Remarks
+      </div>
+      <h4>Feedback</h4>
+      <div *ngFor="let f of selectedEvent.feedbacks">
+        <span>{{f.content}}</span>
+        <p>{{f.timestamp}}</p>
+        <hr>
       </div>
       <div class="card-body">
         <form class="mb-3 mt-md-4">

@@ -15,7 +15,7 @@ import { HttpService } from '../../services/http.service';
 export class AddFeedbackComponent implements OnInit {
   formModel: any = { status: null };
   showError: boolean = false;
-  errorMessage: any;
+  errorMessage: any; 
   eventList: any = [];
   assignModel: any = {};
   selectedEvent: any = {};
