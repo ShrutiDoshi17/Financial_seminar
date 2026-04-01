@@ -1,8 +1,8 @@
 package com.edutech.financial_seminar_and_workshop_management.controller;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +13,7 @@ import com.edutech.financial_seminar_and_workshop_management.service.FeedbackSer
 
 import java.util.List;
 
-
-
 @RestController
-@RequestMapping("/api/professional")
 public class ProfessionalController {
 
     @Autowired
@@ -25,20 +22,25 @@ public class ProfessionalController {
     @Autowired
     private FeedbackService feedbackService;
 
-    @GetMapping("/events")
+    // View Assigned Events
+    @GetMapping("/api/professional/events")
     public ResponseEntity<List<Event>> viewAssignedEvents(@RequestParam Long userId) {
-        return new ResponseEntity<>(eventService.getAssignedEvents(userId),HttpStatus.OK);
+        List<Event> events = eventService.getAssignedEvents(userId);
+        return ResponseEntity.ok(events);
     }
 
-    @PutMapping("/event/{id}/status")
-    public ResponseEntity<Event> updateEventStatus(@PathVariable Long id,@RequestParam String status) {
-        return new ResponseEntity<>(eventService.updateEventStatus(id, status),HttpStatus.OK);
+    // Update Event Status
+    @PutMapping("/api/professional/event/{id}/status")
+    public ResponseEntity<Event> updateEventStatus(@PathVariable Long id, @RequestParam String status) {
+        Event updatedEvent = eventService.updateEventStatus(id, status);
+        return ResponseEntity.ok(updatedEvent);
     }
 
-    @PostMapping("/event/{eventId}/feedback")
-    public ResponseEntity<Feedback> provideFeedback(@PathVariable Long eventId,@RequestParam Long userId,@RequestBody Feedback feedback) {
-        return new ResponseEntity<>(feedbackService.createFeedback(eventId, userId, feedback),HttpStatus.OK);
+    // Provide Feedback
+    @PostMapping("/api/professional/event/{eventId}/feedback")
+    public ResponseEntity<Feedback> provideFeedback(@PathVariable Long eventId, @RequestParam Long userId, @RequestBody Feedback feedback) {
+        Feedback providedFeedback = feedbackService.createFeedback(eventId, userId, feedback);
+        return ResponseEntity.ok(providedFeedback);
     }
 }
-
 

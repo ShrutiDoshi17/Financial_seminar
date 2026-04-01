@@ -1,11 +1,35 @@
+<!-- <div class="row text-center">
+    <h1 class="text-capitalize">Financial Seminar and Workshop Management Platform</h1>
+</div>
+
 <div class="container mt-4">
-    <div class="row text-center">
-        <h1 class="text-capitalize">Financial Seminar and Workshop Management Platform</h1>
+    Error Message 
+    <div *ngIf = "showError" class="alert alert-danger">
+        {{ errorMessage }}
     </div>
 
-    <div>
-        <div class="text-end">
-            <button class="btn btn-danger" (click) = "logout()">Logout</button>
-        </div>
+    Events List 
+    <div *ngIf = "!selectedEvent">
+        <h4>All Events</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Schedule</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor = "let event of eventList">
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.schedule }}</td>
+                    <td>{{ event.location }}</td>
+                    <td>{{ event.status }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
+</div> -->

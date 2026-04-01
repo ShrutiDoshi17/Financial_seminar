@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,25 +7,24 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-
-  roleName: string | null = null;
-  IsLoggin = false;
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.roleName = this.authService.getRole;
-  //  this.IsLoggin = this.authService.isLoggedIn();
+export class AppComponent {
+  IsLoggin:any=false;
+  roleName: string | null;
+  constructor(private authService: AuthService, private router:Router)
+  {
+   
+    this.IsLoggin=authService.getLoginStatus;
+    this.roleName=authService.getRole;
+    if(this.IsLoggin==false)
+    {
+      this.router.navigateByUrl('/login'); 
+    
+    }
   }
+  logout()
+{
+  this.authService.logout();
+  window.location.reload();
+}
 
-  logout(): void {
-    this.authService.logout();
-    this.IsLoggin = false;
-    this.roleName = null;
-    this.router.navigate(['/login']);
-  }
 }

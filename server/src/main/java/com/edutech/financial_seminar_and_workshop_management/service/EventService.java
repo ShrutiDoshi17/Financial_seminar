@@ -12,59 +12,68 @@ import com.edutech.financial_seminar_and_workshop_management.repository.UserRepo
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class EventService {
+
     @Autowired
     private EventRepository eventRepository;
 
     @Autowired
     private UserRepository userRepository;
 
+    // Create Event
     public Event createEvent(Event event) {
         return eventRepository.save(event);
     }
 
+    // Update Event
     public Event updateEvent(Long id, Event eventDetails) {
-        Optional<Event> event = eventRepository.findById(id);
-        if(event.isEmpty()) {
-            return null;
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            event.setTitle(eventDetails.getTitle());
+            event.setDescription(eventDetails.getDescription());
+            event.setSchedule(eventDetails.getSchedule());
+            event.setLocation(eventDetails.getLocation());
+            event.setStatus(eventDetails.getStatus());
+            return eventRepository.save(event);
+        } else {
+            throw new RuntimeException("Event not found with id " + id);
         }
-        Event e = event.get();
-        e.setTitle(eventDetails.getTitle());
-        e.setStatus(eventDetails.getStatus());
-        e.setSchedule(eventDetails.getSchedule());
-        e.setLocation(eventDetails.getLocation());
-        e.setDescription(eventDetails.getDescription());
-        // e.setInstitutionId(eventDetails.getInstitutionId());
-        return eventRepository.save(e);
     }
 
+    // Get Events by InstitutionId
     public List<Event> getEventsByInstitutionId(Long institutionId) {
         return eventRepository.findByInstitutionId(institutionId);
     }
 
+    // Assign Professional to Event
     public User assignUserToEventAsProfessional(Long eventId, Long userId) {
-        User user = userRepository.findById(userId).get();
-        Event event = eventRepository.findById(eventId).get();
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        Optional<User> optionalUser = userRepository.findById(userId);
 
-        List<User> professionals = event.getProfessionals();
-        professionals.add(user);
-        event.setProfessionals(professionals);
-        eventRepository.save(event);
-        return user;
+        if (optionalEvent.isPresent() && optionalUser.isPresent()) {
+            Event event = optionalEvent.get();
+            User user = optionalUser.get();
+
+            event.getProfessionals().add(user);
+            user.getEvents().add(event);
+
+            eventRepository.save(event); 
+            return userRepository.save(user); 
+        } else {
+            throw new RuntimeException("Event or User not found with provided IDs.");
+        }
     }
 
     public List<Event> getAssignedEvents(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()) {
-            return null;
-        }
-        return user.get().getEvents();
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getEvents();
     }
 
     public Event updateEventStatus(Long id, String status) {
-        Event event = eventRepository.findById(id).get();
+        Event event = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         event.setStatus(status);
         return eventRepository.save(event);
     }
@@ -74,6 +83,7 @@ public class EventService {
     }
 
     public Event getEventById(Long id) {
-        return eventRepository.findById(id).get();
+        return eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
     }
+
 }

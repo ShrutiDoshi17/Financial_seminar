@@ -9,6 +9,7 @@ import { HttpService } from '../../services/http.service';
   templateUrl: './assign-professional.component.html',
   styleUrls: ['./assign-professional.component.scss']
 })
+
 export class AssignProfessionalComponent implements OnInit {
   itemForm: FormGroup;
   formModel: any = { status: null };
@@ -16,94 +17,66 @@ export class AssignProfessionalComponent implements OnInit {
   errorMessage: any;
   eventList: any = [];
   assignModel: any = {};
+
   showMessage: any;
   responseMessage: any;
   updateId: any;
   professionalsList: any = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private httpService: HttpService) {
-    this.itemForm = fb.group({
-      eventId: [null, Validators.required],
-      userId: [null, Validators.required]
+  constructor(public router: Router, public httpService: HttpService, private formBuilder: FormBuilder, private authService: AuthService) {
+    this.itemForm = this.formBuilder.group({
+      eventId: [this.formModel.eventId, [Validators.required]],
+      userId: [this.formModel.userId, [Validators.required]]
     })
   }
 
   ngOnInit(): void {
-    this.getEvent()
-    this.getProfessionals()
+    this.getProfessionals();
+    this.getEvent();
   }
 
   getEvent() {
-    const userId = localStorage.getItem('userId')
+    this.eventList = [];
+    const userIdString = localStorage.getItem('userId');
+    const userId = userIdString ? parseInt(userIdString, 10) : null;
 
-    if (!userId) {
-      this.showError = true
-      this.errorMessage = "User ID not found."
-      return
-    }
-
-    this.httpService.getEventByInstitutionId(userId).subscribe({
-      next: (data) => {
-        this.eventList = data
-        this.showError = false
-      },
-      error: (err) => {
-        this.showError = true
-        if (err.status === 401) {
-          this.errorMessage = 'You are not authorized.'
-        } else if (err.status === 404) {
-          this.errorMessage = 'No events found.'
-        } else {
-          this.errorMessage = 'Failed to load events.'
-        }
-      }
+    this.httpService.getEventByInstitutionId(userId).subscribe((data: any) => {
+      this.eventList = data;
+      console.log(this.eventList);
+    }, error => {
+      this.showError = true;
+      this.errorMessage = "An error occurred.. Please try again later.";
+      console.error('Login error:', error);
     })
   }
-
+  
   getProfessionals() {
-    this.httpService.GetAllProfessionals().subscribe({
-      next: (data) => {
-        this.professionalsList = data
-        this.showMessage = false
-      },
-      error: (err) => {
-        this.showError = true
-        if (err.status === 401) {
-          this.errorMessage = 'You are not authorized.'
-        } else if (err.status === 404) {
-          this.errorMessage = 'No professionals found.'
-        } else {
-          this.errorMessage = 'Failed loading professionals.'
-        }
-      }
+    this.professionalsList = [];
+
+    this.httpService.GetAllProfessionals().subscribe((data: any) => {
+      this.professionalsList = data;
+      console.log(this.professionalsList);
+    }, error => {
+      this.showError = true;
+      this.errorMessage = "An error occurred.. Please try again later.";
+      console.error('Login error:', error);
     })
   }
 
   onSubmit() {
-    this.showError = false
-    this.showMessage = false
-
+    // debugger;
     if (this.itemForm.valid) {
-      const eventId = this.itemForm.value.eventId
-      const userId = this.itemForm.value.userId
-
-      this.httpService.assignProfessionals(eventId, userId).subscribe({
-        next: (data) => {
-          this.showMessage = true
-          this.responseMessage = 'Professional assigned to event successfully.'
-          this.itemForm.reset()
-        },
-        error: (err) => {
-          this.showError = true
-          if (err.status === 401) {
-            this.errorMessage = 'You are not authorized.'
-          } else if (err.status === 404) {
-            this.errorMessage = 'No professional or event found.'
-          } else {
-            this.errorMessage = 'Failed to assign professionals.'
-          }
-        }
+      this.showError = false;
+      this.httpService.assignProfessionals(this.itemForm.controls["eventId"].value, this.itemForm.controls["userId"].value).subscribe((data: any) => {
+        this.itemForm.reset();
+        this.responseMessage = "Saved Successfully";
+      }, error => {
+        this.showError = true;
+        this.errorMessage = "An error occurred while logging in. Please try again later.";
+        console.error('Login error:', error);
       })
+    } else {
+      this.itemForm.markAllAsTouched();
     }
   }
 }

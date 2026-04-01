@@ -8,80 +8,150 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class HttpService {
-  private apiUrl = environment.apiUrl
-  httpOptions: { headers: HttpHeaders }
+  public serverName=environment.apiUrl;
+  constructor(private http: HttpClient, private authService:AuthService) {
 
-  constructor(private http: HttpClient, private service:AuthService) {
-    const token = service.getToken()
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    }
-  }
-  Login(details: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/user/login`, details)
-  }
+   }
+ 
 
-  registerUser(details: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/user/register`, details)
-  }
 
-  getEventByProfessional(id: any): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/professional/events?userId=${id}`, this.httpOptions)
+  //add
+  getEventByProfessional(id:any):Observable<any> {
+   
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.get(this.serverName+`/api/professional/events?userId=`+id,{headers:headers});
   }
-
-  GetAllProfessionals(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/institution/event/professionals`, this.httpOptions)
+  //addd
+  getEventByInstitutionId(id:any):Observable<any> {
+   
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.get(this.serverName+`/api/institution/events?institutionId=`+id,{headers:headers});
   }
-
-  getEventByInstitutionId(id: any): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/institution/events?institutionId=${id}`, this.httpOptions)
+  //adddg
+  GetAllProfessionals():Observable<any> {
+   
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.get(this.serverName+`/api/institution/event/professionals`,{headers:headers});
   }
-
-  GetAllevents(): Observable<any> {
-    // return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
-    return this.http.get<any>(`${this.apiUrl}/api/finance/events`, this.httpOptions)
+  GetAllevents():Observable<any> {
+   
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.get(this.serverName+`/api/finance/events`,{headers:headers});
   }
-
-  viewAllEvents(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
+  //addd
+  viewAllEvents():Observable<any> {
+   
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.get(this.serverName+`/api/participant/events`,{headers:headers});
   }
-
-  viewEventStatus(id: any): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/participant/event/${id}/status`, this.httpOptions)
+  //add
+  viewEventStatus(id:any):Observable<any> {
+   
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.get(this.serverName+`/api/participant/event/${id}/status`,{headers:headers});
   }
-
-  EnrollParticipant(eventId: any, userId: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, {}, this.httpOptions)
-  }
-
-  createEvent(details: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/institution/event`, details, this.httpOptions)
-  }
-
-  updateEvent(eventId: any, details: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/api/institution/event/${eventId}`, details, this.httpOptions)
-  }
-
-  addResource(details: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/institution/event/${details.eventId}/resource`, details, this.httpOptions)
-  }
-
-  assignProfessionals(eventId: any, userId: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/institution/event/${eventId}/professional?userId=${userId}`, {}, this.httpOptions)
-  }
-
-  UpdateEventStatus(eventId: any, status: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/api/professional/event/${eventId}/status?status=${status}`, {}, this.httpOptions)
-  }
-
-  AddFeedback(eventId: any, userId: any, details: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/professional/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
+  //add
+  EnrollParticipant(eventId:any,userId:any)
+  {
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`)
+    return this.http.post(this.serverName+`/api/participant/event/${eventId}/enroll?userId=`+userId,{},{headers:headers});
   }
 
-  AddFeedbackByParticipants(eventId: any, userId: any, details: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
+
+
+//added
+  createEvent(details:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.serverName+'/api/institution/event',details,{headers:headers});
   }
+  //added
+  updateEvent(eventId:any, details:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.put(this.serverName+'/api/institution/event/'+eventId,details,{headers:headers});
+  }
+  
+  addResource(details:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.serverName+'/api/institution/event/'+details.eventId+'/resource',details,{headers:headers});
+  }
+  assignProfessionals(eventId:any,userId:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.serverName+`/api/institution/event/${eventId}/professional?userId=${userId}`,{},{headers:headers});
+  }
+  UpdateEventStatus(eventId:any,status:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.put(this.serverName+`/api/professional/event/${eventId}/status?status=${status}`,{},{headers:headers});
+  }
+  AddFeedback(eventId:any,userId:any,details:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.serverName+`/api/professional/event/${eventId}/feedback?userId=${userId}`,details,{headers:headers});
+  }
+  AddFeedbackByParticipants(eventId:any,userId:any,details:any):Observable<any> {
+  
+    const authToken = this.authService.getToken();
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+    return this.http.post(this.serverName+`/api/participant/event/${eventId}/feedback?userId=${userId}`,details,{headers:headers});
+  }
+  
+  Login(details:any):Observable<any> {
+    
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    return this.http.post(this.serverName+'/api/user/login',details,{headers:headers});
+  }
+  registerUser(details:any):Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+    return this.http.post(this.serverName+'/api/user/register',details,{headers:headers});
+  }
+ 
+  
+  
 }

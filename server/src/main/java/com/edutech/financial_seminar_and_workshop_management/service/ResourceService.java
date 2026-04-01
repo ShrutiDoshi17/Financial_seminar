@@ -11,19 +11,24 @@ import com.edutech.financial_seminar_and_workshop_management.repository.Resource
 
 import java.util.Optional;
 
-
 @Service
 public class ResourceService {
+
     @Autowired
     private ResourceRepository resourceRepository;
 
     @Autowired
     private EventRepository eventRepository;
 
+    // Add Resource to Event
     public Resource addResourceToEvent(Long eventId, Resource resource) {
-        Event event = eventRepository.findById(eventId).get();
-        resource.setEvent(event);
-        return resourceRepository.save(resource);
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            resource.setEvent(event); // Set the event for this resource
+            return resourceRepository.save(resource);
+        } else {
+            throw new RuntimeException("Event not found with id " + eventId);
+        }
     }
-    
 }

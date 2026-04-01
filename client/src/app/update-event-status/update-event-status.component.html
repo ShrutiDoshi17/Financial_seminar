@@ -1,110 +1,97 @@
-<!--To complete the code here!!-->
-<div class="container mt-4 update-status-container">
-
-  <h3 class="mb-3 text-center">Update Event Status</h3>
-
-  <!-- Error Message -->
-  <div *ngIf="showError" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
-
-  <!-- Success Message -->
-  <div *ngIf="showMessage" class="alert alert-success">
-    {{ reponseMessage }}
-  </div>
-
-  <!-- Events Table -->
-  <div *ngIf="!isAddRemarks">
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Event ID</th>
-          <th>Title</th>
-          <th>Status</th>
-          <th>Update</th>
-          <th>Remarks</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let event of eventList">
-          <td>{{ event.eventId }}</td>
-          <td>{{ event.title }}</td>
-          <td>{{ event.status }}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-primary"
-              (click)="addStatus(event)">
-              Update Status
-            </button>
-          </td>
-          <td>
-            <button
-              class="btn btn-sm btn-secondary"
-              (click)="addRemarks(event)">
-              Add Remarks
-            </button>
-          </td>
-        </tr>
-
-        <tr *ngIf="eventList.length === 0">
-          <td colspan="5" class="text-center">
-            No events available
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Update Status Form -->
-  <div *ngIf="updateId && !isAddRemarks" class="mt-4">
-    <h5>Update Status for Event ID: {{ updateId }}</h5>
-
-    <div class="mb-3">
-      <label class="form-label">Select Status</label>
-      <select
-        class="form-select"
-        [(ngModel)]="formModel.status">
-        <option value="">Select Status</option>
-        <option value="ACTIVE">ACTIVE</option>
-        <option value="INACTIVE">INACTIVE</option>
-        <option value="COMPLETED">COMPLETED</option>
-      </select>
+<div class="row">
+  <div class="col-md-8">
+    <div class="card" *ngIf="updateId">
+      <div class="card-header">
+        Update Status
+      </div>
+      <div class="card-body">
+        <form class="mb-3 mt-md-4">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="mb-3">
+                <label for="status" class="form-label ">Status</label>
+                <select class="form-control" name="status" id="status" [(ngModel)]="formModel.status">
+                  <option value="null">Choose Status</option>
+                  <option value="Start">Start</option>
+                  <option value="Processing">Processing</option>
+                  <option value="Complete">Complete</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="d-grid">
+                <br>
+                <button (click)="updateStatus()" class="btn btn-outline-dark mt-1" type="submit">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <button class="btn btn-success" (click)="updateStatus()">
-      Save Status
-    </button>
-  </div>
-
-  <!-- Remarks Section -->
-  <div *ngIf="isAddRemarks" class="mt-4">
-    <h5>
-      Add Remarks for Event:
-      <strong>{{ selectedEvent?.title }}</strong>
-    </h5>
-
-    <div class="mb-3">
-      <label class="form-label">Remarks</label>
-      <textarea
-        rows="4"
-        class="form-control"
-        [(ngModel)]="selectedEvent.remarks"
-        placeholder="Enter remarks">
-      </textarea>
+    <div class="row mt-3">
+      <div class="card">
+        <div class="card-header">Event Information</div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>Title</th>
+                <th>Schedule</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let event of eventList">
+                <td>{{event.id}}</td>
+                <td>{{event.title}}</td>
+                <td>{{event.schedule}}</td>
+                <td>{{event.location}}</td>
+                <td>{{event.status}}</td>
+                <td>{{event.description}}</td>
+                <td>
+                  <button (click)="addStatus(event)" class="btn btn-warning mx-2">Update Status</button>
+                  <button (click)="addRemarks(event)" class="btn btn-primary">Add Remarks</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-
-    <button
-      class="btn btn-success me-2"
-      (click)="saveFeedBack()">
-      Save Remarks
-    </button>
-
-    <button
-      class="btn btn-secondary"
-      (click)="isAddRemarks = false">
-      Cancel
-    </button>
   </div>
-
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        Add Remarks
+      </div>
+      <div class="card-body">
+        <form class="mb-3 mt-md-4">
+          <div class="row">
+            <span>{{selectedEvent.title}}</span>
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label for="status" class="form-label ">Feedback</label>
+                <textarea rows="3" name="content" class="form-control" placeholder="content" type="text"
+                  [(ngModel)]="formModel.content"></textarea>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="d-grid">
+                <br>
+                <button (click)="saveFeedBack()" class="btn btn-outline-dark mt-1" type="submit">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

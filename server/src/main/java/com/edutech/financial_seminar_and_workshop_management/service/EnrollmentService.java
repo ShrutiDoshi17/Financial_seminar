@@ -1,5 +1,6 @@
 package com.edutech.financial_seminar_and_workshop_management.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.edutech.financial_seminar_and_workshop_management.repository.Enrollme
 import com.edutech.financial_seminar_and_workshop_management.repository.EventRepository;
 import com.edutech.financial_seminar_and_workshop_management.repository.UserRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class EnrollmentService {
@@ -19,31 +20,20 @@ public class EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private EventRepository eventRepository;
 
-   
+    @Autowired
+    private UserRepository userRepository;
+
+    
     public Enrollment enrollInEvent(Long userId, Long eventId) {
-
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (!optionalUser.isPresent()) {
-            throw new RuntimeException("User not found with ID: " + userId);
-        }
-
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-        if (!optionalEvent.isPresent()) {
-            throw new RuntimeException("Event not found with ID: " + eventId);
-        }
-
-        User user = optionalUser.get();
-        Event event = optionalEvent.get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
 
         Enrollment enrollment = new Enrollment();
         enrollment.setUser(user);
         enrollment.setEvent(event);
-        enrollment.setStatus("ENROLLED");
+        enrollment.setStatus("Enrolled");
 
         return enrollmentRepository.save(enrollment);
     }

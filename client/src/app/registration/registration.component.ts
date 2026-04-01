@@ -9,39 +9,36 @@ import { HttpService } from '../../services/http.service';
   templateUrl: './registration.component.html'
 
 })
-export class RegistrationComponent implements OnInit{
 
-  itemForm: FormGroup
-  formModel: any = {role:null,email:",password:,username:"}
-  showMessage: boolean = false
-  responseMessage: any
+export class RegistrationComponent {
+  itemForm: FormGroup;
+  formModel: any = { role: null, email: '', password: '', username: '' };
+  showMessage: boolean = false;
+  responseMessage: any;
 
-  constructor(private fb: FormBuilder, private httpService : HttpService, private router: Router){
-    this.itemForm = fb.group({
-      email: ['',[Validators.required, Validators.email]],
-      password: ['',[Validators.required]],
-      role: ['',[Validators.required]],
-      username: ['',[Validators.required]],
-    })
+  constructor(public router: Router, private bookService: HttpService, private formBuilder: FormBuilder) {
+    this.itemForm = this.formBuilder.group({
+      email: [this.formModel.email, [Validators.required, Validators.email]],
+      password: [this.formModel.password, [Validators.required]],
+      role: [this.formModel.role, [Validators.required]],
+      username: [this.formModel.username, [Validators.required]],
+    });
   }
-
-  ngOnInit(): void {}
 
   onRegister() {
-    if(this.itemForm.valid){
-      this.httpService.registerUser(this.itemForm.value).subscribe({
-        next:(data)=>{
-          this.responseMessage = "User Registered Successfully"
-          this.showMessage = true
-          this.itemForm.reset()
-          this.router.navigate(['/login'])
-        }
+    if (this.itemForm.valid) {
+      this.showMessage = false;
+      this.bookService.registerUser(this.itemForm.value).subscribe(data => {
+        debugger;
+        this.showMessage = true;
+        this.responseMessage = "you are successfully registered";
+        this.itemForm.reset();
+
       })
     }
-  }
-
-  login(): void {
-    this.router.navigate(['/login'])
+    else {
+      this.itemForm.markAllAsTouched();
+    }
   }
 
 

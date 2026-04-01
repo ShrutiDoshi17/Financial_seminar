@@ -14,6 +14,7 @@ import com.edutech.financial_seminar_and_workshop_management.repository.UserRepo
 
 @Service
 public class FeedbackService {
+
     @Autowired
     private FeedbackRepository feedbackRepository;
 
@@ -23,12 +24,13 @@ public class FeedbackService {
     @Autowired
     private UserRepository userRepository;
 
+    // Create Feedback
     public Feedback createFeedback(Long eventId, Long userId, Feedback feedback) {
-        Event event = eventRepository.findById(eventId).get();
-        User user = userRepository.findById(userId).get();
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
         feedback.setEvent(event);
         feedback.setUser(user);
         return feedbackRepository.save(feedback);
     }
-  
 }

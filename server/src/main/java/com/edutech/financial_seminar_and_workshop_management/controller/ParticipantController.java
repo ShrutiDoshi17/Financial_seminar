@@ -1,7 +1,7 @@
 package com.edutech.financial_seminar_and_workshop_management.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,35 +15,38 @@ import com.edutech.financial_seminar_and_workshop_management.service.FeedbackSer
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/participant")
 public class ParticipantController {
-
-    @Autowired
-    private EventService eventService;
 
     @Autowired
     private EnrollmentService enrollmentService;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private FeedbackService feedbackService;
 
-    @GetMapping("/events")
+    @GetMapping("/api/participant/events")
     public ResponseEntity<List<Event>> getEvents() {
-        return new ResponseEntity<>(eventService.getAllEvents(),HttpStatus.OK);
+        List<Event> events = eventService.getAllEvents();
+        return ResponseEntity.ok(events);
     }
 
-    @PostMapping("/event/{eventId}/enroll")
-    public ResponseEntity<Enrollment> enrollInEvent(@RequestParam Long userId,@PathVariable Long eventId) {
-        return new ResponseEntity<>(enrollmentService.enrollInEvent(userId, eventId),HttpStatus.OK);
+    @PostMapping("/api/participant/event/{eventId}/enroll")
+    public ResponseEntity<Enrollment> enrollInEvent(@RequestParam Long userId, @PathVariable Long eventId) {
+        Enrollment enrollment = enrollmentService.enrollInEvent(userId, eventId);
+        return ResponseEntity.ok(enrollment);
     }
 
-    @GetMapping("/event/{id}/status")
+    @GetMapping("/api/participant/event/{id}/status")
     public ResponseEntity<Event> viewEventStatus(@PathVariable Long id) {
-        return new ResponseEntity<>(eventService.getEventById(id),HttpStatus.OK);
+        Event event = eventService.getEventById(id);
+        return ResponseEntity.ok(event);
     }
 
-    @PostMapping("/event/{eventId}/feedback")
-    public ResponseEntity<Feedback> provideFeedback(@RequestParam Long userId,@PathVariable Long eventId,@RequestBody Feedback feedback) {
-        return new ResponseEntity<>(feedbackService.createFeedback(eventId, userId, feedback),HttpStatus.OK);
+    @PostMapping("/api/participant/event/{eventId}/feedback")
+    public ResponseEntity<Feedback> provideFeedback(@RequestParam Long userId, @PathVariable Long eventId, @RequestBody Feedback feedback) {
+        Feedback providedFeedback = feedbackService.createFeedback(eventId, userId, feedback);
+        return ResponseEntity.ok(providedFeedback);
     }
 }

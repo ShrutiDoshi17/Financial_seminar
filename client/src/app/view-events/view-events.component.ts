@@ -12,56 +12,96 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./view-events.component.scss'],
   providers: [DatePipe]
 })
-export class ViewEventsComponent implements OnInit  {
-  formModel:any={status:null};
-  showError:boolean=false;
-  errorMessage:any;
-  eventObj:any=[];
-  assignModel:any={};
-  showMessage:any;
-  responseMessage:any;
-  isUpdate:any=false;
-  eventList:any=[];
-  workShopList:any=[];
-  userId:any;
-  selectedEvent:any={};
-  status:any;
+export class ViewEventsComponent implements OnInit {
 
-  ngOnInit(): void {
-    this.userId = localStorage.getItem('userId');
-    this.getEvent();
-    
-  }
 
-  getEvent(){
+  formModel: any = { status: null };
+  showError: boolean = false;
+  errorMessage: any;
+  eventObj: any = [];
+  assignModel: any = {};
+
+  showMessage: any;
+  responseMessage: any;
+  isUpdate: any = false;
+  eventList: any = [];
+  workShopList: any = [];
+  userId: any;
+  selectedEvent: any = {};
+  status: any;
+
+  constructor(private datePipe: DatePipe, public router: Router, public httpService: HttpService, private authService: AuthService) {
 
   }
-
-  enroll(){
-
-  }
-
-  viewDetails(val:any){
-    this.selectedEvent = val;
-
-  }
-
-  saveFeedBack(){
-    if(!this.selectedEvent || this.formModel.feedback){
-      this.showError = true;
-      this.errorMessage = 'Feedback cannot be empty';
-      return;
-    }
-
-    this.formModel.timestamp = new Date();
-
-  }
-
-  checkStatus(){
-
-  }
-
-
-   
   
+  ngOnInit(): void {
+    const userIdString = localStorage.getItem('userId');
+    this.userId = userIdString ? parseInt(userIdString, 10) : null;
+    this.getEvent();
+  }
+  
+  getEvent() {
+    this.httpService.viewAllEvents().subscribe((data: any) => {
+      this.eventList = data;
+      console.log(this.eventList);
+    }, error => {
+      this.showError = true;
+      this.errorMessage = "An error occurred.. Please try again later.";
+      console.error('Login error:', error);
+    })
+  }
+
+  enroll() {
+    this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe((data: any) => {
+      console.log(data);
+      this.getEvent();
+    }, error => {
+      this.showError = true;
+      this.errorMessage = "An error occurred.. Please try again later.";
+      console.error('Login error:', error);
+    });;
+  }
+
+  viewDetails(val: any) {
+    this.selectedEvent = val;
+  }
+
+  saveFeedBack() {
+    debugger;
+    if (this.selectedEvent.id != null && this.formModel.content) {
+      this.showError = false;
+      const formattedTime = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+      this.formModel.timestamp = formattedTime;
+      const userIdString = localStorage.getItem('userId');
+      const userId = userIdString ? parseInt(userIdString, 10) : null;
+      this.httpService.AddFeedbackByParticipants(this.selectedEvent.id, userId, this.formModel).subscribe((data: any) => {
+        this.formModel = {};
+        this.responseMessage = "Saved Successfully";
+        this.getEvent();
+        this.selectedEvent = {};
+
+      }, error => {
+        this.showError = true;
+        this.errorMessage = "An error occurred while created in. Please try again later.";
+        console.error('Login error:', error);
+      });;
+    }
+  }
+
+  checkStatus() {
+    this.status = "";
+    this.httpService.viewEventStatus(this.selectedEvent.id).subscribe({
+     next: (data: any) => {
+      this.status = data.status;
+      console.log(data);
+    }, error: (err: any) => {
+      this.showError = true;
+      this.errorMessage = "An error occurred.. Please try again later.";
+      console.error('Login error:', err);
+    }
+    });;
+  }
+
+
 }
