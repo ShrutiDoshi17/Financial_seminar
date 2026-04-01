@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
-import { scheduled } from 'rxjs';
 
 
 @Component({
@@ -12,134 +11,104 @@ import { scheduled } from 'rxjs';
   styleUrls: ['./create-event.component.scss']
 })
 export class CreateEventComponent implements OnInit {
-  itemForm!: FormGroup;
-  formModel: any = { status: null };
-  showError: boolean = false;
-  errorMessage: any;
-  eventList: any = [];
-  assignModel: any = {};
+
+  itemForm: FormGroup; 
+  formModel:any={status:null};
+  showError:boolean=false;
+  errorMessage:any;
+  eventList:any=[];
+  assignModel: any={};
+
   showMessage: any;
   responseMessage: any;
   updateId: any;
-
-  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
-     this.itemForm = this.fb.group({
-      title: [null, [Validators.required]],
-      description: [null, [Validators.required]],
-      schedule: [null, [Validators.required]],
-      location: [null, [Validators.required]],
-      status: [null, [Validators.required]]
+  constructor(public router:Router, public httpService:HttpService, private formBuilder: FormBuilder, private authService:AuthService) 
+    {
+      this.itemForm = this.formBuilder.group({
+        title: [this.formModel.title,[ Validators.required]],      
+        schedule: [this.formModel.schedule,[ Validators.required]],
+        location: [this.formModel.location,[ Validators.required]],
+        status: [this.formModel.status,[ Validators.required]],
+        description: [this.formModel.description,[ Validators.required]],
+        institutionId: [this.formModel.institutionId],
+      
+     
+       
     });
-  }
 
+   
+  }
   ngOnInit(): void {
-    if(!this.itemForm){
-    this.itemForm = this.fb.group({
-      title: [null, [Validators.required]],
-      description: [null, [Validators.required]],
-      schedule: [null, [Validators.required]],
-      location: [null, [Validators.required]],
-      status: [null, [Validators.required]]
-    });
-  }
-  try{
+
     this.getEvent();
-  }catch{
-
   }
-    
-  }
-
   getEvent() {
-    const userId = localStorage.getItem('userId')
-
-    if (!userId) {
-      this.showError = true
-      this.errorMessage = 'User ID not found';
-      return;
-    }
-
-    this.httpService.getEventByInstitutionId(userId).subscribe({
-      next: (data: any) => {
-        this.eventList = data
-        this.showError = false
-      },
-      error: (err: any) => {
-        this.showError = true
-        if (err.status === 403) {
-          this.errorMessage = 'You are not authorized'
-        } else if (err.status === 404) {
-          this.errorMessage = 'No event found'
-        } else {
-          this.errorMessage = 'Falied to load events'
-        }
-      }
-    })
-  }
-
-  edit(val: any):void {
-    if (!val || !val.id) {
-      this.showError = true
-      this.errorMessage = 'Invalid event selected';
-      return;
-    }
-
-    this.updateId = val.id
-
-    this.itemForm.patchValue({
-      title: val.title,
-      description: val.description,
-      schedule: val.schedule,
-      location: val.location,
-      status: val.status
-    });
-  }
-
-  onSubmit(): void {
-    this.showError = false
-    this.showMessage = false
-
-    if (this.itemForm.valid) {
+    this.eventList=[];
+    const userIdString = localStorage.getItem('userId');
+    const userId = userIdString ? parseInt(userIdString, 10) : null;
+    this.itemForm.controls["institutionId"].setValue(userId)
+    this.httpService.getEventByInstitutionId(userId).subscribe((data: any) => {
+      this.eventList=data;
+      console.log(this.eventList);
+    }, error => {
+      // Handle error
       this.showError = true;
-      this.errorMessage = 'ALl field are required';
-      return;
-
-    }
-      const userId = localStorage.getItem('userId')
-
-      if (!userId) {
-        this.showError = true
-        this.errorMessage = 'User ID not found'
-        return
-      }
-
-      const eventData = {
-        ...this.itemForm.value,
-        institutionId: userId
-      }
-
-      if (this.updateId) {
-        this.httpService.updateEvent(this.updateId, eventData).subscribe({
-          next: (data) => {
-            this.showMessage = true
-            this.responseMessage = 'Event added successfully'
-            this.updateId = null
-            this.itemForm.reset()
-            this.getEvent()
-          },
-          error: (err) => {
-            this.showError = true
-            if (err.status === 401) {
-              this.errorMessage = 'You are not authorized'
-            } else if (err.status === 404) {
-              this.errorMessage = 'Institution not found'
-            } else {
-              this.errorMessage = 'Failed to create event'
-            }
-          }
-        });
+      this.errorMessage = "An error occurred.. Please try again later.";
+      console.error('Login error:', error);
+    });;
+  }
+  edit(val:any)
+  {
+    this.itemForm.patchValue(val);
+    this.updateId=val.id;
+  }
+ 
+  onSubmit()
+  {
+    
+      if (this.itemForm.valid) {
+        if(this.updateId==null)
+        {
+          this.showError = false;
+          const userIdString = localStorage.getItem('userId');
+          const userId = userIdString ? parseInt(userIdString, 10) : null;
+          this.itemForm.controls["institutionId"].setValue(userId)
+          this.httpService.createEvent(this.itemForm.value).subscribe((data: any) => {
+            this.itemForm.reset();
+            this.getEvent();
+            
+          }, error => {
+            // Handle error
+            this.showError = true;
+            this.errorMessage = "An error occurred while created in. Please try again later.";
+            console.error('Login error:', error);
+          });;
+        }
+        else{
+          this.showError = false;
+          const userIdString = localStorage.getItem('userId');
+          const userId = userIdString ? parseInt(userIdString, 10) : null;
+          this.itemForm.controls["institutionId"].setValue(userId)
+          this.httpService.updateEvent(this.updateId,this.itemForm.value).subscribe((data: any) => {
+            this.itemForm.reset();
+            this.getEvent();
+            this.updateId=null;
+            
+          }, error => {
+            // Handle error
+            this.showError = true;
+            this.errorMessage = "An error occurred while created in. Please try again later.";
+            console.error('Login error:', error);
+          });;
+        }
+       
+      } else {
+        this.itemForm.markAllAsTouched();
       }
     
+   
   }
 
+  
 }
+ 
