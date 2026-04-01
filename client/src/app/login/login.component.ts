@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent {
   itemForm: FormGroup;
   formModel: any = {};
@@ -28,7 +29,7 @@ export class LoginComponent {
     if (this.itemForm.valid) {
       this.showError = false;
       this.httpService.Login(this.itemForm.value).subscribe((data: any) => {
-        if (data. != 0) {
+        if (data.userNo != 0) {
           // debugger;
 
           // localStorage.setItem('role', data.role);
