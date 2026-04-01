@@ -2,17 +2,17 @@
     <h1 class="text-capitalize">Financial Seminar and Workshop Management Platform</h1>
 </div>
 
-<!-- 
+
 <div class="container mt-4">
-    Error Message 
+    <!-- Error Message  -->
     <div *ngIf = "showError" class="alert alert-danger">
         {{ errorMessage }}
     </div>
 
-    Events List 
-    <div *ngIf = "!selectedEvent">
+    <!-- Events List  -->
+    <div>
         <h4>All Events</h4>
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -30,7 +30,10 @@
                     <td>{{ event.location }}</td>
                     <td>{{ event.status }}</td>
                 </tr>
+                <tr *ngIf = "eventList.length === 0">
+                    <td><span>No events found</span></td>
+                </tr>
             </tbody>
         </table>
     </div>
-</div> -->
+</div>

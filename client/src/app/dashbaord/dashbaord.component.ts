@@ -10,31 +10,30 @@ import { HttpService } from '../../services/http.service';
 })
 
 export class DashbaordComponent  {
-  // role: string | null = null
-  // eventList: any = []
-  // selectedEvent: any
-  // showError: boolean = false
-  // errorMessage: any
+  role: string | null = null
+  eventList: any = []
+  selectedEvent: any
+  showError: boolean = false
+  errorMessage: any
 
-  // constructor(private http: HttpService, private authService: AuthService, private router: Router) {}
+  constructor(private httpService: HttpService, private authService: AuthService, private router: Router) {}
 
-  // ngOnInit(): void {
-  //   this.role = this.authService.getRole
-  //   this.getEvents()
-  // }
+  ngOnInit(): void {
+    this.role = this.authService.getRole
+    this.getEvents()
+  }
 
-  // getEvents(): void {
-  //   this.eventList = []
-  //   this.http.GetAllevents().subscribe({
-  //     next: (data: any) => {
-  //       this.eventList = data
-  //       this.showError = false
-  //     }, error: (err: any) => {
-  //       this.showError = true
-  //       this.errorMessage = 'Failed to load events.'
-  //     }
-  //   })
-  // }
+  getEvents(): void {
+    this.httpService.viewAllEvents().subscribe({
+      next: (data: any) => {
+        this.eventList = data
+        this.showError = false
+      }, error: (err: any) => {
+        this.showError = true
+        this.errorMessage = 'Failed to load events.'
+      }
+    })
+  }
 
   // viewDetails(event: any): void {
   //   this.selectedEvent = event
