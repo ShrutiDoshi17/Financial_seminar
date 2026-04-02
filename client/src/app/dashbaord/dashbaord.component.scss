@@ -1,0 +1,82 @@
+.db-wrapper {
+    min-height: calc(100vh - 64px);
+    background: #151E27;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    padding: 2rem;
+}
+
+.db-card {
+    background: #1C2B3A;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    padding: 3rem 4rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    animation: fadeUp 0.5s ease;
+}
+
+.db-card__icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2E86AB, #f0a500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #fff;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 24px rgba(240, 165, 0, 0.35);
+}
+
+.db-card__greeting {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 0.25rem;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+
+.db-card__name {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    background: linear-gradient(135deg, #fff, #f0a500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.db-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(240, 165, 0, 0.1);
+    border: 1px solid rgba(240, 165, 0, 0.3);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #F0A500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.db-card__badge i {
+    font-size: 0.78rem;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

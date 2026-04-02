@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class ViewEventsComponent implements OnInit {
-
+  enrolled: boolean = false
 
   formModel: any = { status: null };
   showError: boolean = false;
@@ -54,7 +54,8 @@ export class ViewEventsComponent implements OnInit {
   enroll() {
     this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe((data: any) => {
       console.log(data);
-      this.getEvent();
+      this.enrolled = true
+      // this.getEvent();
     }, error => {
       this.showError = true;
       this.errorMessage = "An error occurred.. Please try again later.";

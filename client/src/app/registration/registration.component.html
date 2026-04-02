@@ -1,136 +1,159 @@
 <div class="register-wrapper">
-  <div class="register-left">
+
+  <!-- ===== LEFT PANEL ===== -->
+  <div class="left-panel">
+
+    <div class="finance-illustration">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="180" width="30" height="80" fill="#F0A500" rx="4" />
+        <rect x="70" y="140" width="30" height="120" fill="#2E86AB" rx="4" />
+        <rect x="110" y="100" width="30" height="160" fill="#F0A500" rx="4" />
+        <rect x="150" y="60" width="30" height="200" fill="#2E86AB" rx="4" />
+        <polyline points="200,220 240,170 280,130 320,80 360,50" fill="none" stroke="#F0A500" stroke-width="3" />
+        <circle cx="200" cy="220" r="5" fill="#F0A500" />
+        <circle cx="240" cy="170" r="5" fill="#F0A500" />
+        <circle cx="280" cy="130" r="5" fill="#F0A500" />
+        <circle cx="320" cy="80" r="5" fill="#F0A500" />
+        <circle cx="360" cy="50" r="5" fill="#F0A500" />
+        <circle cx="80" cy="80" r="50" fill="none" stroke="#2E86AB" stroke-width="20" stroke-dasharray="95 220" />
+        <circle cx="80" cy="80" r="50" fill="none" stroke="#F0A500" stroke-width="20" stroke-dasharray="65 220"
+          stroke-dashoffset="-95" />
+        <line x1="20" y1="260" x2="380" y2="260" stroke="#ffffff" stroke-width="0.5" />
+        <line x1="20" y1="200" x2="380" y2="200" stroke="#ffffff" stroke-width="0.5" />
+        <line x1="20" y1="140" x2="380" y2="140" stroke="#ffffff" stroke-width="0.5" />
+      </svg>
+    </div>
+
     <div class="brand-content">
-      <div class="brand-icon">
-        <i class="fas fa-chart-line"></i>
-      </div>
-      <h1>FinSeminar</h1>
-      <p>Join thousands of financial professionals and learners on one
-        unified platform</p>
+      <h1>Fin<span>Seminar</span></h1>
+      <p>Join thousands of financial professionals and learners on one unified platform</p>
+
       <div class="role-cards">
-        <div class="role-card">
-          <i class="fas fa-building"></i>
-          <div>
-            <h6>Institution</h6>
-            <small>Create & manage events</small>
+
+        <div class="role-card" [class.role-active]="itemForm.get('role')?.value === 'INSTITUTION'">
+          <div class="role-icon-wrap"><i class="fas fa-building"></i></div>
+          <div class="role-info">
+            <span class="role-name">Institution</span>
+            <span class="role-desc">Create &amp; manage events</span>
           </div>
         </div>
-        <div class="role-card">
-          <i class="fas fa-user-tie"></i>
-          <div>
-            <h6>Professional</h6>
-            <small>Conduct workshops</small>
+
+        <div class="role-card" [class.role-active]="itemForm.get('role')?.value === 'PROFESSIONAL'">
+          <div class="role-icon-wrap"><i class="fas fa-user-tie"></i></div>
+          <div class="role-info">
+            <span class="role-name">Professional</span>
+            <span class="role-desc">Conduct workshops</span>
           </div>
         </div>
-        <div class="role-card">
-          <i class="fas fa-graduation-cap"></i>
-          <div>
-            <h6>Participant</h6>
-            <small>Enroll & learn</small>
+
+        <div class="role-card" [class.role-active]="itemForm.get('role')?.value === 'PARTICIPANT'">
+          <div class="role-icon-wrap"><i class="fas fa-user-graduate"></i></div>
+          <div class="role-info">
+            <span class="role-name">Participant</span>
+            <span class="role-desc">Enroll &amp; learn</span>
           </div>
         </div>
+
       </div>
     </div>
+
   </div>
-  <div class="register-right">
-    <div class="register-card">
-      <div class="card-header-custom">
-        <h2>Create Account</h2>
-        <p>Fill in the details below to get started</p>
+
+  <!-- ===== RIGHT PANEL ===== -->
+  <div class="right-panel">
+    <div class="form-card">
+
+      <div class="form-header">
+        <h2 class="form-title">Create Account</h2>
+        <p class="form-subtitle">Fill in the details below to get started</p>
       </div>
+
       <!-- Success Message -->
-      <div class="alert alert-success alert-custom-success" *ngIf="showMessage">
-        <i class="fas fa-check-circle me-2"></i>
-        {{ responseMessage }}
-        <div class="mt-2">
-          <small>You can now <a routerLink="/login">login
-              here</a></small>
-        </div>
+      <div class="alert-success" *ngIf="showMessage">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ responseMessage }}</span>
       </div>
+
+      <!-- Error Alert -->
+      <div class="alert-danger" *ngIf="showError">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        {{ errorMessage }}
+      </div>
+
       <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+
         <!-- Username -->
-        <div class="mb-3">
-          <label class="form-label">Username</label>
-          <div class="input-group-custom">
-            <span class="input-icon">
-              <i class="fas fa-user"></i>
-            </span>
-            <input type="text" class="form-control custom-input" placeholder="Choose a username"
-              formControlName="username" [class.is-invalid]="itemForm.get('username')?.invalid &&
-itemForm.get('username')?.touched">
+        <div class="field-group">
+          <label class="field-label">Username</label>
+          <div class="field-wrap"
+            [class.field-error-border]="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
+            <i class="fas fa-user field-icon"></i>
+            <input type="text" class="field-input" placeholder="Enter your username" formControlName="username" />
           </div>
-          <div class="invalid-feedback-custom" *ngIf="itemForm.get('username')?.invalid &&
-itemForm.get('username')?.touched">
+          <span class="error-msg" *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
             Username is required
-          </div>
+          </span>
         </div>
+
         <!-- Email -->
-        <div class="mb-3">
-          <label class="form-label">Email Address</label>
-          <div class="input-group-custom">
-            <span class="input-icon">
-              <i class="fas fa-envelope"></i>
-            </span>
-            <input type="email" class="form-control custom-input" placeholder="Enter your email" formControlName="email"
-              [class.is-invalid]="itemForm.get('email')?.invalid &&
-itemForm.get('email')?.touched">
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <div class="field-wrap"
+            [class.field-error-border]="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
+            <i class="fas fa-envelope field-icon"></i>
+            <input type="email" class="field-input" placeholder="Enter your email" formControlName="email" />
           </div>
-          <div class="invalid-feedback-custom" *ngIf="itemForm.get('email')?.invalid &&
-itemForm.get('email')?.touched">
-            <span *ngIf="itemForm.get('email')?.errors?.
-['required']">Email is required</span>
-            <span *ngIf="itemForm.get('email')?.errors?.['email']">Enter
-              a valid email address</span>
-          </div>
+          <span class="error-msg" *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
+            <ng-container *ngIf="itemForm.get('email')?.errors?.['required']">Email is required</ng-container>
+            <ng-container *ngIf="itemForm.get('email')?.errors?.['email']">Enter a valid email address</ng-container>
+          </span>
         </div>
+
         <!-- Password -->
-        <div class="mb-3">
-          <label class="form-label">Password</label>
-          <div class="input-group-custom">
-            <span class="input-icon">
-              <i class="fas fa-lock"></i>
-            </span>
-            <input type="password" class="form-control custom-input" placeholder="Create a password"
-              formControlName="password" [class.is-invalid]="itemForm.get('password')?.invalid &&
-itemForm.get('password')?.touched">
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <div class="field-wrap"
+            [class.field-error-border]="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
+            <i class="fas fa-lock field-icon"></i>
+            <input type="password" class="field-input" placeholder="Create a password" formControlName="password" />
           </div>
-          <div class="invalid-feedback-custom" *ngIf="itemForm.get('password')?.invalid &&
-itemForm.get('password')?.touched">
+          <span class="error-msg" *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
             Password is required
-          </div>
+          </span>
         </div>
+
         <!-- Role -->
-        <div class="mb-4">
-          <label class="form-label">Select Role</label>
-          <div class="input-group-custom">
-            <span class="input-icon">
-              <i class="fas fa-id-badge"></i>
-            </span>
-            <select class="form-control custom-input custom-select" formControlName="role" [class.is-invalid]="itemForm.get('role')?.invalid &&
-itemForm.get('role')?.touched">
+        <div class="field-group">
+          <label class="field-label">Select Role</label>
+          <div class="field-wrap"
+            [class.field-error-border]="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
+            <i class="fas fa-id-badge field-icon"></i>
+            <select class="field-input field-select" formControlName="role">
               <option [ngValue]="null" disabled>Select your role</option>
               <option value="INSTITUTION">Institution</option>
               <option value="PROFESSIONAL">Professional</option>
               <option value="PARTICIPANT">Participant</option>
             </select>
           </div>
-          <div class="invalid-feedback-custom" *ngIf="itemForm.get('role')?.invalid &&
-itemForm.get('role')?.touched">
+          <span class="error-msg" *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
             Please select a role
-          </div>
+          </span>
         </div>
-        <!-- Register Button -->
-        <button type="submit" class="btn btn-register-submit w-100">
-          <i class="fas fa-user-plus me-2"></i>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-register">
+          <i class="fas fa-user-plus"></i>
           Create Account
         </button>
-        <!-- Back to Login -->
-        <div class="text-center mt-3">
-          <span class="text-muted" style="font-size: 14px;">Already have
-            an account? </span>
-          <a routerLink="/login" class="login-link">Sign In</a>
-        </div>
+
       </form>
+
+      <div class="form-footer">
+        Already have an account?
+        <a routerLink="/login" class="link-login">Sign In</a>
+      </div>
+
     </div>
   </div>
+
 </div>

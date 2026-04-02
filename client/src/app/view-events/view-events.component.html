@@ -1,92 +1,165 @@
-<div *ngIf="responseMessage" class="alert alert-success mt-4" role="alert">
-  {{ responseMessage }}
-</div>
-<div class="d-flex justify-content-between mt-4">
-  <h2 class="mb-0">Manage Events</h2>
-</div>
+<div class="ve-wrapper">
 
-<div class="row mt-3">
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">Event Information</div>
+  <!-- Page Header -->
+  <div class="ve-header">
+    <div class="ve-header__left">
+      <div class="ve-header__icon"><i class="fas fa-list-alt"></i></div>
+      <div>
+        <h1 class="ve-header__title">Available Events</h1>
+        <p class="ve-header__sub">Browse and enroll in financial seminars</p>
+      </div>
     </div>
-    <div class="card-body">
+  </div>
+
+  <!-- Success Alert -->
+  <div *ngIf="showMessage" class="ve-alert">
+    <i class="fas fa-check-circle"></i>
+    <span>{{ responseMessage }}</span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="ve-content" [class.ve-content--split]="selectedEvent.id">
+
+    <!-- Events Table -->
+    <div class="ve-table-card">
+      <div class="ve-table-card__header">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Event Listings</span>
+        <div class="ve-count">{{ eventList.length }} events</div>
+      </div>
       <div class="table-responsive">
-        <table class="table">
+        <table class="ve-table">
           <thead>
             <tr>
-              <th>Sr.</th>
+              <th>#</th>
               <th>Title</th>
               <th>Schedule</th>
               <th>Location</th>
               <th>Status</th>
-              <th>Description</th>
-              <td>Status</td>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let event of eventList">
-              <td>{{event.id}}</td>
-              <td>{{event.title}}</td>
-              <td>{{event.schedule}}</td>
-              <td>{{event.location}}</td>
-              <td>{{event.status}}</td>
-              <td>{{event.description}}</td>
+            <tr *ngFor="let event of eventList"
+                [class.ve-table__row--active]="selectedEvent.id === event.id"
+                (click)="viewDetails(event)">
+              <td class="ve-table__id">{{ event.id }}</td>
+              <td class="ve-table__title">{{ event.title }}</td>
+              <td>{{ event.schedule }}</td>
+              <td>{{ event.location }}</td>
               <td>
-                <div *ngFor="let d of event.enrollments">
-                  <h5>{{ d.status }}</h5>
-                </div>
+                <span class="ve-status-badge"
+                  [ngClass]="{
+                    've-status-badge--planned':   event.status === 'PLANNED',
+                    've-status-badge--ongoing':   event.status === 'ONGOING',
+                    've-status-badge--completed': event.status === 'COMPLETED'
+                  }">
+                  {{ event.status }}
+                </span>
               </td>
               <td>
-                <button class="btn btn-warning" (click)="viewDetails(event)">View Details</button>
+                <button class="ve-btn-details" (click)="viewDetails(event)">
+                  <i class="fas fa-eye"></i> Details
+                </button>
+              </td>
+              <td>
+                <button *ngIf = "!enrolled" class="ve-btn-enroll-inline" (click) = "enroll()">
+                  <i class="fas fa-user-plus"></i>
+                </button>
+                <span class="ve-enroll-rick" *ngIf = "selectedEvent.id === event.id && selectedEvent.enrollments.length > 0">
+                  <i class="fas fa-check-circle"></i>
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  </div>
 
-  <div *ngIf="selectedEvent.id" class="col-md-4">
-    <div class="row">
-      <div class="col-sm-6">
-        <button *ngIf="selectedEvent.enrollments.length==0" (click)="enroll()" class="btn btn-danger">Enroll
-          Now</button>
-        <button *ngIf="selectedEvent.enrollments.length>0" (click)="checkStatus()" class="btn btn-primary">Check
-          Status</button>
-      </div>
-      <div class="col-sm-6">
-        <div class="text-danger">
-          <h5>Status:{{status}}</h5>
-        </div>
-      </div>
-    </div>
-    <hr>
-    <h4>Feedback</h4>
-    <div *ngFor="let r of selectedEvent.feedbacks">
-      <span>{{r.content}}</span>
-      <p>{{r.timestamp}}</p>
-      <hr>
-    </div>
-    <form class="mb-3 mt-md-4">
-      <div class="row">
+    <!-- Event Detail Panel -->
+    <div *ngIf="selectedEvent.id" class="ve-detail-card">
 
-        <br>
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label for="status" class="form-label ">Feedback</label>
-            <textarea rows="3" name="content" class="form-control" placeholder="Content" type="text"
-              [(ngModel)]="formModel.content"></textarea>
-          </div>
+      <!-- Title -->
+      <div class="ve-detail-card__header">
+        <h3 class="ve-detail-card__title">{{ selectedEvent.title }}</h3>
+        <span class="ve-status-badge"
+          [ngClass]="{
+            've-status-badge--planned':   selectedEvent.status === 'PLANNED',
+            've-status-badge--ongoing':   selectedEvent.status === 'ONGOING',
+            've-status-badge--completed': selectedEvent.status === 'COMPLETED'
+          }">
+          {{ selectedEvent.status }}
+        </span>
+      </div>
+
+      <!-- Info -->
+      <div class="ve-detail-card__info">
+        <div class="ve-info-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>{{ selectedEvent.location }}</span>
         </div>
-        <div class="col-md-2">
-          <div class="d-grid">
-            <br>
-            <button (click)="saveFeedBack()" class="btn btn-outline-dark mt-1" type="submit">Submit</button>
-          </div>
+        <div class="ve-info-item">
+          <i class="fas fa-calendar"></i>
+          <span>{{ selectedEvent.schedule }}</span>
+        </div>
+        <div class="ve-info-item ve-info-item--desc">
+          <i class="fas fa-align-left"></i>
+          <span>{{ selectedEvent.description }}</span>
         </div>
       </div>
-    </form>
+
+      <!-- Enroll / Check Status -->
+      <div class="ve-detail-card__actions">
+        <button *ngIf="selectedEvent.enrollments.length == 0"
+          (click)="enroll()" class="ve-btn-enroll">
+          <i class="fas fa-user-plus"></i> Enroll Now
+        </button>
+        <button *ngIf="selectedEvent.enrollments.length > 0"
+          (click)="checkStatus()" class="ve-btn-status">
+          <i class="fas fa-sync-alt"></i> Check Status
+        </button>
+        <div *ngIf="status" class="ve-status-result">
+          <i class="fas fa-info-circle"></i> {{ status }}
+        </div>
+      </div>
+
+      <div class="ve-divider"></div>
+
+      <!-- Feedback List -->
+      <div class="ve-feedback-section">
+        <h4 class="ve-feedback-section__title">
+          <i class="fas fa-comments"></i> Feedback
+        </h4>
+        <div *ngIf="selectedEvent.feedbacks.length === 0" class="ve-feedback-empty">
+          No feedback yet.
+        </div>
+        <div *ngFor="let r of selectedEvent.feedbacks" class="ve-feedback-item">
+          <p class="ve-feedback-item__content">{{ r.content }}</p>
+          <span class="ve-feedback-item__time">{{ r.timestamp }}</span>
+        </div>
+      </div>
+
+      <div class="ve-divider"></div>
+
+      <!-- Submit Feedback -->
+      <div class="ve-feedback-form">
+        <h4 class="ve-feedback-form__title">Leave Feedback</h4>
+        <div class="ve-input-group">
+          <i class="fas fa-pen"></i>
+          <textarea
+            rows="3"
+            name="content"
+            class="ve-textarea"
+            placeholder="Share your experience..."
+            [(ngModel)]="formModel.content">
+          </textarea>
+        </div>
+        <button (click)="saveFeedBack()" class="ve-btn-submit">
+          <i class="fas fa-paper-plane"></i> Submit Feedback
+        </button>
+      </div>
+
+    </div>
   </div>
 </div>
+ 

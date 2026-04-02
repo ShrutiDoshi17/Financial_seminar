@@ -15,11 +15,13 @@ export class DashbaordComponent  {
   selectedEvent: any
   showError: boolean = false
   errorMessage: any
+  username: any
 
   constructor(private httpService: HttpService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.role = this.authService.getRole
+    this.username = this.authService.getUsername
     this.getEvents()
   }
 

@@ -49,6 +49,7 @@ export class LoginComponent {
             this.authService.SetRole(data.role);
             this.authService.saveToken(data.token)
             this.authService.saveUserId(data.userId)
+            this.authService.setUsername(data.username)
             this.router.navigateByUrl('/dashboard');
 
             setTimeout(() => {
