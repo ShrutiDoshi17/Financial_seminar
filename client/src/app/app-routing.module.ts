@@ -15,21 +15,22 @@ import { ViewEventsComponent } from './view-events/view-events.component';
 import { AssignProfessionalComponent } from './assign-professional/assign-professional.component';
 import { UpdateEventStatusComponent } from './update-event-status/update-event-status.component';
 import { AddFeedbackComponent } from './add-feedback/add-feedback.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'registration', component: RegistrationComponent },
-  { path: 'dashboard', component: DashbaordComponent },
-  { path: 'create-event', component: CreateEventComponent },
-  { path: 'add-resource', component: AddResourceComponent },
-  { path: 'assign-professional', component: AssignProfessionalComponent },
-  { path: 'update-event-status', component: UpdateEventStatusComponent },
-  { path: 'add-feedback', component: AddFeedbackComponent },
-  { path: 'view-events', component: ViewEventsComponent },
+  { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
+  { path: 'registration', component: RegistrationComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashbaordComponent, canActivate: [AuthGuard] },
+  { path: 'create-event', component: CreateEventComponent, canActivate: [AuthGuard] },
+  { path: 'add-resource', component: AddResourceComponent, canActivate: [AuthGuard] },
+  { path: 'assign-professional', component: AssignProfessionalComponent, canActivate: [AuthGuard] },
+  { path: 'update-event-status', component: UpdateEventStatusComponent, canActivate: [AuthGuard] },
+  { path: 'add-feedback', component: AddFeedbackComponent, canActivate: [AuthGuard] },
+  { path: 'view-events', component: ViewEventsComponent, canActivate: [AuthGuard] },
 
 
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/dashbaord', pathMatch: 'full' },
+  { path: '**', redirectTo: '/dashbaord', pathMatch: 'full' },
 ];
 
 @NgModule({

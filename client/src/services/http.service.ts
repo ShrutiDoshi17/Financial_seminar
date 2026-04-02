@@ -20,6 +20,11 @@ export class HttpService {
       })
     }
   }
+
+  checkUsernameExists(username: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/user/check-username?username=${username}`, this.httpOptions)
+  }
+
   Login(details: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/user/login`, details)
   }

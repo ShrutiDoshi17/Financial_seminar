@@ -31,6 +31,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByRole("PROFESSIONAL");
     }
 
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
