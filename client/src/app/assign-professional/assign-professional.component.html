@@ -1,58 +1,109 @@
-<div *ngIf="responseMessage" class="alert alert-success mt-4" role="alert">
-  {{ responseMessage }}
-</div>
+<div class="page-wrapper">
+  <div class="container-fluid py-4 px-4">
 
-<div class="d-flex justify-content-between mt-4">
-  <h2 class="mb-0">Assign Professional</h2>
-</div>
+    <div class="row g-4">
 
-<div class="row mt-3">
-  <div class="card">
-    <div class="card-body">
-      <form class="mb-3 mt-md-4" [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-        <div class="row">
-          <div class="col-md-3">
+      <!-- LEFT: Form -->
+      <div class="col-lg-5">
+        <div class="form-card">
+
+          <div class="form-card-header">
+            <i class="fas fa-user-check"></i>
+            <div>
+              <h4>Assign Professional</h4>
+              <p>Assign a professional speaker to your event</p>
+            </div>
+          </div>
+
+          <!-- Error Alert -->
+          <div class="alert-error" *ngIf="showError">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+          </div>
+
+          <!-- Success Alert -->
+          <div class="alert-success" *ngIf="responseMessage">
+            <i class="fas fa-check-circle me-2"></i>{{ responseMessage }}
+          </div>
+
+          <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+
+            <!-- Select Event -->
             <div class="mb-3">
-              <label for="eventId" class="form-label">Event</label>
-              <select name="eventId" formControlName="eventId" class="form-control" id="eventId">
-                <option value="null">Choose Event</option>
-                <option *ngFor="let val of eventList" [value]="val.id">{{val.title}}</option>
-              </select>
-              <div
-                *ngIf="itemForm.controls['eventId'].invalid && (itemForm.controls['eventId'].dirty || itemForm.controls['eventId'].touched)"
-                class="ng-dirty">
-                <span *ngIf="itemForm.controls['eventId'].errors">
-                  <span class="text-danger">Please Choose Event.</span>
-                </span>
+              <label class="form-label">Select Event</label>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fas fa-calendar-alt"></i></span>
+                <select class="custom-input" formControlName="eventId"
+                  [class.is-invalid]="itemForm.get('eventId')?.invalid && itemForm.get('eventId')?.touched">
+                  <option value="" disabled selected>Choose an event</option>
+                  <option *ngFor="let event of eventList" [value]="event.id">{{ event.title }}</option>
+                </select>
+              </div>
+              <div class="invalid-msg" *ngIf="itemForm.get('eventId')?.invalid && itemForm.get('eventId')?.touched">
+                Please select an event
               </div>
             </div>
-          </div>
-          
-          <div class="col-md-3">
-            <div class="mb-3">
-              <label for="userId" class="form-label">Professional</label>
-              <select name="userId" formControlName="userId" class="form-control" id="userId">
-                <option value="null">Choose Professional</option>
-                <option *ngFor="let val of professionalsList" [value]="val.id">{{val.username}}</option>
-              </select>
-              <div
-                *ngIf="itemForm.controls['userId'].invalid && (itemForm.controls['userId'].dirty || itemForm.controls['userId'].touched)"
-                class="ng-dirty">
-                <span *ngIf="itemForm.controls['userId'].errors">
-                  <span class="text-danger">Please Choose Professional.</span>
-                </span>
+
+            <!-- Select Professional -->
+            <div class="mb-4">
+              <label class="form-label">Select Professional</label>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fas fa-user-tie"></i></span>
+                <select class="custom-input" formControlName="userId"
+                  [class.is-invalid]="itemForm.get('userId')?.invalid && itemForm.get('userId')?.touched">
+                  <option value="" disabled selected>Choose a professional</option>
+                  <option *ngFor="let pro of professionalsList" [value]="pro.id">{{ pro.username }}</option>
+                </select>
+              </div>
+              <div class="invalid-msg" *ngIf="itemForm.get('userId')?.invalid && itemForm.get('userId')?.touched">
+                Please select a professional
               </div>
             </div>
-          </div>
 
-          <div class="col-md-2">
-            <div class="d-grid">
-              <br>
-              <button class="btn btn-outline-dark mt-1" type="submit">Submit</button>
-            </div>
-          </div>
+            <button type="submit" class="btn-submit w-100">
+              <i class="fas fa-user-plus me-2"></i>Assign Professional
+            </button>
+
+          </form>
         </div>
-      </form>
+      </div>
+
+      <!-- RIGHT: Professionals List -->
+      <div class="col-lg-7">
+        <div class="list-card">
+
+          <div class="list-card-header">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-users"></i>
+              <h4>Available Professionals</h4>
+            </div>
+            <span class="count-badge">{{ professionalsList.length }} Professionals</span>
+          </div>
+
+          <!-- Empty state -->
+          <div class="empty-state" *ngIf="professionalsList.length === 0">
+            <i class="fas fa-user-slash"></i>
+            <p>No professionals found</p>
+          </div>
+
+          <!-- Professionals Grid -->
+          <div class="pro-grid" *ngIf="professionalsList.length > 0">
+            <div class="pro-card" *ngFor="let pro of professionalsList">
+              <div class="pro-avatar">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="pro-info">
+                <div class="pro-name">{{ pro.username }}</div>
+                <div class="pro-email">{{ pro.email }}</div>
+              </div>
+              <span class="pro-role-badge">
+                <i class="fas fa-briefcase me-1"></i>Professional
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
