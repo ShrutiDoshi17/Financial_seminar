@@ -1,79 +1,130 @@
-<div *ngIf="responseMessage" class="alert alert-success mt-4" role="alert">
-  {{ responseMessage }}
-</div>
+<div class="page-wrapper">
+  <div class="container-fluid py-4 px-4">
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="row mt-3">
-      <div class="card">
-        <div class="card-header">Event Information</div>
-      </div>
+    <div class="row g-4">
 
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Sr.</th>
-                <th>Title</th>
-                <th>Schedule</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th>Description</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let event of eventList">
-                <td>{{event.id}}</td>
-                <td>{{event.title}}</td>
-                <td>{{event.schedule}}</td>
-                <td>{{event.location}}</td>
-                <td>{{event.status}}</td>
-                <td>{{event.description}}</td>
-                <td>
-                  <button (click)="addRemarks(event)" class="btn btn-primary">Add Remarks</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+      <!-- LEFT: Event List -->
+      <div class="col-lg-7">
+        <div class="list-card">
 
-  <div *ngIf = "updateId" class="col-md-4">
-    <div class="card">
-      <div class="card-header">
-        Add Remarks
-      </div>
-      <h4>Feedback</h4>
-      <div *ngFor="let f of selectedEvent.feedbacks">
-        <span>{{f.content}}</span>
-        <p>{{f.timestamp}}</p>
-        <hr>
-      </div>
-      <div class="card-body">
-        <form class="mb-3 mt-md-4">
-          <div class="row">
-            <h6>{{selectedEvent.title}}</h6>
-            <br>
-            <div class="col-md-12">
-              <div class="mb-3">
-                <label for="status" class="form-label ">Feedback</label>
-                <textarea rows="3" name="content" class="form-control" placeholder="Content" type="text"
-                  [(ngModel)]="formModel.content"></textarea>
-              </div>
+          <div class="list-card-header">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-comment-alt"></i>
+              <h4>Assigned Events</h4>
             </div>
-            <div class="col-md-2">
-              <div class="d-grid">
-                <br>
-                <button (click)="saveFeedBack()" class="btn btn-outline-dark mt-1" type="submit">Submit</button>
+            <span class="count-badge">{{ eventList.length }} Events</span>
+          </div>
+
+          <!-- Error Alert -->
+          <div class="alert-error" *ngIf="showError">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+          </div>
+
+          <!-- Success Alert -->
+          <div class="alert-success" *ngIf="responseMessage">
+            <i class="fas fa-check-circle me-2"></i>{{ responseMessage }}
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" *ngIf="eventList.length === 0">
+            <i class="fas fa-calendar-times"></i>
+            <p>No events assigned to you yet</p>
+          </div>
+
+          <!-- Event Cards -->
+          <div class="event-list" *ngIf="eventList.length > 0">
+            <div class="event-item" *ngFor="let event of eventList"
+              [class.selected]="updateId === event.id">
+              <div class="event-info">
+                <div class="event-title">{{ event.title }}</div>
+                <div class="event-meta">
+                  <span><i class="fas fa-map-marker-alt me-1"></i>{{ event.location }}</span>
+                  <span><i class="fas fa-calendar me-1"></i>{{ event.schedule | date: 'dd MMM yyyy' }}</span>
+                </div>
+                <div class="event-desc">{{ event.description }}</div>
+              </div>
+              <div class="d-flex flex-column align-items-end gap-2">
+                <span class="status-badge" [ngClass]="{
+                  'status-planned': event.status === 'PLANNED',
+                  'status-ongoing': event.status === 'ONGOING',
+                  'status-completed': event.status === 'COMPLETED'
+                }">{{ event.status }}</span>
+                <button class="btn-action" (click)="addRemarks(event)">
+                  <i class="fas fa-comment-dots me-1"></i>Add Feedback
+                </button>
               </div>
             </div>
           </div>
-        </form>
+
+        </div>
       </div>
+
+      <!-- RIGHT: Feedback Panel -->
+      <div class="col-lg-5">
+
+        <!-- Feedback Form -->
+        <div class="form-card" *ngIf="selectedEvent?.id">
+          <div class="form-card-header">
+            <i class="fas fa-comment-dots"></i>
+            <div>
+              <h4>Submit Feedback</h4>
+              <p>Share your experience for this event</p>
+            </div>
+          </div>
+
+          <!-- Selected Event Info -->
+          <div class="mb-3">
+            <label class="form-label">Event</label>
+            <div class="selected-event-label">
+              <i class="fas fa-calendar-check me-2"></i>
+              {{ selectedEvent?.title }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Location</label>
+            <div class="info-label">
+              <i class="fas fa-map-marker-alt me-2"></i>
+              {{ selectedEvent?.location }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Schedule</label>
+            <div class="info-label">
+              <i class="fas fa-calendar me-2"></i>
+              {{ selectedEvent?.schedule | date: 'dd MMM yyyy, hh:mm a' }}
+            </div>
+          </div>
+
+          <!-- Feedback Textarea -->
+          <div class="mb-4">
+            <label class="form-label">Your Feedback</label>
+            <div class="input-wrap">
+              <span class="input-icon top"><i class="fas fa-comment-alt"></i></span>
+              <textarea class="custom-input" rows="5"
+                placeholder="Write your feedback here..."
+                [(ngModel)]="formModel.content"></textarea>
+            </div>
+            <div class="invalid-msg" *ngIf="!formModel.content && updateId">
+              Please write your feedback before submitting
+            </div>
+          </div>
+
+          <button class="btn-submit w-100" (click)="saveFeedBack()">
+            <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+          </button>
+
+        </div>
+
+        <!-- Placeholder when nothing selected -->
+        <div class="placeholder-card" *ngIf="!selectedEvent?.id">
+          <i class="fas fa-hand-pointer"></i>
+          <p>Select an event from the list to submit your feedback</p>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>

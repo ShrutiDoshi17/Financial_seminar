@@ -18,8 +18,8 @@ import { AddFeedbackComponent } from './add-feedback/add-feedback.component';
 import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
-  { path: 'registration', component: RegistrationComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'registration', component: RegistrationComponent },
   { path: 'dashboard', component: DashbaordComponent, canActivate: [AuthGuard] },
   { path: 'create-event', component: CreateEventComponent, canActivate: [AuthGuard] },
   { path: 'add-resource', component: AddResourceComponent, canActivate: [AuthGuard] },
@@ -29,8 +29,8 @@ const routes: Routes = [
   { path: 'view-events', component: ViewEventsComponent, canActivate: [AuthGuard] },
 
 
-  { path: '', redirectTo: '/dashbaord', pathMatch: 'full' },
-  { path: '**', redirectTo: '/dashbaord', pathMatch: 'full' },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 
 @NgModule({

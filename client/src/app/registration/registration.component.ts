@@ -6,8 +6,8 @@ import { HttpService } from '../../services/http.service';
 
 @Component({
   selector: 'app-registration',
-  templateUrl: './registration.component.html'
-
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.scss']
 })
 
 export class RegistrationComponent {
@@ -46,7 +46,7 @@ export class RegistrationComponent {
             debugger;
             console.log(this.itemForm)
             this.showMessage = true;
-            this.responseMessage = "you are successfully registered";
+            this.responseMessage = "You are successfully registered";
             this.itemForm.reset();
 
             setTimeout(() => {
