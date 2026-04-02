@@ -20,13 +20,13 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
-  { path: 'dashboard', component: DashbaordComponent, canActivate: [AuthGuard] },
-  { path: 'create-event', component: CreateEventComponent, canActivate: [AuthGuard] },
-  { path: 'add-resource', component: AddResourceComponent, canActivate: [AuthGuard] },
-  { path: 'assign-professional', component: AssignProfessionalComponent, canActivate: [AuthGuard] },
-  { path: 'update-event-status', component: UpdateEventStatusComponent, canActivate: [AuthGuard] },
-  { path: 'add-feedback', component: AddFeedbackComponent, canActivate: [AuthGuard] },
-  { path: 'view-events', component: ViewEventsComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashbaordComponent },
+  { path: 'create-event', component: CreateEventComponent },
+  { path: 'add-resource', component: AddResourceComponent },
+  { path: 'assign-professional', component: AssignProfessionalComponent  },
+  { path: 'update-event-status', component: UpdateEventStatusComponent },
+  { path: 'add-feedback', component: AddFeedbackComponent },
+  { path: 'view-events', component: ViewEventsComponent },
 
 
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

@@ -1,0 +1,98 @@
+<nav class="fs-navbar" *ngIf="IsLoggin">
+  <div class="fs-navbar__inner">
+
+    <!-- Brand -->
+    <a class="fs-navbar__brand" routerLink="/dashboard">
+      <div class="fs-navbar__brand-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <span class="fs-navbar__brand-text">Fin<span class="accent">Seminar</span></span>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="fs-navbar__toggler" type="button"
+      data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+      aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Collapsible Menu -->
+    <div class="collapse navbar-collapse fs-navbar__menu" id="navbarMenu">
+
+      <!-- Role Badge -->
+      <div class="fs-navbar__role-badge me-3">
+        <i class="fas"
+          [ngClass]="{
+            'fa-building': roleName === 'INSTITUTION',
+            'fa-user-tie': roleName === 'PROFESSIONAL',
+            'fa-users': roleName === 'PARTICIPANT'
+          }">
+        </i>
+        <span>{{ roleName }}</span>
+      </div>
+
+      <!-- Nav Links -->
+      <ul class="fs-navbar__links">
+
+        <!-- INSTITUTION links -->
+        <ng-container *ngIf="roleName === 'INSTITUTION'">
+          <li>
+            <a routerLink="/create-event" routerLinkActive="active-link">
+              <i class="fas fa-calendar-plus"></i>
+              <span>Create Event</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/add-resource" routerLinkActive="active-link">
+              <i class="fas fa-folder-plus"></i>
+              <span>Add Resource</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/assign-professional" routerLinkActive="active-link">
+              <i class="fas fa-user-check"></i>
+              <span>Assign Professional</span>
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- PROFESSIONAL links -->
+        <ng-container *ngIf="roleName === 'PROFESSIONAL'">
+          <li>
+            <a routerLink="/update-event-status" routerLinkActive="active-link">
+              <i class="fas fa-sync-alt"></i>
+              <span>Update Status</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/add-feedback" routerLinkActive="active-link">
+              <i class="fas fa-comment-dots"></i>
+              <span>Add Feedback</span>
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- PARTICIPANT links -->
+        <ng-container *ngIf="roleName === 'PARTICIPANT'">
+          <li>
+            <a routerLink="/view-events" routerLinkActive="active-link">
+              <i class="fas fa-list-alt"></i>
+              <span>View Events</span>
+            </a>
+          </li>
+        </ng-container>
+
+      </ul>
+
+      <!-- Logout -->
+      <button class="fs-navbar__logout" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </button>
+
+    </div>
+  </div>
+</nav>
+ 

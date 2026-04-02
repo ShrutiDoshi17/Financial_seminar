@@ -27,30 +27,49 @@ export class LoginComponent {
 
   onLogin() {
     if (this.itemForm.valid) {
-      this.showError = false;
-      this.httpService.Login(this.itemForm.value).subscribe((data: any) => {
-        if (data.userNo != 0) {
-          // debugger;
-
-          // localStorage.setItem('role', data.role);
-          this.authService.SetRole(data.role);
-          this.authService.saveToken(data.token)
-          this.authService.saveUserId(data.userId)
-          this.router.navigateByUrl('/dashboard');
+      // this.showError = false;
+      const username = this.itemForm.value.username
+      this.httpService.checkUsernameExists(username).subscribe((exists: boolean) => {
+        if (!exists) {
+          this.showError = true
+          this.errorMessage = 'Username not found'
 
           setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-
-        } else {
-          this.showError = true;
-          this.errorMessage = "Wrong User or Password";
+            this.showError = false
+            this.errorMessage = ''
+          }, 3000);
+          return
         }
-      }, error => {
-        this.showError = true;
-        this.errorMessage = "An error occurred while logging in. Please try again later.";
-        console.error('Login error:', error);
-      });;
+
+        this.httpService.Login(this.itemForm.value).subscribe((data: any) => {
+          if (data.userNo != 0) {
+            // debugger;
+
+            // localStorage.setItem('role', data.role);
+            this.authService.SetRole(data.role);
+            this.authService.saveToken(data.token)
+            this.authService.saveUserId(data.userId)
+            this.router.navigateByUrl('/dashboard');
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }
+          else {
+            this.showError = true;
+            this.errorMessage = "Wrong User or Password";
+
+            setTimeout(() => {
+              this.showError = false
+              this.errorMessage = ''
+            }, 3000);
+          }
+        }, error => {
+          this.showError = true;
+          this.errorMessage = "An error occurred while logging in. Please try again later.";
+          console.error('Login error:', error);
+        })
+      })
     } else {
       this.itemForm.markAllAsTouched();
     }

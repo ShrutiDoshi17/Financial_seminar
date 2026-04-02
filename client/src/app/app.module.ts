@@ -18,6 +18,7 @@ import { ViewEventsComponent } from './view-events/view-events.component';
 import { AssignProfessionalComponent } from './assign-professional/assign-professional.component';
 import { UpdateEventStatusComponent } from './update-event-status/update-event-status.component';
 import { AddFeedbackComponent } from './add-feedback/add-feedback.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { AddFeedbackComponent } from './add-feedback/add-feedback.component';
       AddResourceComponent,
 
       ViewEventsComponent,
-     
+     NavbarComponent,
    
       AssignProfessionalComponent,
            UpdateEventStatusComponent,
