@@ -15,8 +15,10 @@ import { ViewEventsComponent } from './view-events/view-events.component';
 import { AssignProfessionalComponent } from './assign-professional/assign-professional.component';
 import { UpdateEventStatusComponent } from './update-event-status/update-event-status.component';
 import { AddFeedbackComponent } from './add-feedback/add-feedback.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 const routes: Routes = [
+  { path: '', component: LandingPageComponent },  
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'dashboard', component: DashbaordComponent },
@@ -27,9 +29,7 @@ const routes: Routes = [
   { path: 'add-feedback', component: AddFeedbackComponent },
   { path: 'view-events', component: ViewEventsComponent },
 
-
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({
