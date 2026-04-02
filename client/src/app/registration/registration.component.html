@@ -90,8 +90,11 @@
             <i class="fas fa-user field-icon"></i>
             <input type="text" class="field-input" placeholder="Enter your username" formControlName="username" />
           </div>
-          <span class="error-msg" *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
+          <span class="error-msg" *ngIf="itemForm.get('username')?.errors?.['required'] && itemForm.get('username')?.touched">
             Username is required
+          </span>
+          <span class="error-msg" *ngIf="itemForm.get('username')?.errors?.['pattern'] && itemForm.get('username')?.touched">
+            Username should start with an alphabet
           </span>
         </div>
 
@@ -117,8 +120,11 @@
             <i class="fas fa-lock field-icon"></i>
             <input type="password" class="field-input" placeholder="Create a password" formControlName="password" />
           </div>
-          <span class="error-msg" *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
+          <span class="error-msg" *ngIf="itemForm.get('password')?.errors?.['required'] && itemForm.get('password')?.touched">
             Password is required
+          </span>
+          <span class="error-msg" *ngIf="itemForm.get('password')?.errors?.['pattern'] && itemForm.get('password')?.touched">
+            Password must have at least 1 upper case character, lower case character, digit and special character.
           </span>
         </div>
 

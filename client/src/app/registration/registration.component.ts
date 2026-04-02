@@ -24,7 +24,7 @@ export class RegistrationComponent {
       email: [this.formModel.email, [Validators.required, Validators.email]],
       password: [this.formModel.password, [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&])[A-Za-z\d!@#$%^&*]{8,}$/)]],
       role: [this.formModel.role, [Validators.required]],
-      username: [this.formModel.username, [Validators.required]],
+      username: [this.formModel.username, [Validators.required, Validators.pattern(/^[A-Za-z][A-Za-z\d]*$/)]],
     });
   }
 
