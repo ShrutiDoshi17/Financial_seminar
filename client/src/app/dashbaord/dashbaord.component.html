@@ -142,8 +142,7 @@
               {{ event.location }}
             </td>
             <td>
-              <span class="status-badge"
-                [ngClass]="getStatusClass(event.status)">
+              <span class="status-badge" [ngClass]="getStatusClass(event.status)">
                 {{ event.status }}
               </span>
             </td>
@@ -181,7 +180,7 @@
       <div class="welcome-right">
         <div class="user-profile-card">
           <div class="user-avatar professional-avatar">
-            <i class="bi bi-person-tie"></i>
+            <i class="bi bi-mortarboard-fill"></i>
           </div>
           <div class="user-details">
             <div class="user-name">{{ username }}</div>
@@ -269,20 +268,20 @@
       <i class="bi bi-clipboard-data me-2"></i>Assigned Events
     </div>
 
-        <div class="events-cards-grid" *ngIf="eventList.length > 0">
-            <div class="event-card" *ngFor="let event of eventList" (click)="viewDetails(event)"
-                [class.selected-card]="selectedEvent?.id === event.id">
+    <div class="events-cards-grid" *ngIf="eventList.length > 0">
+      <div class="event-card" *ngFor="let event of eventList"
+        (click)="viewDetails(event)"
+        [class.selected-card]="selectedEvent?.id === event.id">
 
         <div class="event-card-header">
-          <span class="status-badge"
-            [ngClass]="getStatusClass(event.status)">
+          <span class="status-badge" [ngClass]="getStatusClass(event.status)">
             {{ event.status }}
           </span>
           <i class="bi bi-chevron-right card-arrow"></i>
         </div>
 
-                <h5 class="event-card-title">{{ event.title }}</h5>
-                <p class="event-card-desc">{{ event.description }}</p>
+        <h5 class="event-card-title">{{ event.title }}</h5>
+        <p class="event-card-desc">{{ event.description }}</p>
 
         <div class="event-card-footer">
           <div class="event-meta">
@@ -306,8 +305,8 @@
           </button>
         </div>
 
-            </div>
-        </div>
+      </div>
+    </div>
 
     <!-- No Events State -->
     <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
@@ -335,7 +334,8 @@
       <div class="welcome-right">
         <div class="user-profile-card">
           <div class="user-avatar participant-avatar">
-            <i class="bi bi-mortarboard-fill"></i>
+            <i class="bi bi-person-badge"></i>
+            <!-- <i class="bi bi-mortarboard-fill"></i> -->
           </div>
           <div class="user-details">
             <div class="user-name">{{ username }}</div>
@@ -415,20 +415,20 @@
       <i class="bi bi-fire me-2"></i>Available Events
     </div>
 
-        <div class="events-cards-grid" *ngIf="eventList.length > 0">
-            <div class="event-card" *ngFor="let event of eventList" (click)="viewDetails(event)"
-                [class.selected-card]="selectedEvent?.id === event.id">
+    <div class="events-cards-grid" *ngIf="eventList.length > 0">
+      <div class="event-card" *ngFor="let event of eventList"
+        (click)="viewDetails(event)"
+        [class.selected-card]="selectedEvent?.id === event.id">
 
         <div class="event-card-header">
-          <span class="status-badge"
-            [ngClass]="getStatusClass(event.status)">
+          <span class="status-badge" [ngClass]="getStatusClass(event.status)">
             {{ event.status }}
           </span>
           <i class="bi bi-chevron-right card-arrow"></i>
         </div>
 
-                <h5 class="event-card-title">{{ event.title }}</h5>
-                <p class="event-card-desc">{{ event.description }}</p>
+        <h5 class="event-card-title">{{ event.title }}</h5>
+        <p class="event-card-desc">{{ event.description }}</p>
 
         <div class="event-card-footer">
           <div class="event-meta">
@@ -452,8 +452,8 @@
           </button>
         </div>
 
-            </div>
-        </div>
+      </div>
+    </div>
 
     <!-- No Events State -->
     <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
