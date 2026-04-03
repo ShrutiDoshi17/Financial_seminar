@@ -37,12 +37,12 @@
               <th>Location</th>
               <th>Status</th>
               <th>Action</th>
+              <!-- <th>Enroll</th> -->
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let event of eventList"
-                [class.ve-table__row--active]="selectedEvent.id === event.id"
-                (click)="viewDetails(event)">
+                [class.ve-table__row--active]="selectedEvent.id === event.id">
               <td class="ve-table__id">{{ event.id }}</td>
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>
@@ -62,14 +62,14 @@
                   <i class="fas fa-eye"></i> Details
                 </button>
               </td>
-              <td>
-                <button *ngIf = "!enrolled" class="ve-btn-enroll-inline" (click) = "enroll()">
+              <!-- <td>
+                <button *ngIf = "!isEnrolled(event)" class="ve-btn-enroll-inline" (click) = "enroll(event)">
                   <i class="fas fa-user-plus"></i>
                 </button>
-                <span class="ve-enroll-rick" *ngIf = "selectedEvent.id === event.id && selectedEvent.enrollments.length > 0">
+                <span class="ve-enroll-rick" *ngIf = "isEnrolled(event)">
                   <i class="fas fa-check-circle"></i>
                 </span>
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>
@@ -110,9 +110,14 @@
 
       <!-- Enroll / Check Status -->
       <div class="ve-detail-card__actions">
-        <button *ngIf="selectedEvent.enrollments.length == 0"
-          (click)="enroll()" class="ve-btn-enroll">
+        <button *ngIf = "!isEnrolled()"
+           class="ve-btn-enroll"
+           (click) = "enroll()">
           <i class="fas fa-user-plus"></i> Enroll Now
+        </button>
+        <button *ngIf = "isEnrolled()"
+          class="ve-btn-status">
+          <span>Enrolled!</span>
         </button>
         <button *ngIf="selectedEvent.enrollments.length > 0"
           (click)="checkStatus()" class="ve-btn-status">
@@ -120,22 +125,6 @@
         </button>
         <div *ngIf="status" class="ve-status-result">
           <i class="fas fa-info-circle"></i> {{ status }}
-        </div>
-      </div>
-
-      <div class="ve-divider"></div>
-
-      <!-- Feedback List -->
-      <div class="ve-feedback-section">
-        <h4 class="ve-feedback-section__title">
-          <i class="fas fa-comments"></i> Feedback
-        </h4>
-        <div *ngIf="selectedEvent.feedbacks.length === 0" class="ve-feedback-empty">
-          No feedback yet.
-        </div>
-        <div *ngFor="let r of selectedEvent.feedbacks" class="ve-feedback-item">
-          <p class="ve-feedback-item__content">{{ r.content }}</p>
-          <span class="ve-feedback-item__time">{{ r.timestamp }}</span>
         </div>
       </div>
 
@@ -158,6 +147,22 @@
           <i class="fas fa-paper-plane"></i> Submit Feedback
         </button>
       </div>
+
+      <!-- Feedback List -->
+      <div class="ve-feedback-section">
+        <h4 class="ve-feedback-section__title">
+          <i class="fas fa-comments"></i> Feedback
+        </h4>
+        <div *ngIf="selectedEvent.feedbacks.length === 0" class="ve-feedback-empty">
+          No feedback yet.
+        </div>
+        <div *ngFor="let r of selectedEvent.feedbacks" class="ve-feedback-item">
+          <p class="ve-feedback-item__content">{{ r.content }}</p>
+          <span class="ve-feedback-item__time">{{ r.timestamp }}</span>
+        </div>
+      </div>
+
+      <div class="ve-divider"></div>
 
     </div>
   </div>

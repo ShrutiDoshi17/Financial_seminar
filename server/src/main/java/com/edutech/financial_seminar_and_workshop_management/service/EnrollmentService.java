@@ -27,13 +27,17 @@ public class EnrollmentService {
 
     
     public Enrollment enrollInEvent(Long userId, Long eventId) {
+        if(enrollmentRepository.existsByEventIdAndUserId(eventId, userId)) {
+            throw new IllegalStateException("User already enrolled!");
+        }
+
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
 
         Enrollment enrollment = new Enrollment();
         enrollment.setUser(user);
         enrollment.setEvent(event);
-        enrollment.setStatus("Enrolled");
+        enrollment.setStatus("ENROLLED");
 
         return enrollmentRepository.save(enrollment);
     }

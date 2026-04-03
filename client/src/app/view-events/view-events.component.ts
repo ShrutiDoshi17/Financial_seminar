@@ -13,8 +13,6 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class ViewEventsComponent implements OnInit {
-  enrolled: boolean = false
-
   formModel: any = { status: null };
   showError: boolean = false;
   errorMessage: any;
@@ -33,13 +31,13 @@ export class ViewEventsComponent implements OnInit {
   constructor(private datePipe: DatePipe, public router: Router, public httpService: HttpService, private authService: AuthService) {
 
   }
-  
+
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
     this.userId = userIdString ? parseInt(userIdString, 10) : null;
     this.getEvent();
   }
-  
+
   getEvent() {
     this.httpService.viewAllEvents().subscribe((data: any) => {
       this.eventList = data;
@@ -51,16 +49,28 @@ export class ViewEventsComponent implements OnInit {
     })
   }
 
+  isEnrolled(): boolean {
+    return !!this.selectedEvent.enrollments?.find((e: any) => {
+      e.userId === this.userId
+    })
+  }
+
   enroll() {
-    this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe((data: any) => {
-      console.log(data);
-      this.enrolled = true
-      // this.getEvent();
-    }, error => {
-      this.showError = true;
-      this.errorMessage = "An error occurred.. Please try again later.";
-      console.error('Login error:', error);
-    });;
+    if (this.isEnrolled()) {
+      return
+    }
+    this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.getEvent();
+      },
+      error: (err: any) => {
+        if(err.status === 409) {
+          this.showMessage = true
+          this.responseMessage = 'User already enrolled!'
+        }
+      }
+    })
   }
 
   viewDetails(val: any) {
@@ -93,14 +103,14 @@ export class ViewEventsComponent implements OnInit {
   checkStatus() {
     this.status = "";
     this.httpService.viewEventStatus(this.selectedEvent.id).subscribe({
-     next: (data: any) => {
-      this.status = data.status;
-      console.log(data);
-    }, error: (err: any) => {
-      this.showError = true;
-      this.errorMessage = "An error occurred.. Please try again later.";
-      console.error('Login error:', err);
-    }
+      next: (data: any) => {
+        this.status = data.status;
+        console.log(data);
+      }, error: (err: any) => {
+        this.showError = true;
+        this.errorMessage = "An error occurred.. Please try again later.";
+        console.error('Login error:', err);
+      }
     });;
   }
 
