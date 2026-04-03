@@ -5,12 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(
-    name = "enrollment",
-    // uniqueConstraints = {
-    //     @
-    // }
-)
 public class Enrollment {
 
     @Id
