@@ -71,6 +71,4 @@ export class AddFeedbackComponent implements OnInit {
       })
     }
   }
-
-
 }

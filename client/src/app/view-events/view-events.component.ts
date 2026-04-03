@@ -104,5 +104,19 @@ export class ViewEventsComponent implements OnInit {
     });;
   }
 
+  downloadCertificate(eventId: number) {
+  this.httpService.downloadCertificate(eventId).subscribe(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'certificate.pdf';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }, error => {
+    console.error('Download failed', error);
+  });
+}
+
+
 
 }

@@ -489,6 +489,20 @@
   vertical-align: middle;
 }
 
+.ve-btn-certificate {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ve-btn-certificate i {
+  margin-right: 6px;
+}
+
 /* Responsive */
 @media (max-width: 991px) {
   .ve-content--split {

@@ -27,6 +27,7 @@
         <span>Event Listings</span>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
+
       <div class="table-responsive">
         <table class="ve-table">
           <thead>
@@ -39,6 +40,7 @@
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
             <tr *ngFor="let event of eventList"
                 [class.ve-table__row--active]="selectedEvent.id === event.id"
@@ -50,8 +52,8 @@
               <td>
                 <span class="ve-status-badge"
                   [ngClass]="{
-                    've-status-badge--planned':   event.status === 'PLANNED',
-                    've-status-badge--ongoing':   event.status === 'ONGOING',
+                    've-status-badge--planned': event.status === 'PLANNED',
+                    've-status-badge--ongoing': event.status === 'ONGOING',
                     've-status-badge--completed': event.status === 'COMPLETED'
                   }">
                   {{ event.status }}
@@ -84,8 +86,8 @@
         <h3 class="ve-detail-card__title">{{ selectedEvent.title }}</h3>
         <span class="ve-status-badge"
           [ngClass]="{
-            've-status-badge--planned':   selectedEvent.status === 'PLANNED',
-            've-status-badge--ongoing':   selectedEvent.status === 'ONGOING',
+            've-status-badge--planned': selectedEvent.status === 'PLANNED',
+            've-status-badge--ongoing': selectedEvent.status === 'ONGOING',
             've-status-badge--completed': selectedEvent.status === 'COMPLETED'
           }">
           {{ selectedEvent.status }}
@@ -108,16 +110,32 @@
         </div>
       </div>
 
-      <!-- Enroll / Check Status -->
+      <!-- Actions -->
       <div class="ve-detail-card__actions">
+
+        <!-- Enroll -->
         <button *ngIf="selectedEvent.enrollments.length == 0"
           (click)="enroll()" class="ve-btn-enroll">
           <i class="fas fa-user-plus"></i> Enroll Now
         </button>
+
+        <!-- Check Status -->
         <button *ngIf="selectedEvent.enrollments.length > 0"
           (click)="checkStatus()" class="ve-btn-status">
           <i class="fas fa-sync-alt"></i> Check Status
         </button>
+
+        <!-- ✅ Download Certificate (NEW CODE) -->
+        <button
+          *ngIf="
+            selectedEvent.status === 'COMPLETED' &&
+            selectedEvent.enrollments.length > 0
+          "
+          (click)="downloadCertificate(selectedEvent.id)"
+          class="ve-btn-certificate">
+          <i class="fas fa-certificate"></i> Download Certificate
+        </button>
+
         <div *ngIf="status" class="ve-status-result">
           <i class="fas fa-info-circle"></i> {{ status }}
         </div>
@@ -146,13 +164,13 @@
         <h4 class="ve-feedback-form__title">Leave Feedback</h4>
         <div class="ve-input-group">
           <i class="fas fa-pen"></i>
-          <textarea
-            rows="3"
+        <textarea
+          rows="3"
             name="content"
             class="ve-textarea"
             placeholder="Share your experience..."
             [(ngModel)]="formModel.content">
-          </textarea>
+        </textarea>
         </div>
         <button (click)="saveFeedBack()" class="ve-btn-submit">
           <i class="fas fa-paper-plane"></i> Submit Feedback

@@ -89,4 +89,11 @@ export class HttpService {
   AddFeedbackByParticipants(eventId: any, userId: any, details: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
   }
+
+  downloadCertificate(eventId: number) {
+  return this.http.get(
+    `/api/certificates/download/${eventId}`,
+    { responseType: 'blob' }
+  );
+}
 } 
