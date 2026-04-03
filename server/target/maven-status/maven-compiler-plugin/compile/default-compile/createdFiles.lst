@@ -1,0 +1,4 @@
+com/edutech/financial_seminar_and_workshop_management/service/CertificateService.class
+com/edutech/financial_seminar_and_workshop_management/entity/Certificate.class
+com/edutech/financial_seminar_and_workshop_management/controller/CertificateController.class
+com/edutech/financial_seminar_and_workshop_management/repository/CertificateRepository.class

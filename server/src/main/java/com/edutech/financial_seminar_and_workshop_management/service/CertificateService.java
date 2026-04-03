@@ -1,40 +1,57 @@
+package com.edutech.financial_seminar_and_workshop_management.service;
+
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+
 @Service
 public class CertificateService {
 
-    public byte[] generateCertificate(User participant, Event event) 
+    public byte[] generateCertificate(String username, String eventTitle)
             throws Exception {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, out);
-
         document.open();
 
-        Font title = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22);
-        Font body = FontFactory.getFont(FontFactory.HELVETICA, 14);
+        Font titleFont =
+                FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22);
+        Font textFont =
+                FontFactory.getFont(FontFactory.HELVETICA, 14);
 
-        Paragraph p1 = new Paragraph("CERTIFICATE OF COMPLETION", title);
-        p1.setAlignment(Element.ALIGN_CENTER);
-        document.add(p1);
+        Paragraph title =
+                new Paragraph("CERTIFICATE OF COMPLETION\n\n", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
 
-        document.add(new Paragraph("\n"));
+        document.add(new Paragraph("This is to certify that\n", textFont));
 
-        document.add(new Paragraph(
-            "This is to certify that", body));
-        document.add(new Paragraph(
-            participant.getName(), 
-            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
-
-        document.add(new Paragraph(
-            "has successfully completed the seminar:", body));
-        document.add(new Paragraph(
-            event.getTitle(),
-            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
+        Paragraph name =
+                new Paragraph(username,
+                        FontFactory.getFont(
+                                FontFactory.HELVETICA_BOLD, 18));
+        name.setAlignment(Element.ALIGN_CENTER);
+        document.add(name);
 
         document.add(new Paragraph(
-            "\nIssued on: " + LocalDate.now(), body));
+                "\nhas successfully completed the seminar:\n", textFont));
+
+        Paragraph event =
+                new Paragraph(eventTitle,
+                        FontFactory.getFont(
+                                FontFactory.HELVETICA_BOLD, 16));
+        event.setAlignment(Element.ALIGN_CENTER);
+        document.add(event);
+
+        document.add(new Paragraph(
+                "\nIssued on : " + LocalDate.now(), textFont));
 
         document.close();
         return out.toByteArray();
     }
-}
+} 

@@ -1,3 +1,8 @@
+package com.edutech.financial_seminar_and_workshop_management.entity;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+
 @Entity
 public class Certificate {
 
@@ -14,17 +19,6 @@ public class Certificate {
     @ManyToOne
     private Event event;
 
-    public Certificate() {}
-
-    public Certificate(String certificateNumber, LocalDate issuedDate,
-                       User participant, Event event) {
-        this.certificateNumber = certificateNumber;
-        this.issuedDate = issuedDate;
-        this.participant = participant;
-        this.event = event;
+    public Certificate() {
     }
-
-    
-
-    
-}
+} 
