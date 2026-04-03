@@ -1,45 +1,6 @@
 <div class="landing-wrapper">
 
-  <!-- ═══════════════════════════════════════ -->
-  <!-- NAVBAR                                  -->
-  <!-- ═══════════════════════════════════════ -->
-  <nav class="landing-navbar">
-    <div class="nav-brand" (click)="scrollToSection('home')">
-      <div class="fs-navbar__brand-icon">
-        <i class="fas fa-chart-line"></i>
-      </div>
-      <span>Fin<span class="accent">Seminar</span></span>
-    </div>
 
-    <!-- Mobile Toggler -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">
-    <label for="nav-toggle" class="nav-toggler">
-      <i class="fas fa-bars"></i>
-    </label>
-
-    <div class="nav-links">
-      <a class="nav-link" (click)="scrollToSection('home')">
-        <i class="fas fa-home me-1"></i>Home
-      </a>
-      <a class="nav-link" (click)="scrollToSection('about')">
-        <i class="fas fa-info-circle me-1"></i>About
-      </a>
-      <a class="nav-link" (click)="scrollToSection('contact')">
-        <i class="fas fa-envelope me-1"></i>Contact Us
-      </a>
-      <div class="nav-divider"></div>
-      <button class="btn-nav-login" (click)="goToLogin()">
-        <i class="fas fa-sign-in-alt me-1"></i>Login
-      </button>
-      <button class="btn-nav-register" (click)="goToRegister()">
-        <i class="fas fa-user-plus me-1"></i>Register
-      </button>
-    </div>
-  </nav>
-
-  <!-- ═══════════════════════════════════════ -->
-  <!-- SECTION 1 — HOME                        -->
-  <!-- ═══════════════════════════════════════ -->
   <section id="home" class="hero-section">
 
     <!-- Background SVG Illustration -->
