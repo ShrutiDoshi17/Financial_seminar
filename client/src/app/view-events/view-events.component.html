@@ -115,17 +115,14 @@
            (click) = "enroll()">
           <i class="fas fa-user-plus"></i> Enroll Now
         </button>
-        <button *ngIf = "isEnrolled()"
-          class="ve-btn-status">
-          <span>Enrolled!</span>
-        </button>
-        <button *ngIf="selectedEvent.enrollments.length > 0"
+        <span *ngIf = "isEnrolled()">Enrolled!</span>
+        <!-- <button *ngIf="selectedEvent.enrollments.length > 0"
           (click)="checkStatus()" class="ve-btn-status">
           <i class="fas fa-sync-alt"></i> Check Status
         </button>
         <div *ngIf="status" class="ve-status-result">
           <i class="fas fa-info-circle"></i> {{ status }}
-        </div>
+        </div> -->
       </div>
 
       <div class="ve-divider"></div>

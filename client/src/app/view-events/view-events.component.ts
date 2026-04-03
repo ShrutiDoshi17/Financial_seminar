@@ -50,25 +50,39 @@ export class ViewEventsComponent implements OnInit {
   }
 
   isEnrolled(): boolean {
-    return !!this.selectedEvent.enrollments?.find((e: any) => {
-      e.userId === this.userId
-    })
+    if(!this.selectedEvent || !this.selectedEvent.enrollments) {
+      return false
+    }
+    return this.selectedEvent.enrollments.some(
+      (e: any) => e.user?.id == this.userId
+    );
   }
 
   enroll() {
-    if (this.isEnrolled()) {
-      return
-    }
     this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe({
       next: (data: any) => {
         console.log(data);
-        this.getEvent();
+        this.selectedEvent.enrollments.push({
+          user: {id: this.userId}
+        })
+        // this.getEvent();
+        this.showMessage = true
+        this.responseMessage = "User enrolled successfully!"
+
+        setTimeout(() => {
+          this.showMessage = false
+          this.responseMessage = ''
+        }, 3000)
       },
       error: (err: any) => {
-        if(err.status === 409) {
-          this.showMessage = true
-          this.responseMessage = 'User already enrolled!'
-        }
+        this.showMessage = true
+        this.responseMessage = 'User already enrolled!'
+        console.error(err)
+
+        setTimeout(() => {
+          this.showMessage = false
+          this.responseMessage = ''
+        }, 3000)
       }
     })
   }
