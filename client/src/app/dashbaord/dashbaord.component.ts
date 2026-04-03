@@ -32,7 +32,7 @@ export class DashbaordComponent implements OnInit {
 
   ngOnInit(): void {
     this.role = this.authService.getRole;
-    this.username = localStorage.getItem('userId');
+    this.username = localStorage.getItem('username');
     this.getEvents();
   }
 

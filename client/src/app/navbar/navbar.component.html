@@ -4,7 +4,7 @@
     <!-- Brand — always goes to landing -->
     <a class="fs-navbar__brand" (click)="goToLanding()">
       <div class="fs-navbar__brand-icon">
-        <i class="fas fa-chart-line"></i>
+        <i class="bi bi-graph-up-arrow"></i>
       </div>
       <span class="fs-navbar__brand-text">
         Fin<span class="accent">Seminar</span>
@@ -27,17 +27,17 @@
         <ul class="fs-navbar__links">
           <li>
             <a (click)="scrollToSection('home')">
-              <i class="fas fa-home"></i><span>Home</span>
+              <i class="bi bi-house-fill"></i><span>Home</span>
             </a>
           </li>
           <li>
             <a (click)="scrollToSection('about')">
-              <i class="fas fa-info-circle"></i><span>About</span>
+              <i class="bi bi-info-circle"></i><span>About</span>
             </a>
           </li>
           <li>
             <a (click)="scrollToSection('contact')">
-              <i class="fas fa-envelope"></i><span>Contact</span>
+              <i class="bi bi-envelope"></i><span>Contact</span>
             </a>
           </li>
         </ul>
@@ -45,24 +45,22 @@
         <div class="fs-navbar__divider"></div>
 
         <button class="fs-navbar__btn-login" (click)="goToLogin()">
-          <i class="fas fa-sign-in-alt"></i><span>Sign In</span>
+          <i class="bi bi-box-arrow-in-right"></i><span>Sign In</span>
         </button>
         <button class="fs-navbar__btn-register" (click)="goToRegister()">
-          <i class="fas fa-user-plus"></i><span>Register</span>
+          <i class="bi bi-person-plus-fill"></i><span>Register</span>
         </button>
       </ng-container>
 
       <!-- ── LOGGED IN — Role based links ── -->
       <ng-container *ngIf="IsLoggin">
 
-
-
         <!-- Role Badge -->
         <div class="fs-navbar__role-badge">
-          <i class="fas" [ngClass]="{
-              'fa-building':   roleName === 'INSTITUTION',
-              'fa-user-tie':   roleName === 'PROFESSIONAL',
-              'fa-users':      roleName === 'PARTICIPANT'
+          <i class="bi" [ngClass]="{
+              'bi-building':         roleName === 'INSTITUTION',
+              'bi-person-workspace': roleName === 'PROFESSIONAL',
+              'bi-people-fill':      roleName === 'PARTICIPANT'
             }">
           </i>
           <span>{{ roleName }}</span>
@@ -70,37 +68,37 @@
 
         <!-- Nav Links -->
         <ul class="fs-navbar__links">
-          
-          <!-- Back to Home always visible when logged in -->
+
+          <!-- Home -->
           <li>
-            <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
-              (click)="closeMenu()">
-              <i class="fas fa-home"></i><span>Home</span>
+            <a routerLink="/" routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
+              <i class="bi bi-house-fill"></i><span>Home</span>
             </a>
           </li>
 
+          <!-- Dashboard -->
           <li>
             <a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeMenu()">
-              <i class="fas fa-gauge"></i><span>Dashboard</span>
+              <i class="bi bi-speedometer2"></i><span>Dashboard</span>
             </a>
           </li>
-
 
           <!-- INSTITUTION -->
           <ng-container *ngIf="roleName === 'INSTITUTION'">
             <li>
               <a routerLink="/create-event" routerLinkActive="active-link" (click)="closeMenu()">
-                <i class="fas fa-calendar-plus"></i><span>Create Event</span>
+                <i class="bi bi-calendar-plus"></i><span>Create Event</span>
               </a>
             </li>
             <li>
               <a routerLink="/add-resource" routerLinkActive="active-link" (click)="closeMenu()">
-                <i class="fas fa-folder-plus"></i><span>Add Resource</span>
+                <i class="bi bi-folder-plus"></i><span>Add Resource</span>
               </a>
             </li>
             <li>
               <a routerLink="/assign-professional" routerLinkActive="active-link" (click)="closeMenu()">
-                <i class="fas fa-user-check"></i><span>Assign Professional</span>
+                <i class="bi bi-person-check"></i><span>Assign Professional</span>
               </a>
             </li>
           </ng-container>
@@ -109,12 +107,12 @@
           <ng-container *ngIf="roleName === 'PROFESSIONAL'">
             <li>
               <a routerLink="/update-event-status" routerLinkActive="active-link" (click)="closeMenu()">
-                <i class="fas fa-sync-alt"></i><span>Update Status</span>
+                <i class="bi bi-arrow-repeat"></i><span>Update Status</span>
               </a>
             </li>
             <li>
               <a routerLink="/add-feedback" routerLinkActive="active-link" (click)="closeMenu()">
-                <i class="fas fa-comment-dots"></i><span>Add Feedback</span>
+                <i class="bi bi-chat-square-dots"></i><span>Add Feedback</span>
               </a>
             </li>
           </ng-container>
@@ -123,7 +121,7 @@
           <ng-container *ngIf="roleName === 'PARTICIPANT'">
             <li>
               <a routerLink="/view-events" routerLinkActive="active-link" (click)="closeMenu()">
-                <i class="fas fa-list-alt"></i><span>View Events</span>
+                <i class="bi bi-list-ul"></i><span>View Events</span>
               </a>
             </li>
           </ng-container>
@@ -132,7 +130,7 @@
 
         <!-- Logout -->
         <button class="fs-navbar__logout" (click)="logout()">
-          <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+          <i class="bi bi-box-arrow-right"></i><span>Logout</span>
         </button>
 
       </ng-container>
