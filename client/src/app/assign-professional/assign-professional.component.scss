@@ -91,7 +91,10 @@
 
   &::-webkit-scrollbar { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: rgba(240,165,0,0.3); border-radius: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(240,165,0,0.3);
+    border-radius: 4px;
+  }
 }
 
 .pro-card {
@@ -122,10 +125,7 @@
   justify-content: center;
   flex-shrink: 0;
 
-  i {
-    color: white;
-    font-size: 18px;
-  }
+  i { color: white; font-size: 18px; }
 }
 
 .pro-info {
@@ -216,6 +216,15 @@
   margin-top: 4px;
 }
 
+/* ── ALL ASSIGNED MESSAGE ─────────────────── */
+.all-assigned-msg {
+  color: #F0A500;
+  font-size: 11px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+}
+
 /* ── BUTTONS ─────────────────────────────── */
 .btn-submit {
   background: linear-gradient(135deg, #2E86AB, #F0A500);
@@ -229,10 +238,15 @@
   transition: all 0.3s ease;
   cursor: pointer;
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(240,165,0,0.35);
     background: linear-gradient(135deg, #F0A500, #2E86AB);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 }
 
@@ -270,8 +284,6 @@
 /* ── RESPONSIVE ──────────────────────────── */
 @media (max-width: 768px) {
   .form-card, .list-card { padding: 20px; }
-
   .pro-card { flex-wrap: wrap; }
-
   .pro-role-badge { width: 100%; text-align: center; }
 }
