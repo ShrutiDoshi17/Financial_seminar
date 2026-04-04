@@ -17,6 +17,7 @@ export class DashbaordComponent implements OnInit {
   showError: boolean = false;
   errorMessage: any;
   username: any;
+  isLoading: boolean = true;
 
   // Stats variables
   totalEvents: number = 0;
@@ -33,11 +34,15 @@ export class DashbaordComponent implements OnInit {
   ngOnInit(): void {
     this.role = this.authService.getRole;
     this.username = localStorage.getItem('username');
+    this.showError = false
+    this.isLoading = true
     this.getEvents();
   }
 
   getEvents(): void {
     const userId = localStorage.getItem('userId');
+
+    this.isLoading = true
 
     if (this.role === 'INSTITUTION') {
       // Institution — fetch their own events
@@ -46,10 +51,13 @@ export class DashbaordComponent implements OnInit {
           this.eventList = data;
           this.calculateStats();
           this.showError = false;
+          this.isLoading = false
         },
         error: (err: any) => {
           this.showError = true;
           this.errorMessage = 'Failed to load events.';
+          this.isLoading = false
+
         }
       });
 
@@ -60,10 +68,14 @@ export class DashbaordComponent implements OnInit {
           this.eventList = data;
           this.calculateStats();
           this.showError = false;
+                    this.isLoading = false
+
         },
         error: (err: any) => {
           this.showError = true;
           this.errorMessage = 'Failed to load events.';
+                    this.isLoading = false
+
         }
       });
 
@@ -74,10 +86,14 @@ export class DashbaordComponent implements OnInit {
           this.eventList = data;
           this.calculateStats();
           this.showError = false;
+                    this.isLoading = false
+
         },
         error: (err: any) => {
           this.showError = true;
           this.errorMessage = 'Failed to load events.';
+                    this.isLoading = false
+
         }
       });
     }

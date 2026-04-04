@@ -25,11 +25,14 @@ export class AuthService {
     localStorage.setItem('username', username)
   }
 
+  get getUsername(): string | null {
+    return localStorage.getItem('username')
+  }
+
   get getRole(): string | null {
     return localStorage.getItem('role');
   }
 
-  
   get getLoginStatus(): boolean {
     return !!localStorage.getItem('token');
   }
@@ -39,9 +42,6 @@ export class AuthService {
     return this.token;
   }
 
-  get getUsername(): string | null {
-    return localStorage.getItem('username')
-  }
 
   logout() {
     localStorage.removeItem('token');

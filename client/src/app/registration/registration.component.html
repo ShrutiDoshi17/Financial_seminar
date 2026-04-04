@@ -1,5 +1,29 @@
 <div class="register-wrapper">
 
+  <!-- Success Message -->
+  <!-- Toast container (top-right) -->
+  <div class="position-fixed top-3 start-50 translate-middle" style="z-index: 1200;">
+    <!-- Render only when showMessage = true -->
+    <div *ngIf="showMessage" class="toast show align-items-center text-bg-success border-0 shadow" role="alert"
+      aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body p-3">
+          ✅ Registration successful!
+        </div>
+
+        <!-- Optional close button (if you want manual close too) -->
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"
+          (click)="showMessage = false"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="alert-danger" *ngIf="showError">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    {{ errorMessage }}
+  </div>
+
   <!-- ===== LEFT PANEL ===== -->
   <div class="left-panel">
 
@@ -155,17 +179,9 @@
         <p class="form-subtitle">Fill in the details below to get started</p>
       </div>
 
-      <!-- Success Message -->
-      <div class="alert-success" *ngIf="showMessage">
-        <i class="fas fa-check-circle"></i>
-        <span>{{ responseMessage }}</span>
-      </div>
 
-      <!-- Error Alert -->
-      <div class="alert-danger" *ngIf="showError">
-        <i class="fas fa-exclamation-circle me-2"></i>
-        {{ errorMessage }}
-      </div>
+
+
 
       <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
 
