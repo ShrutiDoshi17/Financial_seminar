@@ -26,7 +26,7 @@ public class JwtUtil {
 
     private final String secret = "secretKey000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
-    private final int expiration = 86400;
+    private final int expiration = 180;
 
     public String generateToken(String username) {
         Date now = new Date();

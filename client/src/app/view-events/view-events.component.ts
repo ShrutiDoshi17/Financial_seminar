@@ -35,6 +35,7 @@ export class ViewEventsComponent implements OnInit {
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
     this.userId = userIdString ? parseInt(userIdString, 10) : null;
+    console.log('userId from localStorage:', this.userId)
     this.getEvent();
   }
 
@@ -53,8 +54,17 @@ export class ViewEventsComponent implements OnInit {
     if(!this.selectedEvent || !this.selectedEvent.enrollments) {
       return false
     }
+
+    // console.log('userId:', this.userId)
+    // console.log('typeof userId:', typeof this.userId)
+    // console.log('enrollments:', this.selectedEvent.enrollments)
+
     return this.selectedEvent.enrollments.some(
-      (e: any) => e.user?.id == this.userId
+      (e: any) => e.id === this.selectedEvent.id && e.status === 'ENROLLED' 
+      // (e: any) => {
+      //   console.log('Enrollment user id:', e.user?.id, 'type:', typeof e.user?.id)
+      //   return e.user?.id == this.userId
+      // }
     );
   }
 

@@ -47,6 +47,11 @@ public class EventService {
         return eventRepository.findByInstitutionId(institutionId);
     }
 
+    // Delete Event by ID
+    // public Event deleteEventById(Long eventId) {
+    //     return eventRepository.deleteById(eventId);
+    // }
+
     // Assign Professional to Event
     public User assignUserToEventAsProfessional(Long eventId, Long userId) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);

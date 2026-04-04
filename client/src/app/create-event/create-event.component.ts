@@ -22,6 +22,10 @@ export class CreateEventComponent implements OnInit {
   responseMessage: any;
   updateId: any;
 
+  showDeleteModal: boolean = false
+  eventToDelete: any = null
+  deleteId: any = null
+
   constructor(public router: Router, public httpService: HttpService, private formBuilder: FormBuilder, private authService: AuthService) {
     this.itemForm = this.formBuilder.group({
       title: [this.formModel.title, [Validators.required]],
@@ -94,5 +98,17 @@ export class CreateEventComponent implements OnInit {
     } else {
       this.itemForm.markAllAsTouched();
     }
+  }
+
+  deleteEvent(id: any): void {
+    this.deleteId = id
+    this.eventToDelete = this.eventList.find(
+      (e: any) => e.id === id
+    )
+    this.showDeleteModal = true
+  }
+
+  confirmDelete(): void {
+    
   }
 }

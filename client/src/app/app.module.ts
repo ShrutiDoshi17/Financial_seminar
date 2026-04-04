@@ -24,26 +24,24 @@ import { NavbarComponent } from './navbar/navbar.component';
   declarations: [
     AppComponent,
     LoginComponent,
-      RegistrationComponent,
-      DashbaordComponent,    
-      CreateEventComponent,
-      AddResourceComponent,
-
-      ViewEventsComponent,
-     NavbarComponent,
-   
-      AssignProfessionalComponent,
-           UpdateEventStatusComponent,
-           AddFeedbackComponent
+    RegistrationComponent,
+    DashbaordComponent,
+    CreateEventComponent,
+    AddResourceComponent,
+    ViewEventsComponent,
+    NavbarComponent,
+    AssignProfessionalComponent,
+    UpdateEventStatusComponent,
+    AddFeedbackComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule 
+    HttpClientModule
   ],
-  providers: [HttpService,HttpClientModule ],
+  providers: [HttpService, HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

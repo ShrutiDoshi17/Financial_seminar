@@ -39,7 +39,7 @@ export class RegistrationComponent {
           setTimeout(() => {
             this.showError = false
             this.errorMessage = ''
-          }, 3000)
+          }, 2000)
         }
         else {
           this.service.registerUser(this.itemForm.value).subscribe(data => {

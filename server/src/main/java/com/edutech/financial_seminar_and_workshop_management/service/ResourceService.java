@@ -31,4 +31,8 @@ public class ResourceService {
             throw new RuntimeException("Event not found with id " + eventId);
         }
     }
+
+    public List<Resource> viewResourcesByEventId(Long eventId) {
+        return resourceRepository.findByEventId(eventId);
+    }
 }
