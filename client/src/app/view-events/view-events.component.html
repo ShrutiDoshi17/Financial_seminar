@@ -43,8 +43,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let event of eventList"
-                [class.ve-table__row--active]="selectedEvent.id === event.id">
+            <tr *ngFor="let event of eventList" [class.ve-table__row--active]="selectedEvent.id === event.id">
               <td class="ve-table__id">{{ event.id }}</td>
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>
@@ -112,10 +111,11 @@
 
       <!-- Actions -->
       <div class="ve-detail-card__actions">
-        <button *ngIf = "!isEnrolled()"
-           class="ve-btn-enroll"
-           (click) = "enroll()">
-          <i class="fas fa-user-plus"></i> Enroll Now
+
+        <!-- Not enrolled — active button -->
+        <button *ngIf="!isEnrolled()" class="ve-btn-enroll" (click)="enroll()">
+          <i class="fas fa-user-plus me-2"></i>
+          Enroll Now
         </button>
         <span *ngIf = "isEnrolled()">Enrolled!</span>
         <!-- <button *ngIf="selectedEvent.enrollments.length > 0"
@@ -176,4 +176,3 @@
     </div>
   </div>
 </div>
- 
