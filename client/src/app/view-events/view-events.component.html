@@ -124,15 +124,13 @@
         </button> -->
 
         <!-- ✅ Download Certificate (NEW CODE) -->
-        <button
-          *ngIf="
-            selectedEvent.status === 'COMPLETED' &&
-            selectedEvent.enrollments.length > 0
-          "
-          (click)="downloadCertificate(selectedEvent.id)"
-          class="ve-btn-certificate">
-          <i class="fas fa-certificate"></i> Download Certificate
-        </button>
+        <!-- Replace the certificate button with this -->
+<button
+  *ngIf="isEnrolled()"
+  (click)="downloadCertificate()"
+  class="ve-btn-certificate">
+  <i class="fas fa-certificate"></i> Download Certificate
+</button>
 
         <div *ngIf="status" class="ve-status-result">
           <i class="fas fa-info-circle"></i> {{ status }}

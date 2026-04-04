@@ -90,10 +90,26 @@ export class HttpService {
     return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/feedback?userId=${userId}`, details, this.httpOptions)
   }
 
-  downloadCertificate(eventId: number) {
-  return this.http.get(
-    `/api/certificates/download/${eventId}`,
-    { responseType: 'blob' }
-  );
-}
+//   downloadCertificate(eventId: number) {
+//   return this.http.get(
+//     `/api/certificates/download/${eventId}`,
+//     { responseType: 'blob' }
+//   );
+// }
+
+
+
+// downloadCertificate(eventId: number) {
+//   const token = localStorage.getItem('token');
+
+//   return this.http.get(
+//     `http://localhost:3000/api/certificates/download/${eventId}`,
+//     {
+//       responseType: 'blob',
+//       headers: {
+//         Authorization: `Bearer ${token}`
+//       }
+//     }
+//   );
+// }
 } 

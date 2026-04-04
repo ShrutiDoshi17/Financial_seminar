@@ -128,17 +128,94 @@ export class ViewEventsComponent implements OnInit {
     });;
   }
 
-  downloadCertificate(eventId: number) {
-  this.httpService.downloadCertificate(eventId).subscribe(blob => {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'certificate.pdf';
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }, error => {
-    console.error('Download failed', error);
-  });
+  downloadCertificate() {
+  const event = this.selectedEvent;
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200;
+  canvas.height = 800;
+  const ctx = canvas.getContext('2d')!;
+
+  // Background
+  ctx.fillStyle = '#151E27';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Outer gold border
+  ctx.strokeStyle = '#F0A500';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+  // Inner blue border
+  ctx.strokeStyle = '#2E86AB';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
+
+  // Header gradient strip
+  const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  grad.addColorStop(0, '#2E86AB');
+  grad.addColorStop(1, '#F0A500');
+  ctx.fillStyle = grad;
+  ctx.fillRect(36, 36, canvas.width - 72, 110);
+
+  // Brand name
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 36px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('FinSeminar', canvas.width / 2, 105);
+
+  // Certificate title
+  ctx.fillStyle = '#F0A500';
+  ctx.font = 'bold 50px serif';
+  ctx.fillText('Certificate of Participation', canvas.width / 2, 230);
+
+  // Decorative line
+  ctx.strokeStyle = '#F0A500';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(100, 255);
+  ctx.lineTo(canvas.width - 100, 255);
+  ctx.stroke();
+
+  // Body text
+  ctx.fillStyle = '#E8E8E8';
+  ctx.font = '24px serif';
+  ctx.fillText('This certifies that the participant has successfully enrolled in', canvas.width / 2, 325);
+
+  // Event title
+  ctx.fillStyle = '#F0A500';
+  ctx.font = 'bold 34px serif';
+  ctx.fillText(`"${event.title}"`, canvas.width / 2, 395);
+
+  // Event details
+  ctx.fillStyle = '#E8E8E8';
+  ctx.font = '22px serif';
+  ctx.fillText(`Location: ${event.location}`, canvas.width / 2, 460);
+  ctx.fillText(`Scheduled: ${event.schedule}`, canvas.width / 2, 498);
+
+  // Issued info
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.font = '18px serif';
+  const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+  ctx.fillText(`Issued by FinSeminar Platform  |  Date: ${today}`, canvas.width / 2, 590);
+
+  // Bottom strip
+  ctx.fillStyle = grad;
+  ctx.fillRect(36, canvas.height - 120, canvas.width - 72, 4);
+
+  // Signature lines
+  ctx.strokeStyle = '#F0A500';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(180, canvas.height - 75); ctx.lineTo(480, canvas.height - 75); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(720, canvas.height - 75); ctx.lineTo(1020, canvas.height - 75); ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = '16px serif';
+  ctx.fillText('Participant Signature', 330, canvas.height - 52);
+  ctx.fillText('Authorized Signatory', 870, canvas.height - 52);
+
+  // Trigger download
+  const link = document.createElement('a');
+  link.download = `FinSeminar_Certificate_${event.title.replace(/\s+/g, '_')}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 }
 
 
