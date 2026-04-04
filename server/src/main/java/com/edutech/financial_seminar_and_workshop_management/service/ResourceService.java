@@ -10,6 +10,7 @@ import com.edutech.financial_seminar_and_workshop_management.repository.EventRep
 import com.edutech.financial_seminar_and_workshop_management.repository.ResourceRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class ResourceService {
