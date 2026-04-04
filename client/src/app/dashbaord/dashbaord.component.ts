@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 
-
 @Component({
   selector: 'app-dashbaord',
   templateUrl: './dashbaord.component.html',
@@ -19,11 +18,17 @@ export class DashbaordComponent implements OnInit {
   username: any;
   isLoading: boolean = true;
 
-  // Stats variables
+  // Raw stats (actual values from API)
   totalEvents: number = 0;
   ongoingEvents: number = 0;
   completedEvents: number = 0;
   plannedEvents: number = 0;
+
+  // Animated counter display values
+  animTotalEvents: number = 0;
+  animOngoingEvents: number = 0;
+  animCompletedEvents: number = 0;
+  animPlannedEvents: number = 0;
 
   constructor(
     private httpService: HttpService,
@@ -32,70 +37,82 @@ export class DashbaordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.role = this.authService.getRole;
+    this.role = localStorage.getItem('role');
     this.username = localStorage.getItem('username');
-    this.showError = false
-    this.isLoading = true
-    this.getEvents();
+    this.showError = false;
+    this.isLoading = true;
+
+    if (!this.role) {
+      setTimeout(() => {
+        this.role = localStorage.getItem('role');
+        this.getEvents();
+      }, 100);
+    } else {
+      this.getEvents();
+    }
   }
 
   getEvents(): void {
     const userId = localStorage.getItem('userId');
 
-    this.isLoading = true
+    if (!userId || !this.role) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.isLoading = true;
+    this.showError = false;
 
     if (this.role === 'INSTITUTION') {
-      // Institution — fetch their own events
       this.httpService.getEventByInstitutionId(userId).subscribe({
         next: (data: any) => {
           this.eventList = data;
           this.calculateStats();
           this.showError = false;
-          this.isLoading = false
+          this.isLoading = false;
+          this.animateCounters();
         },
         error: (err: any) => {
           this.showError = true;
           this.errorMessage = 'Failed to load events.';
-          this.isLoading = false
-
+          this.isLoading = false;
         }
       });
 
     } else if (this.role === 'PROFESSIONAL') {
-      // Professional — fetch assigned events
       this.httpService.getEventByProfessional(userId).subscribe({
         next: (data: any) => {
           this.eventList = data;
           this.calculateStats();
           this.showError = false;
-                    this.isLoading = false
-
+          this.isLoading = false;
+          this.animateCounters();
         },
         error: (err: any) => {
           this.showError = true;
           this.errorMessage = 'Failed to load events.';
-                    this.isLoading = false
-
+          this.isLoading = false;
         }
       });
 
     } else if (this.role === 'PARTICIPANT') {
-      // Participant — fetch all available events
       this.httpService.viewAllEvents().subscribe({
         next: (data: any) => {
           this.eventList = data;
           this.calculateStats();
           this.showError = false;
-                    this.isLoading = false
-
+          this.isLoading = false;
+          this.animateCounters();
         },
         error: (err: any) => {
           this.showError = true;
           this.errorMessage = 'Failed to load events.';
-                    this.isLoading = false
-
+          this.isLoading = false;
         }
       });
+
+    } else {
+      this.isLoading = false;
     }
   }
 
@@ -112,11 +129,45 @@ export class DashbaordComponent implements OnInit {
     ).length;
   }
 
+  // Animated counter logic
+  animateCounters(): void {
+    this.countUp('animTotalEvents', this.totalEvents, 1500);
+    this.countUp('animPlannedEvents', this.plannedEvents, 1500);
+    this.countUp('animOngoingEvents', this.ongoingEvents, 1500);
+    this.countUp('animCompletedEvents', this.completedEvents, 1500);
+  }
+
+  countUp(
+    property: 'animTotalEvents' | 'animPlannedEvents' |
+              'animOngoingEvents' | 'animCompletedEvents',
+    target: number,
+    duration: number
+  ): void {
+    const steps = 60;
+    const stepTime = duration / steps;
+    const increment = target / steps;
+    let current = 0;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      current = Math.min(
+        Math.round(increment * step),
+        target
+      );
+      this[property] = current;
+
+      if (step >= steps || current >= target) {
+        this[property] = target;
+        clearInterval(timer);
+      }
+    }, stepTime);
+  }
+
   viewDetails(event: any): void {
     this.selectedEvent = event;
   }
 
-  // Navigation methods
   goToCreateEvent(): void {
     this.router.navigate(['/create-event']);
   }

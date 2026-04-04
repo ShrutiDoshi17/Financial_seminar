@@ -1,56 +1,18 @@
 <div class="dashboard-wrapper">
 
-  <!-- PROGRESS BAR -->
-  <div class="dash-progress-bar" *ngIf="isLoading">
-    <div class="dash-progress-fill"></div>
-  </div>
-
-  <!-- SKELETON — shows while loading -->
-  <div *ngIf="isLoading" class="skeleton-wrapper">
-    <!-- skeleton banner -->
-    <div class="skeleton-banner">
-      <div class="skeleton-block skeleton-title"></div>
-      <div class="skeleton-block skeleton-subtitle"></div>
-      <div class="skeleton-block skeleton-subtitle short"></div>
-    </div>
-
-    <!-- skeleton stats -->
-    <div class="stats-row">
-      <div class="skeleton-stat-card" *ngFor="let i of [1,2,3,4]">
-        <div class="skeleton-block skeleton-icon"></div>
-        <div class="skeleton-stat-info">
-          <div class="skeleton-block skeleton-number"></div>
-          <div class="skeleton-block skeleton-label"></div>
-        </div>
+  <!-- LOADING SPINNER -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="loader-box">
+      <div class="spinner-ring">
+        <div class="spinner-ring__inner"></div>
       </div>
-    </div>
-
-    <!-- skeleton section title -->
-    <div class="skeleton-block skeleton-section-title"></div>
-
-    <!-- skeleton action cards -->
-    <div class="quick-actions-grid">
-      <div class="skeleton-action-card" *ngFor="let i of [1,2,3]">
-        <div class="skeleton-block skeleton-card-icon"></div>
-        <div class="skeleton-block skeleton-card-title"></div>
-        <div class="skeleton-block skeleton-card-text"></div>
-        <div class="skeleton-block skeleton-card-text short"></div>
+      <div class="spinner-pulse"></div>
+      <div class="spinner-logo">
+        <i class="fas fa-chart-line"></i>
       </div>
-    </div>
-
-    <!-- skeleton section title -->
-    <div class="skeleton-block skeleton-section-title"></div>
-
-    <!-- skeleton table -->
-    <div class="skeleton-table">
-      <div class="skeleton-table-header">
-        <div class="skeleton-block skeleton-th"
-          *ngFor="let i of [1,2,3,4,5]"></div>
-      </div>
-      <div class="skeleton-table-row"
-        *ngFor="let i of [1,2,3,4]">
-        <div class="skeleton-block skeleton-td"
-          *ngFor="let j of [1,2,3,4,5]"></div>
+      <div class="loader-text">
+        <span class="loader-brand">Fin<span class="loader-accent">Seminar</span></span>
+        <span class="loader-subtext">Loading your dashboard...</span>
       </div>
     </div>
   </div>
@@ -58,473 +20,647 @@
   <!-- REAL CONTENT — only shows when NOT loading -->
   <div *ngIf="!isLoading" class="content-loaded">
 
-
+    <!-- ═══════════════════════════════════════ -->
+    <!-- INSTITUTION DASHBOARD                   -->
+    <!-- ═══════════════════════════════════════ -->
     <div *ngIf="role === 'INSTITUTION'">
 
-    <!-- Welcome Banner -->
-    <div class="welcome-banner">
-      <div class="welcome-left">
-        <div class="welcome-badge">
-          <i class="bi bi-building me-2"></i>Institution
-        </div>
-        <h2>Welcome Back!</h2>
-        <p>Manage your financial seminars and workshops from one place.</p>
-      </div>
-      <div class="welcome-right">
-        <div class="user-profile-card">
-          <div class="user-avatar institution-avatar">
-            <i class="bi bi-building"></i>
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <div class="welcome-left">
+          <div class="welcome-badge">
+            <i class="bi bi-building me-2"></i>Institution
           </div>
-          <div class="user-details">
-            <div class="user-name">{{ username }}</div>
-            <div class="user-role-label">Institution</div>
+          <h2>Welcome Back!</h2>
+          <p>Manage your financial seminars and workshops from one place.</p>
+        </div>
+        <div class="welcome-right">
+          <div class="user-profile-card">
+            <div class="user-avatar institution-avatar">
+              <i class="bi bi-building"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ username }}</div>
+              <div class="user-role-label">Institution</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Error Alert -->
-    <div class="alert-custom-danger" *ngIf="showError && !isLoading" >
-      <i class="bi bi-exclamation-circle me-2"></i>
-      {{ errorMessage }}
-    </div>
+      <!-- Error Alert -->
+      <div class="alert-custom-danger" *ngIf="showError && !isLoading">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ errorMessage }}
+      </div>
 
-    <!-- Stats Row -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon blue">
-          <i class="bi bi-calendar-event"></i>
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animTotalEvents }}</span>
+            <span class="stat-label">Total Events</span>
+          </div>
         </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ totalEvents }}</span>
-          <span class="stat-label">Total Events</span>
+        <div class="stat-card">
+          <div class="stat-icon gold">
+            <i class="bi bi-hourglass-split"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animPlannedEvents }}</span>
+            <span class="stat-label">Planned</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <i class="bi bi-play-circle-fill"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animOngoingEvents }}</span>
+            <span class="stat-label">Ongoing</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animCompletedEvents }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon gold">
-          <i class="bi bi-hourglass-split"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ plannedEvents }}</span>
-          <span class="stat-label">Planned</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon orange">
-          <i class="bi bi-play-circle-fill"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ ongoingEvents }}</span>
-          <span class="stat-label">Ongoing</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green">
-          <i class="bi bi-check-circle-fill"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ completedEvents }}</span>
-          <span class="stat-label">Completed</span>
-        </div>
-      </div>
-    </div>
 
-    <!-- Quick Actions -->
-    <div class="section-title">
-      <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
-    </div>
-    <div class="quick-actions-grid">
-      <div class="action-card" (click)="goToCreateEvent()">
-        <div class="action-icon create">
-          <i class="bi bi-calendar-plus"></i>
+      <!-- Quick Actions -->
+      <div class="section-title">
+        <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
+      </div>
+      <div class="quick-actions-grid">
+        <div class="action-card" (click)="goToCreateEvent()">
+          <div class="action-icon create">
+            <i class="bi bi-calendar-plus"></i>
+          </div>
+          <h4>Create Event</h4>
+          <p>Create a new financial seminar or workshop</p>
+          <div class="action-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
         </div>
-        <h4>Create Event</h4>
-        <p>Create a new financial seminar or workshop</p>
-        <div class="action-arrow">
-          <i class="bi bi-arrow-right"></i>
+        <div class="action-card" (click)="goToAddResource()">
+          <div class="action-icon resource">
+            <i class="bi bi-folder-plus"></i>
+          </div>
+          <h4>Add Resource</h4>
+          <p>Attach venues, tools or content to events</p>
+          <div class="action-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+        </div>
+        <div class="action-card" (click)="goToAssignProfessional()">
+          <div class="action-icon assign">
+            <i class="bi bi-person-check"></i>
+          </div>
+          <h4>Assign Professional</h4>
+          <p>Assign an expert to conduct your event</p>
+          <div class="action-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
         </div>
       </div>
-      <div class="action-card" (click)="goToAddResource()">
-        <div class="action-icon resource">
-          <i class="bi bi-folder-plus"></i>
-        </div>
-        <h4>Add Resource</h4>
-        <p>Attach venues, tools or content to events</p>
-        <div class="action-arrow">
-          <i class="bi bi-arrow-right"></i>
-        </div>
+
+      <!-- Recent Events Table -->
+      <div class="section-title">
+        <i class="bi bi-list-ul me-2"></i>Your Events
       </div>
-      <div class="action-card" (click)="goToAssignProfessional()">
-        <div class="action-icon assign">
-          <i class="bi bi-person-check"></i>
-        </div>
-        <h4>Assign Professional</h4>
-        <p>Assign an expert to conduct your event</p>
-        <div class="action-arrow">
-          <i class="bi bi-arrow-right"></i>
-        </div>
+
+      <div class="events-table-wrapper" *ngIf="eventList.length > 0">
+        <table class="events-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Event Title</th>
+              <th>Schedule</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let event of eventList; let i = index"
+              (click)="viewDetails(event)"
+              [class.selected-row]="selectedEvent?.id === event.id">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <div class="event-title-cell">
+                  <i class="bi bi-calendar-date me-2"></i>
+                  {{ event.title }}
+                </div>
+              </td>
+              <td>
+                <i class="bi bi-clock me-1 text-muted"></i>
+                {{ event.schedule }}
+              </td>
+              <td>
+                <i class="bi bi-geo-alt me-1 text-muted"></i>
+                {{ event.location }}
+              </td>
+              <td>
+                <span class="status-badge"
+                  [ngClass]="getStatusClass(event.status)">
+                  {{ event.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
 
-    <!-- Recent Events Table -->
-    <div class="section-title">
-      <i class="bi bi-list-ul me-2"></i>Your Events
-    </div>
-
-    <div class="events-table-wrapper" *ngIf="eventList.length > 0">
-      <table class="events-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Event Title</th>
-            <th>Schedule</th>
-            <th>Location</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let event of eventList; let i = index"
-            (click)="viewDetails(event)"
-            [class.selected-row]="selectedEvent?.id === event.id">
-            <td>{{ i + 1 }}</td>
-            <td>
-              <div class="event-title-cell">
-                <i class="bi bi-calendar-date me-2"></i>
-                {{ event.title }}
-              </div>
-            </td>
-            <td>
-              <i class="bi bi-clock me-1 text-muted"></i>
-              {{ event.schedule }}
-            </td>
-            <td>
-              <i class="bi bi-geo-alt me-1 text-muted"></i>
-              {{ event.location }}
-            </td>
-            <td>
-              <span class="status-badge" [ngClass]="getStatusClass(event.status)">
-                {{ event.status }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- No Events State -->
-    <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
-      <i class="bi bi-calendar-x"></i>
-      <h5>No Events Yet</h5>
-      <p>Start by creating your first financial event</p>
-      <button class="btn-empty-action" (click)="goToCreateEvent()">
-        <i class="bi bi-plus me-2"></i>Create First Event
-      </button>
-    </div>
+      <!-- No Events State -->
+      <div class="empty-state"
+        *ngIf="eventList.length === 0 && !showError">
+        <i class="bi bi-calendar-x"></i>
+        <h5>No Events Yet</h5>
+        <p>Start by creating your first financial event</p>
+        <button class="btn-empty-action" (click)="goToCreateEvent()">
+          <i class="bi bi-plus me-2"></i>Create First Event
+        </button>
+      </div>
 
     </div>
+    <!-- END INSTITUTION -->
 
     <!-- ═══════════════════════════════════════ -->
     <!-- PROFESSIONAL DASHBOARD                  -->
     <!-- ═══════════════════════════════════════ -->
     <div *ngIf="role === 'PROFESSIONAL'">
 
-    <!-- Welcome Banner -->
-    <div class="welcome-banner professional-banner">
-      <div class="welcome-left">
-        <div class="welcome-badge professional-badge">
-          <i class="bi bi-person-workspace me-2"></i>Professional
-        </div>
-        <h2>Welcome Back!</h2>
-        <p>View and manage your assigned financial workshops.</p>
-      </div>
-      <div class="welcome-right">
-        <div class="user-profile-card">
-          <div class="user-avatar professional-avatar">
-            <i class="bi bi-mortarboard-fill"></i>
+      <!-- Welcome Banner -->
+      <div class="welcome-banner professional-banner">
+        <div class="welcome-left">
+          <div class="welcome-badge professional-badge">
+            <i class="bi bi-person-workspace me-2"></i>Professional
           </div>
-          <div class="user-details">
-            <div class="user-name">{{ username }}</div>
-            <div class="user-role-label professional-role">Professional</div>
-          </div>
+          <h2>Welcome Back!</h2>
+          <p>View and manage your assigned financial workshops.</p>
         </div>
-      </div>
-    </div>
-
-    <!-- Error Alert -->
-    <div class="alert-custom-danger" *ngIf="showError && !isLoading">
-      <i class="bi bi-exclamation-circle me-2"></i>
-      {{ errorMessage }}
-    </div>
-
-    <!-- Stats Row -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon blue">
-          <i class="bi bi-clipboard-check"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ totalEvents }}</span>
-          <span class="stat-label">Total Assigned</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon gold">
-          <i class="bi bi-hourglass-split"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ plannedEvents }}</span>
-          <span class="stat-label">Upcoming</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon orange">
-          <i class="bi bi-broadcast"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ ongoingEvents }}</span>
-          <span class="stat-label">In Progress</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green">
-          <i class="bi bi-check2-all"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ completedEvents }}</span>
-          <span class="stat-label">Completed</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="section-title">
-      <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
-    </div>
-    <div class="quick-actions-grid two-col">
-      <div class="action-card" (click)="goToUpdateStatus()">
-        <div class="action-icon update">
-          <i class="bi bi-arrow-repeat"></i>
-        </div>
-        <h4>Update Event Status</h4>
-        <p>Change status from Planned to Ongoing or Completed</p>
-        <div class="action-arrow">
-          <i class="bi bi-arrow-right"></i>
-        </div>
-      </div>
-      <div class="action-card" (click)="goToAddFeedback()">
-        <div class="action-icon feedback">
-          <i class="bi bi-chat-square-dots"></i>
-        </div>
-        <h4>Add Feedback</h4>
-        <p>Submit your feedback for completed events</p>
-        <div class="action-arrow">
-          <i class="bi bi-arrow-right"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Assigned Events Cards -->
-    <div class="section-title">
-      <i class="bi bi-clipboard-data me-2"></i>Assigned Events
-    </div>
-
-    <div class="events-cards-grid" *ngIf="eventList.length > 0">
-      <div class="event-card" *ngFor="let event of eventList"
-        (click)="viewDetails(event)"
-        [class.selected-card]="selectedEvent?.id === event.id">
-
-        <div class="event-card-header">
-          <span class="status-badge" [ngClass]="getStatusClass(event.status)">
-            {{ event.status }}
-          </span>
-          <i class="bi bi-chevron-right card-arrow"></i>
-        </div>
-
-        <h5 class="event-card-title">{{ event.title }}</h5>
-        <p class="event-card-desc">{{ event.description }}</p>
-
-        <div class="event-card-footer">
-          <div class="event-meta">
-            <i class="bi bi-clock"></i>
-            <span>{{ event.schedule }}</span>
-          </div>
-          <div class="event-meta">
-            <i class="bi bi-geo-alt"></i>
-            <span>{{ event.location }}</span>
+        <div class="welcome-right">
+          <div class="user-profile-card">
+            <div class="user-avatar professional-avatar">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ username }}</div>
+              <div class="user-role-label professional-role">Professional</div>
+            </div>
           </div>
         </div>
-
-        <div class="event-card-actions">
-          <button class="btn-card-action update-btn"
-            (click)="goToUpdateStatus(); $event.stopPropagation()">
-            <i class="bi bi-arrow-repeat me-1"></i>Update Status
-          </button>
-          <button class="btn-card-action feedback-btn"
-            (click)="goToAddFeedback(); $event.stopPropagation()">
-            <i class="bi bi-chat me-1"></i>Feedback
-          </button>
-        </div>
-
       </div>
-    </div>
 
-    <!-- No Events State -->
-    <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
-      <i class="bi bi-clipboard-check"></i>
-      <h5>No Assigned Events</h5>
-      <p>You have not been assigned to any events yet</p>
-    </div>
+      <!-- Error Alert -->
+      <div class="alert-custom-danger" *ngIf="showError && !isLoading">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-clipboard-check"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animTotalEvents }}</span>
+            <span class="stat-label">Total Assigned</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">
+            <i class="bi bi-hourglass-split"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animPlannedEvents }}</span>
+            <span class="stat-label">Upcoming</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <i class="bi bi-broadcast"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animOngoingEvents }}</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="bi bi-check2-all"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animCompletedEvents }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-title">
+        <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
+      </div>
+      <div class="quick-actions-grid two-col">
+        <div class="action-card" (click)="goToUpdateStatus()">
+          <div class="action-icon update">
+            <i class="bi bi-arrow-repeat"></i>
+          </div>
+          <h4>Update Event Status</h4>
+          <p>Change status from Planned to Ongoing or Completed</p>
+          <div class="action-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+        </div>
+        <div class="action-card" (click)="goToAddFeedback()">
+          <div class="action-icon feedback">
+            <i class="bi bi-chat-square-dots"></i>
+          </div>
+          <h4>Add Feedback</h4>
+          <p>Submit your feedback for completed events</p>
+          <div class="action-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assigned Events Cards -->
+      <div class="section-title">
+        <i class="bi bi-clipboard-data me-2"></i>Assigned Events
+      </div>
+
+      <div class="events-cards-grid" *ngIf="eventList.length > 0">
+        <div class="flip-card" *ngFor="let event of eventList">
+          <div class="flip-card-inner">
+
+            <!-- FRONT -->
+            <div class="flip-card-front">
+              <div class="event-card-header">
+                <span class="status-badge"
+                  [ngClass]="getStatusClass(event.status)">
+                  {{ event.status }}
+                </span>
+                <div class="info-icon-wrapper">
+                  <i class="fas fa-info-circle info-icon"></i>
+                  <div class="preview-tooltip">
+                    <div class="tooltip-row">
+                      <i class="fas fa-heading"></i>
+                      <span>{{ event.title }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                      <i class="fas fa-clock"></i>
+                      <span>{{ event.schedule }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>{{ event.location }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                      <i class="fas fa-toggle-on"></i>
+                      <span>{{ event.status }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h5 class="event-card-title">{{ event.title }}</h5>
+              <p class="event-card-desc">{{ event.description }}</p>
+
+              <div class="event-card-footer">
+                <div class="event-meta">
+                  <i class="fas fa-clock"></i>
+                  <span>{{ event.schedule }}</span>
+                </div>
+                <div class="event-meta">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>{{ event.location }}</span>
+                </div>
+              </div>
+
+              <div class="event-card-actions">
+                <button class="btn-card-action update-btn"
+                  (click)="goToUpdateStatus(); $event.stopPropagation()">
+                  <i class="fas fa-sync-alt me-1"></i>Update Status
+                </button>
+                <button class="btn-card-action feedback-btn"
+                  (click)="goToAddFeedback(); $event.stopPropagation()">
+                  <i class="fas fa-comment me-1"></i>Feedback
+                </button>
+              </div>
+
+              <div class="flip-hint">
+                <i class="fas fa-sync-alt me-1"></i>Hover to see more
+              </div>
+            </div>
+
+            <!-- BACK — GLASSMORPHISM -->
+            <div class="flip-card-back">
+              <div class="glass-header">
+                <i class="fas fa-calendar-alt me-2"></i>Event Details
+              </div>
+              <div class="glass-content">
+                <div class="glass-row">
+                  <span class="glass-label">Title</span>
+                  <span class="glass-value">{{ event.title }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Description</span>
+                  <span class="glass-value desc">{{ event.description }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Schedule</span>
+                  <span class="glass-value">{{ event.schedule }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Location</span>
+                  <span class="glass-value">{{ event.location }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Status</span>
+                  <span class="status-badge"
+                    [ngClass]="getStatusClass(event.status)">
+                    {{ event.status }}
+                  </span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Professionals</span>
+                  <span class="glass-value">
+                    {{ event.professionals?.length || 0 }} assigned
+                  </span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Feedbacks</span>
+                  <span class="glass-value">
+                    {{ event.feedbacks?.length || 0 }} received
+                  </span>
+                </div>
+              </div>
+              <div class="glass-footer">
+                <i class="fas fa-sync-alt me-1"></i>Hover away to flip back
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- No Events State -->
+      <div class="empty-state"
+        *ngIf="eventList.length === 0 && !showError">
+        <i class="bi bi-clipboard-check"></i>
+        <h5>No Assigned Events</h5>
+        <p>You have not been assigned to any events yet</p>
+      </div>
 
     </div>
+    <!-- END PROFESSIONAL -->
 
     <!-- ═══════════════════════════════════════ -->
     <!-- PARTICIPANT DASHBOARD                   -->
     <!-- ═══════════════════════════════════════ -->
     <div *ngIf="role === 'PARTICIPANT'">
 
-    <!-- Welcome Banner -->
-    <div class="welcome-banner participant-banner">
-      <div class="welcome-left">
-        <div class="welcome-badge participant-badge">
-          <i class="bi bi-mortarboard-fill me-2"></i>Participant
-        </div>
-        <h2>Welcome Back!</h2>
-        <p>Discover and enroll in financial workshops near you.</p>
-      </div>
-      <div class="welcome-right">
-        <div class="user-profile-card">
-          <div class="user-avatar participant-avatar">
-            <i class="bi bi-person-badge"></i>
-            <!-- <i class="bi bi-mortarboard-fill"></i> -->
+      <!-- Welcome Banner -->
+      <div class="welcome-banner participant-banner">
+        <div class="welcome-left">
+          <div class="welcome-badge participant-badge">
+            <i class="bi bi-mortarboard-fill me-2"></i>Participant
           </div>
-          <div class="user-details">
-            <div class="user-name">{{ username }}</div>
-            <div class="user-role-label participant-role">Participant</div>
-          </div>
+          <h2>Welcome Back!</h2>
+          <p>Discover and enroll in financial workshops near you.</p>
         </div>
-      </div>
-    </div>
-
-    <!-- Error Alert -->
-    <div class="alert-custom-danger" *ngIf="showError && !isLoading">
-      <i class="bi bi-exclamation-circle me-2"></i>
-      {{ errorMessage }}
-    </div>
-
-    <!-- Stats Row -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon blue">
-          <i class="bi bi-calendar-event"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ totalEvents }}</span>
-          <span class="stat-label">Available Events</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon gold">
-          <i class="bi bi-calendar-check"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ plannedEvents }}</span>
-          <span class="stat-label">Upcoming</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon orange">
-          <i class="bi bi-fire"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ ongoingEvents }}</span>
-          <span class="stat-label">Happening Now</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green">
-          <i class="bi bi-trophy-fill"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-number">{{ completedEvents }}</span>
-          <span class="stat-label">Completed</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Action -->
-    <div class="section-title">
-      <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
-    </div>
-    <div class="quick-actions-grid one-col">
-      <div class="action-card wide-card" (click)="goToViewEvents()">
-        <div class="action-icon view">
-          <i class="bi bi-calendar-event"></i>
-        </div>
-        <div class="wide-card-content">
-          <h4>Browse &amp; Enroll in Events</h4>
-          <p>Explore all available financial workshops and seminars</p>
-        </div>
-        <div class="action-arrow">
-          <i class="bi bi-arrow-right"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Available Events Preview -->
-    <div class="section-title">
-      <i class="bi bi-fire me-2"></i>Available Events
-    </div>
-
-    <div class="events-cards-grid" *ngIf="eventList.length > 0">
-      <div class="event-card" *ngFor="let event of eventList"
-        (click)="viewDetails(event)"
-        [class.selected-card]="selectedEvent?.id === event.id">
-
-        <div class="event-card-header">
-          <span class="status-badge" [ngClass]="getStatusClass(event.status)">
-            {{ event.status }}
-          </span>
-          <i class="bi bi-chevron-right card-arrow"></i>
-        </div>
-
-        <h5 class="event-card-title">{{ event.title }}</h5>
-        <p class="event-card-desc">{{ event.description }}</p>
-
-        <div class="event-card-footer">
-          <div class="event-meta">
-            <i class="bi bi-clock"></i>
-            <span>{{ event.schedule }}</span>
-          </div>
-          <div class="event-meta">
-            <i class="bi bi-geo-alt"></i>
-            <span>{{ event.location }}</span>
+        <div class="welcome-right">
+          <div class="user-profile-card">
+            <div class="user-avatar participant-avatar">
+              <i class="bi bi-person-badge"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ username }}</div>
+              <div class="user-role-label participant-role">Participant</div>
+            </div>
           </div>
         </div>
-
-        <div class="event-card-actions">
-          <button class="btn-card-action enroll-btn"
-            (click)="goToViewEvents(); $event.stopPropagation()">
-            <i class="bi bi-plus me-1"></i>Enroll Now
-          </button>
-          <button class="btn-card-action status-btn"
-            (click)="goToViewEvents(); $event.stopPropagation()">
-            <i class="bi bi-info-circle me-1"></i>Details
-          </button>
-        </div>
-
       </div>
-    </div>
 
-    <!-- No Events State -->
-    <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
-      <i class="bi bi-search"></i>
-      <h5>No Events Available</h5>
-      <p>Check back later for upcoming financial workshops</p>
-      <button class="btn-empty-action" (click)="goToViewEvents()">
-        <i class="bi bi-search me-2"></i>Browse Events
-      </button>
-    </div>
+      <!-- Error Alert -->
+      <div class="alert-custom-danger" *ngIf="showError && !isLoading">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animTotalEvents }}</span>
+            <span class="stat-label">Available Events</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animPlannedEvents }}</span>
+            <span class="stat-label">Upcoming</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <i class="bi bi-fire"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animOngoingEvents }}</span>
+            <span class="stat-label">Happening Now</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="bi bi-trophy-fill"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ animCompletedEvents }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action -->
+      <div class="section-title">
+        <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
+      </div>
+      <div class="quick-actions-grid one-col">
+        <div class="action-card wide-card" (click)="goToViewEvents()">
+          <div class="action-icon view">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <div class="wide-card-content">
+            <h4>Browse &amp; Enroll in Events</h4>
+            <p>Explore all available financial workshops and seminars</p>
+          </div>
+          <div class="action-arrow">
+            <i class="bi bi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Available Events -->
+      <div class="section-title">
+        <i class="bi bi-fire me-2"></i>Available Events
+      </div>
+
+      <div class="events-cards-grid" *ngIf="eventList.length > 0">
+        <div class="flip-card" *ngFor="let event of eventList">
+          <div class="flip-card-inner">
+
+            <!-- FRONT -->
+            <div class="flip-card-front">
+              <div class="event-card-header">
+                <span class="status-badge"
+                  [ngClass]="getStatusClass(event.status)">
+                  {{ event.status }}
+                </span>
+                <div class="info-icon-wrapper">
+                  <i class="fas fa-info-circle info-icon"></i>
+                  <div class="preview-tooltip">
+                    <div class="tooltip-row">
+                      <i class="fas fa-heading"></i>
+                      <span>{{ event.title }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                      <i class="fas fa-clock"></i>
+                      <span>{{ event.schedule }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>{{ event.location }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                      <i class="fas fa-toggle-on"></i>
+                      <span>{{ event.status }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h5 class="event-card-title">{{ event.title }}</h5>
+              <p class="event-card-desc">{{ event.description }}</p>
+
+              <div class="event-card-footer">
+                <div class="event-meta">
+                  <i class="fas fa-clock"></i>
+                  <span>{{ event.schedule }}</span>
+                </div>
+                <div class="event-meta">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>{{ event.location }}</span>
+                </div>
+              </div>
+
+              <div class="event-card-actions">
+                <button class="btn-card-action enroll-btn"
+                  (click)="goToViewEvents(); $event.stopPropagation()">
+                  <i class="fas fa-plus me-1"></i>Enroll Now
+                </button>
+                <button class="btn-card-action status-btn"
+                  (click)="goToViewEvents(); $event.stopPropagation()">
+                  <i class="fas fa-info-circle me-1"></i>Details
+                </button>
+              </div>
+
+              <div class="flip-hint">
+                <i class="fas fa-sync-alt me-1"></i>Hover to see more
+              </div>
+            </div>
+
+            <!-- BACK — GLASSMORPHISM -->
+            <div class="flip-card-back">
+              <div class="glass-header">
+                <i class="fas fa-calendar-alt me-2"></i>Event Details
+              </div>
+              <div class="glass-content">
+                <div class="glass-row">
+                  <span class="glass-label">Title</span>
+                  <span class="glass-value">{{ event.title }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Description</span>
+                  <span class="glass-value desc">{{ event.description }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Schedule</span>
+                  <span class="glass-value">{{ event.schedule }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Location</span>
+                  <span class="glass-value">{{ event.location }}</span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Status</span>
+                  <span class="status-badge"
+                    [ngClass]="getStatusClass(event.status)">
+                    {{ event.status }}
+                  </span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Professionals</span>
+                  <span class="glass-value">
+                    {{ event.professionals?.length || 0 }} assigned
+                  </span>
+                </div>
+                <div class="glass-divider"></div>
+                <div class="glass-row">
+                  <span class="glass-label">Feedbacks</span>
+                  <span class="glass-value">
+                    {{ event.feedbacks?.length || 0 }} received
+                  </span>
+                </div>
+              </div>
+              <div class="glass-footer">
+                <i class="fas fa-sync-alt me-1"></i>Hover away to flip back
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- No Events State -->
+      <div class="empty-state"
+        *ngIf="eventList.length === 0 && !showError">
+        <i class="bi bi-search"></i>
+        <h5>No Events Available</h5>
+        <p>Check back later for upcoming financial workshops</p>
+        <button class="btn-empty-action" (click)="goToViewEvents()">
+          <i class="bi bi-search me-2"></i>Browse Events
+        </button>
+      </div>
 
     </div>
+    <!-- END PARTICIPANT -->
+
+  </div>
+  <!-- END REAL CONTENT -->
 
 </div>
+<!-- END DASHBOARD WRAPPER -->
