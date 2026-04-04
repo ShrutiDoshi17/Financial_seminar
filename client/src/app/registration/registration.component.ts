@@ -34,7 +34,7 @@ export class RegistrationComponent {
       this.service.checkUsernameExists(username).subscribe((exists: boolean) => {
         if (exists) {
           this.showError = true
-          this.errorMessage = 'Username already exists. Please try a different username.'
+          this.errorMessage = 'Username already exists.'
 
           setTimeout(() => {
             this.showError = false
