@@ -5,6 +5,7 @@ package com.edutech.financial_seminar_and_workshop_management.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus; 
 
 import com.edutech.financial_seminar_and_workshop_management.entity.Event;
 import com.edutech.financial_seminar_and_workshop_management.entity.Resource;
@@ -39,6 +40,16 @@ public class InstitutionController {
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails) {
         Event updatedEvent = eventService.updateEvent(id, eventDetails);
         return ResponseEntity.ok(updatedEvent);
+    }
+
+    // Delete Event
+    @DeleteMapping("/api/institution/event/{id}")
+    public ResponseEntity<Long> deleteEvent(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<Long>(eventService.deleteEventById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Long>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // Get Events

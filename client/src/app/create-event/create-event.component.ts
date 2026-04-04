@@ -42,7 +42,7 @@ export class CreateEventComponent implements OnInit {
   }
 
   getEvent() {
-    this.eventList = [];
+    // this.eventList = [];
     const userIdString = localStorage.getItem('userId');
     const userId = userIdString ? parseInt(userIdString, 10) : null;
     this.itemForm.controls["institutionId"].setValue(userId)
@@ -77,6 +77,8 @@ export class CreateEventComponent implements OnInit {
           this.showError = true;
           this.errorMessage = "An error occurred while created in. Please try again later.";
           console.error('Login error:', error);
+
+          
         })
       }
       else {
@@ -109,6 +111,36 @@ export class CreateEventComponent implements OnInit {
   }
 
   confirmDelete(): void {
-    
+    this.httpService.deleteEvent(this.deleteId).subscribe({
+      next: () => {
+        this.showDeleteModal = false
+        this.deleteId = null
+        this.eventToDelete = null
+        this.showMessage = true
+        this.responseMessage = "Event deleted successfully!"
+        this.getEvent()
+
+        setTimeout(() => {
+          this.showMessage = false
+          this.responseMessage = ''
+        }, 3000)
+      },
+      error: (err: any) => {
+        this.showError = true;
+        this.errorMessage = "An error occurred while deleting";
+        console.error('Delete event error:', err);
+
+        setTimeout(() => {
+          this.showError = false
+          this.errorMessage = ''
+        }, 3000)
+      }
+    })
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false
+    this.deleteId = null
+    this.eventToDelete = null
   }
 }

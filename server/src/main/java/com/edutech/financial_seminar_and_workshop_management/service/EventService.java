@@ -48,9 +48,13 @@ public class EventService {
     }
 
     // Delete Event by ID
-    // public Event deleteEventById(Long eventId) {
-    //     return eventRepository.deleteById(eventId);
-    // }
+    public Long deleteEventById(Long eventId) {
+        if(eventRepository.existsById(eventId)) {
+            eventRepository.deleteById(eventId);
+            return eventId;
+        }
+        return null;
+    }
 
     // Assign Professional to Event
     public User assignUserToEventAsProfessional(Long eventId, Long userId) {
