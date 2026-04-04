@@ -41,15 +41,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let event of eventList"
-                [class.ve-table__row--active]="selectedEvent.id === event.id">
+            <tr *ngFor="let event of eventList" [class.ve-table__row--active]="selectedEvent.id === event.id">
               <td class="ve-table__id">{{ event.id }}</td>
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>
               <td>{{ event.location }}</td>
               <td>
-                <span class="ve-status-badge"
-                  [ngClass]="{
+                <span class="ve-status-badge" [ngClass]="{
                     've-status-badge--planned':   event.status === 'PLANNED',
                     've-status-badge--ongoing':   event.status === 'ONGOING',
                     've-status-badge--completed': event.status === 'COMPLETED'
@@ -82,8 +80,7 @@
       <!-- Title -->
       <div class="ve-detail-card__header">
         <h3 class="ve-detail-card__title">{{ selectedEvent.title }}</h3>
-        <span class="ve-status-badge"
-          [ngClass]="{
+        <span class="ve-status-badge" [ngClass]="{
             've-status-badge--planned':   selectedEvent.status === 'PLANNED',
             've-status-badge--ongoing':   selectedEvent.status === 'ONGOING',
             've-status-badge--completed': selectedEvent.status === 'COMPLETED'
@@ -110,19 +107,23 @@
 
       <!-- Enroll / Check Status -->
       <div class="ve-detail-card__actions">
-        <button *ngIf = "!isEnrolled()"
-           class="ve-btn-enroll"
-           (click) = "enroll()">
-          <i class="fas fa-user-plus"></i> Enroll Now
+
+        <!-- Not enrolled — active button -->
+        <button *ngIf="!isEnrolled()" class="ve-btn-enroll" (click)="enroll()">
+          <i class="fas fa-user-plus me-2"></i>
+          Enroll Now
         </button>
-        <span *ngIf = "isEnrolled()">Enrolled!</span>
-        <!-- <button *ngIf="selectedEvent.enrollments.length > 0"
-          (click)="checkStatus()" class="ve-btn-status">
-          <i class="fas fa-sync-alt"></i> Check Status
+
+        <!-- Already enrolled — disabled styled button -->
+        <button *ngIf="isEnrolled()" class="ve-btn-enrolled" disabled>
+          <i class="fas fa-check-circle me-2"></i>
+          Enrolled
         </button>
-        <div *ngIf="status" class="ve-status-result">
-          <i class="fas fa-info-circle"></i> {{ status }}
-        </div> -->
+      </div>
+
+      <div *ngIf="showError" class="ve-alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{{ errorMessage }}</span>
       </div>
 
       <div class="ve-divider"></div>
@@ -132,11 +133,7 @@
         <h4 class="ve-feedback-form__title">Leave Feedback</h4>
         <div class="ve-input-group">
           <i class="fas fa-pen"></i>
-          <textarea
-            rows="3"
-            name="content"
-            class="ve-textarea"
-            placeholder="Share your experience..."
+          <textarea rows="3" name="content" class="ve-textarea" placeholder="Share your experience..."
             [(ngModel)]="formModel.content">
           </textarea>
         </div>
@@ -164,4 +161,3 @@
     </div>
   </div>
 </div>
- 
