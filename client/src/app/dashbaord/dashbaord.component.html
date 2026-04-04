@@ -1,4 +1,64 @@
 <div class="dashboard-wrapper">
+
+  <!-- PROGRESS BAR -->
+  <div class="dash-progress-bar" *ngIf="isLoading">
+    <div class="dash-progress-fill"></div>
+  </div>
+
+  <!-- SKELETON — shows while loading -->
+  <div *ngIf="isLoading" class="skeleton-wrapper">
+    <!-- skeleton banner -->
+    <div class="skeleton-banner">
+      <div class="skeleton-block skeleton-title"></div>
+      <div class="skeleton-block skeleton-subtitle"></div>
+      <div class="skeleton-block skeleton-subtitle short"></div>
+    </div>
+
+    <!-- skeleton stats -->
+    <div class="stats-row">
+      <div class="skeleton-stat-card" *ngFor="let i of [1,2,3,4]">
+        <div class="skeleton-block skeleton-icon"></div>
+        <div class="skeleton-stat-info">
+          <div class="skeleton-block skeleton-number"></div>
+          <div class="skeleton-block skeleton-label"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- skeleton section title -->
+    <div class="skeleton-block skeleton-section-title"></div>
+
+    <!-- skeleton action cards -->
+    <div class="quick-actions-grid">
+      <div class="skeleton-action-card" *ngFor="let i of [1,2,3]">
+        <div class="skeleton-block skeleton-card-icon"></div>
+        <div class="skeleton-block skeleton-card-title"></div>
+        <div class="skeleton-block skeleton-card-text"></div>
+        <div class="skeleton-block skeleton-card-text short"></div>
+      </div>
+    </div>
+
+    <!-- skeleton section title -->
+    <div class="skeleton-block skeleton-section-title"></div>
+
+    <!-- skeleton table -->
+    <div class="skeleton-table">
+      <div class="skeleton-table-header">
+        <div class="skeleton-block skeleton-th"
+          *ngFor="let i of [1,2,3,4,5]"></div>
+      </div>
+      <div class="skeleton-table-row"
+        *ngFor="let i of [1,2,3,4]">
+        <div class="skeleton-block skeleton-td"
+          *ngFor="let j of [1,2,3,4,5]"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REAL CONTENT — only shows when NOT loading -->
+  <div *ngIf="!isLoading" class="content-loaded">
+
+
     <div *ngIf="role === 'INSTITUTION'">
 
     <!-- Welcome Banner -->
@@ -24,7 +84,7 @@
     </div>
 
     <!-- Error Alert -->
-    <div class="alert-custom-danger" *ngIf="showError">
+    <div class="alert-custom-danger" *ngIf="showError && !isLoading" >
       <i class="bi bi-exclamation-circle me-2"></i>
       {{ errorMessage }}
     </div>
@@ -191,7 +251,7 @@
     </div>
 
     <!-- Error Alert -->
-    <div class="alert-custom-danger" *ngIf="showError">
+    <div class="alert-custom-danger" *ngIf="showError && !isLoading">
       <i class="bi bi-exclamation-circle me-2"></i>
       {{ errorMessage }}
     </div>
@@ -346,7 +406,7 @@
     </div>
 
     <!-- Error Alert -->
-    <div class="alert-custom-danger" *ngIf="showError">
+    <div class="alert-custom-danger" *ngIf="showError && !isLoading">
       <i class="bi bi-exclamation-circle me-2"></i>
       {{ errorMessage }}
     </div>

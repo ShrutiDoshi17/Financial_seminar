@@ -27,7 +27,7 @@ export class LoginComponent {
 
   onLogin() {
     if (this.itemForm.valid) {
-      // this.showError = false;
+      this.showError = false;
       const username = this.itemForm.value.username
       this.httpService.checkUsernameExists(username).subscribe((exists: boolean) => {
         if (!exists) {
@@ -50,11 +50,10 @@ export class LoginComponent {
             this.authService.saveToken(data.token)
             this.authService.saveUserId(data.userId)
             this.authService.setUsername(data.username)
-            this.router.navigateByUrl('/dashboard');
-
             setTimeout(() => {
               window.location.reload();
-            }, 1000);
+            }, 10);
+            this.router.navigateByUrl('/dashboard');
           }
           else {
             this.showError = true;

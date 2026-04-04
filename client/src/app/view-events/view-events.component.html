@@ -27,6 +27,7 @@
         <span>Event Listings</span>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
+
       <div class="table-responsive">
         <table class="ve-table">
           <thead>
@@ -40,6 +41,7 @@
               <!-- <th>Enroll</th> -->
             </tr>
           </thead>
+
           <tbody>
             <tr *ngFor="let event of eventList" [class.ve-table__row--active]="selectedEvent.id === event.id">
               <td class="ve-table__id">{{ event.id }}</td>
@@ -47,9 +49,10 @@
               <td>{{ event.schedule }}</td>
               <td>{{ event.location }}</td>
               <td>
-                <span class="ve-status-badge" [ngClass]="{
-                    've-status-badge--planned':   event.status === 'PLANNED',
-                    've-status-badge--ongoing':   event.status === 'ONGOING',
+                <span class="ve-status-badge"
+                  [ngClass]="{
+                    've-status-badge--planned': event.status === 'PLANNED',
+                    've-status-badge--ongoing': event.status === 'ONGOING',
                     've-status-badge--completed': event.status === 'COMPLETED'
                   }">
                   {{ event.status }}
@@ -80,9 +83,10 @@
       <!-- Title -->
       <div class="ve-detail-card__header">
         <h3 class="ve-detail-card__title">{{ selectedEvent.title }}</h3>
-        <span class="ve-status-badge" [ngClass]="{
-            've-status-badge--planned':   selectedEvent.status === 'PLANNED',
-            've-status-badge--ongoing':   selectedEvent.status === 'ONGOING',
+        <span class="ve-status-badge"
+          [ngClass]="{
+            've-status-badge--planned': selectedEvent.status === 'PLANNED',
+            've-status-badge--ongoing': selectedEvent.status === 'ONGOING',
             've-status-badge--completed': selectedEvent.status === 'COMPLETED'
           }">
           {{ selectedEvent.status }}
@@ -105,7 +109,7 @@
         </div>
       </div>
 
-      <!-- Enroll / Check Status -->
+      <!-- Actions -->
       <div class="ve-detail-card__actions">
 
         <!-- Not enrolled — active button -->
@@ -113,17 +117,26 @@
           <i class="fas fa-user-plus me-2"></i>
           Enroll Now
         </button>
+        <span *ngIf = "isEnrolled()">Enrolled!</span>
+        <!-- <button *ngIf="selectedEvent.enrollments.length > 0"
+          (click)="checkStatus()" class="ve-btn-status">
+          <i class="fas fa-sync-alt"></i> Check Status
+        </button> -->
 
-        <!-- Already enrolled — disabled styled button -->
-        <button *ngIf="isEnrolled()" class="ve-btn-enrolled" disabled>
-          <i class="fas fa-check-circle me-2"></i>
-          Enrolled
+        <!-- ✅ Download Certificate (NEW CODE) -->
+        <button
+          *ngIf="
+            selectedEvent.status === 'COMPLETED' &&
+            selectedEvent.enrollments.length > 0
+          "
+          (click)="downloadCertificate(selectedEvent.id)"
+          class="ve-btn-certificate">
+          <i class="fas fa-certificate"></i> Download Certificate
         </button>
-      </div>
 
-      <div *ngIf="showError" class="ve-alert-error">
-        <i class="fas fa-exclamation-circle"></i>
-        <span>{{ errorMessage }}</span>
+        <div *ngIf="status" class="ve-status-result">
+          <i class="fas fa-info-circle"></i> {{ status }}
+        </div> 
       </div>
 
       <div class="ve-divider"></div>
@@ -133,9 +146,13 @@
         <h4 class="ve-feedback-form__title">Leave Feedback</h4>
         <div class="ve-input-group">
           <i class="fas fa-pen"></i>
-          <textarea rows="3" name="content" class="ve-textarea" placeholder="Share your experience..."
+        <textarea
+          rows="3"
+            name="content"
+            class="ve-textarea"
+            placeholder="Share your experience..."
             [(ngModel)]="formModel.content">
-          </textarea>
+        </textarea>
         </div>
         <button (click)="saveFeedBack()" class="ve-btn-submit">
           <i class="fas fa-paper-plane"></i> Submit Feedback
