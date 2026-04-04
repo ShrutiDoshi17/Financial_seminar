@@ -74,6 +74,10 @@ export class HttpService {
     return this.http.put<any>(`${this.apiUrl}/api/institution/event/${eventId}`, details, this.httpOptions)
   }
 
+  deleteEvent(eventId: any): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/api/institution/event/${eventId}`, this.httpOptions);
+  }
+
   addResource(details: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/institution/event/${details.eventId}/resource`, details, this.httpOptions)
   }

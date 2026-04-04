@@ -1,4 +1,37 @@
 <div class="page-wrapper">
+  <!-- ✅ SUCCESS TOAST -->
+  <div *ngIf="showMessage" class="toast-host">
+    <div class="toast-box toast-success">
+      <div class="toast-content">
+        <span class="toast-dot"></span>
+
+        <div class="toast-text">
+          {{ responseMessage }}
+        </div>
+
+        <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close"
+          (click)="showMessage = false">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ❌ ERROR TOAST -->
+  <div *ngIf="showError" class="toast-host">
+    <div class="toast-box toast-error">
+      <div class="toast-content">
+        <span class="toast-dot"></span>
+
+        <div class="toast-text">
+          {{ errorMessage }}
+        </div>
+
+        <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close"
+          (click)="showError = false">
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="container-fluid py-4 px-4">
 
     <div class="row g-4">
@@ -173,12 +206,12 @@
         This action cannot be undone.
       </p>
       <div class="modal-actions">
-        <!-- <button class="btn-modal-cancel" (click)="cancelDelete()">
+        <button class="btn-modal-cancel" (click)="cancelDelete()">
           <i class="fas fa-times me-2"></i>Cancel
         </button>
         <button class="btn-modal-confirm" (click)="confirmDelete()">
           <i class="fas fa-trash-alt me-2"></i>Delete
-        </button> -->
+        </button>
       </div>
     </div>
   </div>

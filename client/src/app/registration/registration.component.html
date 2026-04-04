@@ -2,44 +2,38 @@
 
   <!-- Success Message -->
   <!-- ✅ SUCCESS TOAST -->
-<div *ngIf="showMessage" class="toast-host">
-  <div class="toast-box toast-success">
-    <div class="toast-content">
-      <span class="toast-dot"></span>
+  <div *ngIf="showMessage" class="toast-host">
+    <div class="toast-box toast-success">
+      <div class="toast-content">
+        <span class="toast-dot"></span>
 
-      <div class="toast-text">
-        {{ responseMessage }}
+        <div class="toast-text">
+          {{ responseMessage }}
+        </div>
+
+        <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close"
+          (click)="showMessage = false">
+        </button>
       </div>
-
-      <button
-        type="button"
-        class="btn-close btn-close-white toast-close"
-        aria-label="Close"
-        (click)="showMessage = false">
-      </button>
     </div>
   </div>
-</div>
 
-<!-- ❌ ERROR TOAST -->
-<div *ngIf="showError" class="toast-host">
-  <div class="toast-box toast-error">
-    <div class="toast-content">
-      <span class="toast-dot"></span>
+  <!-- ❌ ERROR TOAST -->
+  <div *ngIf="showError" class="toast-host">
+    <div class="toast-box toast-error">
+      <div class="toast-content">
+        <span class="toast-dot"></span>
 
-      <div class="toast-text">
-        {{ errorMessage }}
+        <div class="toast-text">
+          {{ errorMessage }}
+        </div>
+
+        <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close"
+          (click)="showError = false">
+        </button>
       </div>
-
-      <button
-        type="button"
-        class="btn-close btn-close-white toast-close"
-        aria-label="Close"
-        (click)="showError = false">
-      </button>
     </div>
   </div>
-</div>
 
   <!-- ===== LEFT PANEL ===== -->
   <div class="left-panel">
