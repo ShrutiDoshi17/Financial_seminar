@@ -42,15 +42,13 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let event of eventList"
-              [class.ve-table__row--active]="selectedEvent.id === event.id">
+            <tr *ngFor="let event of eventList" [class.ve-table__row--active]="selectedEvent.id === event.id">
               <td class="ve-table__id">{{ event.id }}</td>
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>
               <td>{{ event.location }}</td>
               <td>
-                <span class="ve-status-badge"
-                  [ngClass]="{
+                <span class="ve-status-badge" [ngClass]="{
                     've-status-badge--planned':   event.status === 'PLANNED',
                     've-status-badge--ongoing':   event.status === 'ONGOING',
                     've-status-badge--completed': event.status === 'COMPLETED'
@@ -75,8 +73,7 @@
       <!-- Title -->
       <div class="ve-detail-card__header">
         <h3 class="ve-detail-card__title">{{ selectedEvent.title }}</h3>
-        <span class="ve-status-badge"
-          [ngClass]="{
+        <span class="ve-status-badge" [ngClass]="{
             've-status-badge--planned':   selectedEvent.status === 'PLANNED',
             've-status-badge--ongoing':   selectedEvent.status === 'ONGOING',
             've-status-badge--completed': selectedEvent.status === 'COMPLETED'
@@ -113,7 +110,7 @@
         <span *ngIf="isEnrolled()">Enrolled!</span>
 
         <!-- Download Certificate -->
-        <button *ngIf="isEnrolled()" (click)="downloadCertificate()" class="ve-btn-certificate">
+        <button *ngIf="isCompleted()" (click)="downloadCertificate()" class="ve-btn-certificate">
           <i class="bi bi-award"></i> Download Certificate
         </button>
 
@@ -123,37 +120,34 @@
 
       </div>
 
-      <div class="ve-divider"></div>
-
       <!-- Submit Feedback -->
-      <div class="ve-feedback-form">
-        <h4 class="ve-feedback-form__title">Leave Feedback</h4>
-        <div class="ve-input-group">
-          <i class="bi bi-pen"></i>
-          <textarea
-            rows="3"
-            name="content"
-            class="ve-textarea"
-            placeholder="Share your experience..."
-            [(ngModel)]="formModel.content">
+      <div class="ve-divider"></div>
+      <div *ngIf="isCompleted()">
+        <div class="ve-feedback-form">
+          <h4 class="ve-feedback-form__title">Leave Feedback</h4>
+          <div class="ve-input-group">
+            <i class="bi bi-pen"></i>
+            <textarea rows="3" name="content" class="ve-textarea" placeholder="Share your experience..."
+              [(ngModel)]="formModel.content">
           </textarea>
+          </div>
+          <button (click)="saveFeedBack()" class="ve-btn-submit">
+            <i class="bi bi-send"></i> Submit Feedback
+          </button>
         </div>
-        <button (click)="saveFeedBack()" class="ve-btn-submit">
-          <i class="bi bi-send"></i> Submit Feedback
-        </button>
-      </div>
 
-      <!-- Feedback List -->
-      <div class="ve-feedback-section">
-        <h4 class="ve-feedback-section__title">
-          <i class="bi bi-chat-dots"></i> Feedback
-        </h4>
-        <div *ngIf="selectedEvent.feedbacks.length === 0" class="ve-feedback-empty">
-          No feedback yet.
-        </div>
-        <div *ngFor="let r of selectedEvent.feedbacks" class="ve-feedback-item">
-          <p class="ve-feedback-item__content">{{ r.content }}</p>
-          <span class="ve-feedback-item__time">{{ r.timestamp }}</span>
+        <!-- Feedback List -->
+        <div class="ve-feedback-section">
+          <h4 class="ve-feedback-section__title mt-4">
+            <i class="bi bi-chat-dots"></i> Feedback
+          </h4>
+          <div *ngIf="selectedEvent.feedbacks.length === 0" class="ve-feedback-empty">
+            No feedback yet.
+          </div>
+          <div *ngFor="let r of selectedEvent.feedbacks" class="ve-feedback-item">
+            <p class="ve-feedback-item__content">{{ r.content }}</p>
+            <span class="ve-feedback-item__time">{{ r.timestamp }}</span>
+          </div>
         </div>
       </div>
 

@@ -27,6 +27,7 @@ export class ViewEventsComponent implements OnInit {
   userId: any;
   selectedEvent: any = {};
   status: any;
+  eventCompleted: boolean = false
 
   constructor(private datePipe: DatePipe, public router: Router, public httpService: HttpService, private authService: AuthService) {
 
@@ -68,62 +69,29 @@ export class ViewEventsComponent implements OnInit {
     );
   }
 
+  isCompleted(): boolean {
+    return this.selectedEvent.status === 'COMPLETED'
+  }
+
   enroll() {
+    // if (this.isEnrolled()) {
+    //   return
+    // }
     this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe({
       next: (data: any) => {
         console.log(data);
-        this.selectedEvent.enrollments.push({
-          user: { id: this.userId }
-        })
-        // this.getEvent();
-        this.showMessage = true
-        this.responseMessage = "User enrolled successfully!"
-
-        setTimeout(() => {
-          this.showMessage = false
-          this.responseMessage = ''
-        }, 3000)
+        this.getEvent();
       },
       error: (err: any) => {
-        // If already enrolled — treat as success
-        // Backend sends 500 with message 'User already enrolled!'
-        if (
-          err.status === 500 &&
-          err.error?.message === 'User already enrolled!'
-        ) {
-          // Push enrollment locally so button switches to disabled
-          if (!this.selectedEvent.enrollments) {
-            this.selectedEvent.enrollments = [];
-          }
-          this.selectedEvent.enrollments.push({
-            user: { id: this.userId }
-          });
-
-          this.showMessage = true;
-          this.responseMessage = 'You are already enrolled in this event!';
-
-          setTimeout(() => {
-            this.showMessage = false;
-            this.responseMessage = '';
-          }, 3000);
-
-        } else {
-          // Genuine error
-          this.showError = true;
-          this.errorMessage = 'Failed to enroll. Please try again.';
-          console.error(err);
-
-          setTimeout(() => {
-            this.showError = false;
-            this.errorMessage = '';
-          }, 3000);
-        }
+        this.showMessage = true
+        this.responseMessage = 'User already enrolled!'
       }
     })
-  }
+  } 
 
   viewDetails(val: any) {
     this.selectedEvent = val;
+    this.isEnrolled()
   }
 
   saveFeedBack() {

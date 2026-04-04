@@ -63,8 +63,12 @@ export class HttpService {
   }
 
   EnrollParticipant(eventId: any, userId: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, {}, this.httpOptions)
+    return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, this.httpOptions)
   }
+
+  // checkEnrollment(eventId: any, userId: any): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, this.httpOptions)
+  // } 
 
   createEvent(details: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/institution/event`, details, this.httpOptions)
