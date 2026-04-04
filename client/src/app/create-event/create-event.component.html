@@ -8,7 +8,7 @@
         <div class="form-card">
 
           <div class="form-card-header">
-            <i class="fas fa-calendar-plus"></i>
+            <i class="bi bi-calendar-plus"></i>
             <div>
               <h4>{{ updateId ? 'Update Event' : 'Create Event' }}</h4>
               <p>{{ updateId ? 'Edit event details below' : 'Fill in the details to create a new event' }}</p>
@@ -17,12 +17,12 @@
 
           <!-- Error Alert -->
           <div class="alert-error" *ngIf="showError">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+            <i class="bi bi-exclamation-circle me-2"></i>{{ errorMessage }}
           </div>
 
           <!-- Success Alert -->
           <div class="alert-success" *ngIf="showMessage">
-            <i class="fas fa-check-circle me-2"></i>{{ responseMessage }}
+            <i class="bi bi-check-circle me-2"></i>{{ responseMessage }}
           </div>
 
           <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
@@ -31,7 +31,7 @@
             <div class="mb-3">
               <label class="form-label">Event Title</label>
               <div class="input-wrap">
-                <span class="input-icon"><i class="fas fa-heading"></i></span>
+                <span class="input-icon"><i class="bi bi-type-h1"></i></span>
                 <input type="text" class="custom-input" placeholder="Enter event title" formControlName="title"
                   [class.is-invalid]="itemForm.get('title')?.invalid && itemForm.get('title')?.touched">
               </div>
@@ -44,7 +44,7 @@
             <div class="mb-3">
               <label class="form-label">Description</label>
               <div class="input-wrap">
-                <span class="input-icon top"><i class="fas fa-align-left"></i></span>
+                <span class="input-icon top"><i class="bi bi-text-left"></i></span>
                 <textarea class="custom-input" rows="3" placeholder="Enter event description"
                   formControlName="description"
                   [class.is-invalid]="itemForm.get('description')?.invalid && itemForm.get('description')?.touched"></textarea>
@@ -59,7 +59,7 @@
             <div class="mb-3">
               <label class="form-label">Schedule</label>
               <div class="input-wrap">
-                <span class="input-icon"><i class="fas fa-calendar-alt"></i></span>
+                <span class="input-icon"><i class="bi bi-calendar-event"></i></span>
                 <input type="datetime-local" class="custom-input" formControlName="schedule"
                   [class.is-invalid]="itemForm.get('schedule')?.invalid && itemForm.get('schedule')?.touched">
               </div>
@@ -72,7 +72,7 @@
             <div class="mb-3">
               <label class="form-label">Location</label>
               <div class="input-wrap">
-                <span class="input-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <span class="input-icon"><i class="bi bi-geo-alt"></i></span>
                 <input type="text" class="custom-input" placeholder="Enter location" formControlName="location"
                   [class.is-invalid]="itemForm.get('location')?.invalid && itemForm.get('location')?.touched">
               </div>
@@ -85,7 +85,7 @@
             <div class="mb-4">
               <label class="form-label">Status</label>
               <div class="input-wrap">
-                <span class="input-icon"><i class="fas fa-toggle-on"></i></span>
+                <span class="input-icon"><i class="bi bi-toggle-on"></i></span>
                 <select class="custom-input" formControlName="status"
                   [class.is-invalid]="itemForm.get('status')?.invalid && itemForm.get('status')?.touched">
                   <option value="" disabled selected>Select status</option>
@@ -100,7 +100,7 @@
             </div>
 
             <button type="submit" class="btn-submit w-100">
-              <i class="fas fa-{{ updateId ? 'save' : 'plus-circle' }} me-2"></i>
+              <i class="bi bi-{{ updateId ? 'floppy' : 'plus-circle' }} me-2"></i>
               {{ updateId ? 'Update Event' : 'Create Event' }}
             </button>
 
@@ -114,7 +114,7 @@
 
           <div class="list-card-header">
             <div class="d-flex align-items-center gap-2">
-              <i class="fas fa-list-alt"></i>
+              <i class="bi bi-list-ul"></i>
               <h4>Your Events</h4>
             </div>
             <span class="count-badge">{{ eventList.length }} Events</span>
@@ -122,7 +122,7 @@
 
           <!-- Empty state -->
           <div class="empty-state" *ngIf="eventList.length === 0">
-            <i class="fas fa-calendar-times"></i>
+            <i class="bi bi-calendar-x"></i>
             <p>No events found. Create your first event!</p>
           </div>
 
@@ -132,23 +132,23 @@
               <div class="event-info">
                 <div class="event-title">{{ event.title }}</div>
                 <div class="event-meta">
-                  <span><i class="fas fa-map-marker-alt me-1"></i>{{ event.location }}</span>
-                  <span><i class="fas fa-calendar me-1"></i>{{ event.schedule | date: 'dd MMM yyyy' }}</span>
+                  <span><i class="bi bi-geo-alt me-1"></i>{{ event.location }}</span>
+                  <span><i class="bi bi-calendar me-1"></i>{{ event.schedule | date: 'dd MMM yyyy' }}</span>
                 </div>
                 <div class="event-desc">{{ event.description }}</div>
               </div>
               <div class="d-flex flex-column align-items-end gap-2">
                 <span class="status-badge" [ngClass]="{
-                  'status-planned': event.status === 'PLANNED',
-                  'status-ongoing': event.status === 'ONGOING',
+                  'status-planned':   event.status === 'PLANNED',
+                  'status-ongoing':   event.status === 'ONGOING',
                   'status-completed': event.status === 'COMPLETED'
                 }">{{ event.status }}</span>
                 <div class="action-buttons">
                   <button class="btn-edit" (click)="edit(event)">
-                    <i class="fas fa-edit me-1"></i>Edit
+                    <i class="bi bi-pencil me-1"></i>Edit
                   </button>
                   <button class="btn-delete" (click)="deleteEvent(event.id)">
-                    <i class="fas fa-trash-alt me-1"></i>Delete
+                    <i class="bi bi-trash me-1"></i>Delete
                   </button>
                 </div>
               </div>
@@ -165,7 +165,7 @@
   <div class="modal-overlay" *ngIf="showDeleteModal">
     <div class="modal-box">
       <div class="modal-icon">
-        <i class="fas fa-exclamation-triangle"></i>
+        <i class="bi bi-exclamation-triangle"></i>
       </div>
       <h4>Delete Event?</h4>
       <p>Are you sure you want to delete
@@ -174,12 +174,13 @@
       </p>
       <div class="modal-actions">
         <!-- <button class="btn-modal-cancel" (click)="cancelDelete()">
-          <i class="fas fa-times me-2"></i>Cancel
+          <i class="bi bi-x me-2"></i>Cancel
         </button>
         <button class="btn-modal-confirm" (click)="confirmDelete()">
-          <i class="fas fa-trash-alt me-2"></i>Delete
+          <i class="bi bi-trash me-2"></i>Delete
         </button> -->
       </div>
     </div>
   </div>
+
 </div>

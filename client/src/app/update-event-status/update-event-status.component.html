@@ -9,7 +9,7 @@
 
           <div class="list-card-header">
             <div class="d-flex align-items-center gap-2">
-              <i class="fas fa-sync-alt"></i>
+              <i class="bi bi-arrow-repeat"></i>
               <h4>Assigned Events</h4>
             </div>
             <span class="count-badge">{{ eventList.length }} Events</span>
@@ -17,17 +17,17 @@
 
           <!-- Error Alert -->
           <div class="alert-error" *ngIf="showError">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+            <i class="bi bi-exclamation-circle me-2"></i>{{ errorMessage }}
           </div>
 
           <!-- Success Alert -->
           <div class="alert-success" *ngIf="showMessage">
-            <i class="fas fa-check-circle me-2"></i>{{ responseMessage }}
+            <i class="bi bi-check-circle me-2"></i>{{ responseMessage }}
           </div>
 
           <!-- Empty State -->
           <div class="empty-state" *ngIf="eventList.length === 0">
-            <i class="fas fa-calendar-times"></i>
+            <i class="bi bi-calendar-x"></i>
             <p>No events assigned to you yet</p>
           </div>
 
@@ -38,23 +38,20 @@
               <div class="event-info">
                 <div class="event-title">{{ event.title }}</div>
                 <div class="event-meta">
-                  <span><i class="fas fa-map-marker-alt me-1"></i>{{ event.location }}</span>
-                  <span><i class="fas fa-calendar me-1"></i>{{ event.schedule | date: 'dd MMM yyyy' }}</span>
+                  <span><i class="bi bi-geo-alt me-1"></i>{{ event.location }}</span>
+                  <span><i class="bi bi-calendar me-1"></i>{{ event.schedule | date: 'dd MMM yyyy' }}</span>
                 </div>
                 <div class="event-desc">{{ event.description }}</div>
               </div>
               <div class="d-flex flex-column align-items-end gap-2">
                 <span class="status-badge" [ngClass]="{
-                  'status-planned': event.status === 'PLANNED',
-                  'status-ongoing': event.status === 'ONGOING',
+                  'status-planned':   event.status === 'PLANNED',
+                  'status-ongoing':   event.status === 'ONGOING',
                   'status-completed': event.status === 'COMPLETED'
                 }">{{ event.status }}</span>
                 <button class="btn-action" (click)="addStatus(event)">
-                  <i class="fas fa-edit me-1"></i>Update Status
+                  <i class="bi bi-pencil me-1"></i>Update Status
                 </button>
-                <!-- <button class="btn-action-outline" (click)="addRemarks(event)">
-                  <i class="fas fa-comment-alt me-1"></i>Add Feedback
-                </button> -->
               </div>
             </div>
           </div>
@@ -68,7 +65,7 @@
         <!-- Update Status Panel -->
         <div class="form-card mb-4" *ngIf="updateId">
           <div class="form-card-header">
-            <i class="fas fa-sliders-h"></i>
+            <i class="bi bi-sliders"></i>
             <div>
               <h4>Update Status</h4>
               <p>Change the status of the selected event</p>
@@ -78,7 +75,7 @@
           <div class="mb-3">
             <label class="form-label">Selected Event</label>
             <div class="selected-event-label">
-              <i class="fas fa-calendar-check me-2"></i>
+              <i class="bi bi-calendar-check me-2"></i>
               {{ selectedEvent?.title || 'Event #' + updateId }}
             </div>
           </div>
@@ -86,7 +83,7 @@
           <div class="mb-4">
             <label class="form-label">New Status</label>
             <div class="input-wrap">
-              <span class="input-icon"><i class="fas fa-toggle-on"></i></span>
+              <span class="input-icon"><i class="bi bi-toggle-on"></i></span>
               <select class="custom-input" [(ngModel)]="formModel.status">
                 <option value="" disabled selected>Select new status</option>
                 <option value="PLANNED">Planned</option>
@@ -97,14 +94,14 @@
           </div>
 
           <button class="btn-submit w-100" (click)="updateStatus()">
-            <i class="fas fa-save me-2"></i>Save Status
+            <i class="bi bi-floppy me-2"></i>Save Status
           </button>
         </div>
 
         <!-- Add Feedback Panel -->
         <div class="form-card" *ngIf="selectedEvent?.id && isAddRemarks">
           <div class="form-card-header">
-            <i class="fas fa-comment-dots"></i>
+            <i class="bi bi-chat-dots"></i>
             <div>
               <h4>Add Feedback</h4>
               <p>Submit your feedback for this event</p>
@@ -114,7 +111,7 @@
           <div class="mb-3">
             <label class="form-label">Event</label>
             <div class="selected-event-label">
-              <i class="fas fa-calendar-check me-2"></i>
+              <i class="bi bi-calendar-check me-2"></i>
               {{ selectedEvent?.title }}
             </div>
           </div>
@@ -122,7 +119,7 @@
           <div class="mb-4">
             <label class="form-label">Your Feedback</label>
             <div class="input-wrap">
-              <span class="input-icon top"><i class="fas fa-comment-alt"></i></span>
+              <span class="input-icon top"><i class="bi bi-chat-left"></i></span>
               <textarea class="custom-input" rows="4"
                 placeholder="Write your feedback here..."
                 [(ngModel)]="formModel.content"></textarea>
@@ -130,13 +127,13 @@
           </div>
 
           <button class="btn-submit w-100" (click)="saveFeedBack()">
-            <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+            <i class="bi bi-send me-2"></i>Submit Feedback
           </button>
         </div>
 
         <!-- Placeholder when nothing selected -->
         <div class="placeholder-card" *ngIf="!updateId && !selectedEvent?.id">
-          <i class="fas fa-hand-pointer"></i>
+          <i class="bi bi-hand-index"></i>
           <p>Select an event from the list to update its status or add feedback</p>
         </div>
 
