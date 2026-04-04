@@ -99,15 +99,15 @@
 
       <div class="features">
         <div class="feature-item">
-          <i class="fas fa-check-circle"></i>
+          <i class="bi bi-check-circle-fill"></i>
           <span>Manage Financial Workshops</span>
         </div>
         <div class="feature-item">
-          <i class="fas fa-check-circle"></i>
+          <i class="bi bi-check-circle-fill"></i>
           <span>Connect with Professionals</span>
         </div>
         <div class="feature-item">
-          <i class="fas fa-check-circle"></i>
+          <i class="bi bi-check-circle-fill"></i>
           <span>Track Event Progress</span>
         </div>
       </div>
@@ -117,6 +117,31 @@
 
   <!-- RIGHT SIDE -->
   <div class="login-right">
+
+    <!-- Captcha Toast -->
+    <div class="toast-notification captcha-toast" *ngIf="showCaptchaToast">
+      <div class="toast-icon">
+        <i class="bi bi-shield-x"></i>
+      </div>
+      <div class="toast-content">
+        <div class="toast-title">Captcha Failed</div>
+        <div class="toast-message">{{ toastMessage }}</div>
+      </div>
+      <div class="toast-progress"></div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast-notification error-toast" *ngIf="showError">
+      <div class="toast-icon">
+        <i class="bi bi-exclamation-circle"></i>
+      </div>
+      <div class="toast-content">
+        <div class="toast-title">Login Failed</div>
+        <div class="toast-message">{{ errorMessage }}</div>
+      </div>
+      <div class="toast-progress error-progress"></div>
+    </div>
+
     <div class="login-card">
       <div class="card-header-custom">
         <h2>Welcome Back</h2>
@@ -125,17 +150,11 @@
 
       <form [formGroup]="itemForm" (ngSubmit)="onLogin()">
 
-        <!-- Error Alert -->
-        <div class="alert-custom" *ngIf="showError">
-          <i class="fas fa-exclamation-circle me-2"></i>
-          {{ errorMessage }}
-        </div>
-
         <!-- Username -->
         <div class="mb-4">
           <label class="form-label">Username</label>
           <div class="input-group-custom">
-            <span class="input-icon"><i class="fas fa-user"></i></span>
+            <span class="input-icon"><i class="bi bi-person"></i></span>
             <input type="text" class="form-control custom-input"
               placeholder="Enter your username" formControlName="username"
               [class.is-invalid]="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
@@ -150,7 +169,7 @@
         <div class="mb-4">
           <label class="form-label">Password</label>
           <div class="input-group-custom">
-            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <span class="input-icon"><i class="bi bi-lock"></i></span>
             <input type="password" class="form-control custom-input"
               placeholder="Enter your password" formControlName="password"
               [class.is-invalid]="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
@@ -161,9 +180,35 @@
           </div>
         </div>
 
+        <!-- Math CAPTCHA -->
+        <div class="mb-4">
+          <label class="form-label">Captcha Verification</label>
+          <div class="captcha-box">
+            <div class="captcha-question">
+              <i class="bi bi-shield-lock"></i>
+              <span>What is <strong>{{ captchaNum1 }} + {{ captchaNum2 }}</strong> ?</span>
+              <button type="button" class="captcha-refresh" (click)="generateCaptcha()" title="Refresh">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+            <div class="input-group-custom mt-2">
+              <span class="input-icon"><i class="bi bi-calculator"></i></span>
+              <input type="text" inputmode="numeric"
+                class="form-control custom-input"
+                placeholder="Enter your answer"
+                [(ngModel)]="captchaAnswer"
+                [ngModelOptions]="{standalone: true}"
+                [class.is-invalid]="captchaError">
+            </div>
+            <div class="invalid-feedback-custom" *ngIf="captchaError">
+              {{ captchaError }}
+            </div>
+          </div>
+        </div>
+
         <!-- Login Button -->
         <button type="submit" class="btn btn-login w-100">
-          <i class="fas fa-sign-in-alt me-2"></i>Sign In
+          <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
         </button>
 
         <!-- Divider -->
@@ -173,7 +218,7 @@
 
         <!-- Register Button -->
         <button type="button" class="btn btn-register w-100" (click)="registration()">
-          <i class="fas fa-user-plus me-2"></i>Create New Account
+          <i class="bi bi-person-plus me-2"></i>Create New Account
         </button>
 
       </form>
