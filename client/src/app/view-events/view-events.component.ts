@@ -28,6 +28,8 @@ export class ViewEventsComponent implements OnInit {
   userId: any;
   selectedEvent: any = {};
   status: any;
+  currentPage: number = 1;
+  pageSize: number = 2;
   isAlreadyEnrolled: boolean = false;
   isEnrolling: boolean = false;
   isCheckingEnrollment: boolean = false;
@@ -240,6 +242,25 @@ export class ViewEventsComponent implements OnInit {
       this.showError = false;
       this.errorMessage = '';
     }, 3000);
+  }
+
+  get paginatedList(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredList.slice(start, start + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.eventList.length / this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.selectedEvent = {};
   }
 
   downloadCertificate() {
