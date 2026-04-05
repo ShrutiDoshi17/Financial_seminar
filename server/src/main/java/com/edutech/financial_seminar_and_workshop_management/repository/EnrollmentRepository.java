@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import java.util.List;
 
-@Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     List<Enrollment> findByUserId(Long userId);
     List<Enrollment> findByEventId(Long eventId);
