@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/user/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/user/check-username").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/institution/event").hasAuthority("INSTITUTION")
                 .antMatchers(HttpMethod.PUT, "/api/institution/event/{id}").hasAuthority("INSTITUTION")
                 .antMatchers(HttpMethod.DELETE, "/api/institution/event/{id}").hasAuthority("INSTITUTION")
@@ -55,14 +56,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/institution/event/{eventId}/resources").hasAuthority("INSTITUTION")
                 .antMatchers(HttpMethod.GET, "/api/institution/event/professionals").hasAuthority("INSTITUTION")
                 .antMatchers(HttpMethod.POST, "/api/institution/event/{eventId}/professional").hasAuthority("INSTITUTION")
+
                 .antMatchers(HttpMethod.GET, "/api/professional/events").hasAuthority("PROFESSIONAL")
                 .antMatchers(HttpMethod.PUT, "/api/professional/event/{id}/status").hasAuthority("PROFESSIONAL")
                 .antMatchers(HttpMethod.POST, "/api/professional/event/{eventId}/feedback").hasAuthority("PROFESSIONAL")
+
                 .antMatchers(HttpMethod.GET, "/api/participant/events").hasAuthority("PARTICIPANT")
                 .antMatchers(HttpMethod.POST, "/api/participant/event/{eventId}/enroll").hasAuthority("PARTICIPANT")
                 .antMatchers(HttpMethod.GET, "/api/participant/event/{eventId}/check-enroll").hasAuthority("PARTICIPANT")
                 .antMatchers(HttpMethod.GET, "/api/participant/event/{id}/status").hasAuthority("PARTICIPANT")
                 .antMatchers(HttpMethod.POST, "/api/participant/event/{eventId}/feedback").hasAuthority("PARTICIPANT")
+                .antMatchers(HttpMethod.POST, "/api/participant/payment/create-order").hasAuthority("PARTICIPANT")
+                .antMatchers(HttpMethod.POST, "/api/participant/payment/verify-and-enroll").hasAuthority("PARTICIPANT") 
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 import { DatePipe } from '@angular/common';
+
+declare var Razorpay: any
 
 @Component({
   selector: 'app-view-events',
@@ -31,8 +33,9 @@ export class ViewEventsComponent implements OnInit {
     private datePipe: DatePipe,
     public router: Router,
     public httpService: HttpService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private ngZone: NgZone
+  ) { }
 
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
@@ -64,46 +67,90 @@ export class ViewEventsComponent implements OnInit {
   }
 
   viewDetails(event: any) {
-  this.selectedEvent = event;
-  this.isAlreadyEnrolled = false;
-  this.isCheckingEnrollment = true; // add this flag
-  this.status = '';
+    this.selectedEvent = event;
+    this.isAlreadyEnrolled = false;
+    this.isCheckingEnrollment = true; // flag
+    this.status = '';
 
-  this.httpService.checkEnrollment(this.selectedEvent.id, this.userId).subscribe({
-    next: (data: any) => {
-      this.isAlreadyEnrolled = data != null;
-      this.isCheckingEnrollment = false;
-    },
-    error: () => {
-      this.isAlreadyEnrolled = false;
-      this.isCheckingEnrollment = false;
-    }
-  });
-} 
+    this.httpService.checkEnrollment(this.selectedEvent.id, this.userId).subscribe({
+      next: (data: any) => {
+        this.isAlreadyEnrolled = data != null;
+        this.isCheckingEnrollment = false;
+      },
+      error: () => {
+        this.isAlreadyEnrolled = false;
+        this.isCheckingEnrollment = false;
+      }
+    });
+  }
 
   isCompleted(): boolean {
     return this.selectedEvent?.status === 'COMPLETED';
   }
 
   enroll() {
-    if (this.isEnrolling || this.isAlreadyEnrolled) return; // guard
+    if (this.isEnrolling || this.isAlreadyEnrolled) return;
     this.isEnrolling = true;
 
-    this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe({
-      next: (data: any) => {
-        this.isAlreadyEnrolled = true;
-        this.isEnrolling = false;
-        this.getEvent();
+    const amount = 100; // ₹1 in paise — change as needed
+
+    this.httpService.createPaymentOrder(amount).subscribe({
+      next: (order: any) => {
+        const options = {
+          key: order.keyId,
+          amount: order.amount,
+          currency: order.currency,
+          name: 'FinSeminar',
+          description: this.selectedEvent.title,
+          order_id: order.orderId,
+          handler: (response: any) => {
+            // Payment successful — now verify and enroll
+            const paymentData = {
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+              userId: this.userId,
+              eventId: this.selectedEvent.id
+            };
+
+            this.ngZone.run(() => {
+              this.httpService.verifyAndEnroll(paymentData).subscribe({
+                next: () => {
+                  this.isEnrolling = false;
+                  this.isAlreadyEnrolled = true;
+                  this.showToast('Enrolled successfully!');
+                  // this.getEvent();
+                },
+                error: () => {
+                  this.isEnrolling = false;
+                  this.showToast('Payment verified but enrollment failed. Contact support.');
+                }
+              });
+            })
+          },
+          prefill: {
+            name: '',
+            email: '',
+            contact: ''
+          },
+          theme: {
+            color: '#2E86AB'
+          },
+          modal: {
+            ondismiss: () => {
+              // User closed the popup without paying
+              this.isEnrolling = false;
+              this.showToast('Payment cancelled.');
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
       },
-      error: (err: any) => {
+      error: () => {
         this.isEnrolling = false;
-        if (err.status === 403 || err.status === 409) {
-          // 403 = backend now blocks duplicate enroll
-          this.isAlreadyEnrolled = true;
-          this.showToast('You are already enrolled in this event.');
-        } else {
-          this.showToast('Enrollment failed. Please try again.');
-        }
+        this.showToast('Failed to initiate payment. Please try again.');
       }
     });
   }

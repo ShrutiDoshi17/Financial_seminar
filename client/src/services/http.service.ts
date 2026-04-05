@@ -62,6 +62,16 @@ export class HttpService {
     return this.http.get<any>(`${this.apiUrl}/api/institution/event/${eventId}/resources`, this.httpOptions)
   }
 
+  // Payment 
+  createPaymentOrder(amount: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/participant/payment/create-order`, { amount }, this.httpOptions);
+  }
+
+  verifyAndEnroll(paymentData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/participant/payment/verify-and-enroll`, paymentData, this.httpOptions);
+  }
+  
+
   EnrollParticipant(eventId: any, userId: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, {}, this.httpOptions)
   }
