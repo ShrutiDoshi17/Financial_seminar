@@ -17,17 +17,24 @@ export class AssignProfessionalComponent implements OnInit {
   errorMessage: any;
   eventList: any = [];
   assignModel: any = {};
-
   showMessage: any;
   responseMessage: any;
   updateId: any;
   professionalsList: any = [];
 
-  constructor(public router: Router, public httpService: HttpService, private formBuilder: FormBuilder, private authService: AuthService) {
+  // Track assigned professional IDs so we can hide them from the list
+  assignedProfessionalIds: Set<number> = new Set();
+
+  constructor(
+    public router: Router,
+    public httpService: HttpService,
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) {
     this.itemForm = this.formBuilder.group({
       eventId: [this.formModel.eventId, [Validators.required]],
-      userId: [this.formModel.userId, [Validators.required]]
-    })
+      userId:  [this.formModel.userId,  [Validators.required]]
+    });
   }
 
   ngOnInit(): void {
@@ -45,11 +52,11 @@ export class AssignProfessionalComponent implements OnInit {
       console.log(this.eventList);
     }, error => {
       this.showError = true;
-      this.errorMessage = "An error occurred.. Please try again later.";
-      console.error('Login error:', error);
-    })
+      this.errorMessage = "An error occurred. Please try again later.";
+      console.error('Error:', error);
+    });
   }
-  
+
   getProfessionals() {
     this.professionalsList = [];
 
@@ -58,23 +65,39 @@ export class AssignProfessionalComponent implements OnInit {
       console.log(this.professionalsList);
     }, error => {
       this.showError = true;
-      this.errorMessage = "An error occurred.. Please try again later.";
-      console.error('Login error:', error);
-    })
+      this.errorMessage = "An error occurred. Please try again later.";
+      console.error('Error:', error);
+    });
+  }
+
+  // Returns only professionals not yet assigned
+  get availableProfessionals(): any[] {
+    return this.professionalsList.filter(
+      (pro: any) => !this.assignedProfessionalIds.has(pro.id)
+    );
   }
 
   onSubmit() {
-    // debugger;
     if (this.itemForm.valid) {
       this.showError = false;
-      this.httpService.assignProfessionals(this.itemForm.controls["eventId"].value, this.itemForm.controls["userId"].value).subscribe((data: any) => {
+      this.showMessage = false;
+
+      const assignedUserId = this.itemForm.controls['userId'].value;
+
+      this.httpService.assignProfessionals(
+        this.itemForm.controls['eventId'].value,
+        assignedUserId
+      ).subscribe((data: any) => {
+        // Add to assigned set so they disappear from the list
+        this.assignedProfessionalIds.add(Number(assignedUserId));
+        this.showMessage = true;
+        this.responseMessage = "Professional assigned successfully!";
         this.itemForm.reset();
-        this.responseMessage = "Saved Successfully";
       }, error => {
         this.showError = true;
-        this.errorMessage = "An error occurred while logging in. Please try again later.";
-        console.error('Login error:', error);
-      })
+        this.errorMessage = "An error occurred while assigning. Please try again later.";
+        console.error('Error:', error);
+      });
     } else {
       this.itemForm.markAllAsTouched();
     }
