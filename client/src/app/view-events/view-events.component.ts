@@ -21,7 +21,10 @@ export class ViewEventsComponent implements OnInit {
   showMessage: boolean = false;
   responseMessage: string = '';
 
+  searchQuery: string = ''
+  filteredList: any[] = []
   eventList: any[] = [];
+
   userId: any;
   selectedEvent: any = {};
   status: any;
@@ -47,6 +50,7 @@ export class ViewEventsComponent implements OnInit {
     this.httpService.viewAllEvents().subscribe({
       next: (data: any) => {
         this.eventList = data;
+        this.filteredList = this.eventList;
         // Re-sync selectedEvent if one is open
         if (this.selectedEvent?.id) {
           this.refreshSelectedEvent();
@@ -87,6 +91,22 @@ export class ViewEventsComponent implements OnInit {
   isCompleted(): boolean {
     return this.selectedEvent?.status === 'COMPLETED';
   }
+
+  applyFilter() {
+    const query = this.searchQuery.trim().toLowerCase();
+    if (!query) {
+      this.filteredList = this.eventList;
+      return;
+    }
+    this.filteredList = this.eventList.filter((event: any) => {
+      return (
+        event.id?.toString().includes(query) ||
+        event.title?.toLowerCase().includes(query) ||
+        event.location?.toLowerCase().includes(query) ||
+        event.status?.toLowerCase().includes(query) 
+      );
+    });
+  } 
 
   enroll() {
     if (this.isEnrolling || this.isAlreadyEnrolled) return;

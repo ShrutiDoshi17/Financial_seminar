@@ -107,6 +107,10 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
+
+  /* ✅ Center the card */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .ve-table-card__header {
@@ -124,6 +128,34 @@
   color: #F0A500;
 }
 
+/* ✅ Make search container take available space + center it */
+.ve-table-card__header > div:first-of-type {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* ✅ Search input styling matching your dark UI */
+.ve-search-input {
+  width: 260px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #E8E8E8;
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.ve-search-input::placeholder {
+  color: rgba(232, 232, 232, 0.6);
+}
+
+.ve-search-input:focus {
+  border-color: rgba(240, 165, 0, 0.45);
+  box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.12);
+}
+
 .ve-count {
   margin-left: auto;
   background: rgba(240, 165, 0, 0.1);
@@ -134,6 +166,74 @@
   color: #F0A500;
   font-weight: 600;
 }
+
+/* ✅ Responsive behavior */
+@media (max-width: 768px) {
+  .ve-table-card__header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Title becomes its own row */
+  .ve-table-card__header i,
+  .ve-table-card__header span {
+    width: 100%;
+  }
+
+  /* Search becomes next row and centered */
+  .ve-table-card__header > div:first-of-type {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Count badge moves below */
+  .ve-count {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Search becomes full width on small screens */
+  .ve-search-input {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+// .ve-table-card {
+//   background: #1C2B3A;
+//   border-radius: 20px;
+//   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+//   border: 1px solid rgba(255, 255, 255, 0.06);
+//   overflow: hidden;
+// }
+
+// .ve-table-card__header {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+//   padding: 1rem 1.5rem;
+//   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+//   font-size: 0.9rem;
+//   font-weight: 600;
+//   color: #E8E8E8;
+// }
+
+// .ve-table-card__header i {
+//   color: #F0A500;
+// }
+
+// .ve-count {
+//   margin-left: auto;
+//   background: rgba(240, 165, 0, 0.1);
+//   border: 1px solid rgba(240, 165, 0, 0.25);
+//   border-radius: 20px;
+//   padding: 2px 12px;
+//   font-size: 0.72rem;
+//   color: #F0A500;
+//   font-weight: 600;
+// }
 
 /* Table */
 .ve-table {

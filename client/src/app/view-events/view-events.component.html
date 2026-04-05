@@ -31,6 +31,15 @@
       <div class="ve-table-card__header">
         <i class="bi bi-calendar-event"></i>
         <span>Event Listings</span>
+        <div>
+          <input
+            type="text"
+            class="ve-search-input"
+            placeholder="Search by title or ID..."
+            [(ngModel)]="searchQuery"
+            (input)="applyFilter()"
+          /> 
+        </div>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
 
@@ -48,7 +57,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let event of eventList" [class.ve-table__row--active]="selectedEvent.id === event.id">
+            <tr *ngFor="let event of filteredList" [class.ve-table__row--active]="selectedEvent.id === event.id">
               <td class="ve-table__id">{{ event.id }}</td>
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>

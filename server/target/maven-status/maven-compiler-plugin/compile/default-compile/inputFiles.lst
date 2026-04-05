@@ -5,6 +5,7 @@
 /home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/repository/EnrollmentRepository.java
 /home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/repository/FeedbackRepository.java
 /home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/service/CertificateService.java
+/home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/controller/PaymentController.java
 /home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/controller/ProfessionalController.java
 /home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/config/SecurityConfig.java
 /home/coder/app/server/src/main/java/com/edutech/financial_seminar_and_workshop_management/repository/EventRepository.java
