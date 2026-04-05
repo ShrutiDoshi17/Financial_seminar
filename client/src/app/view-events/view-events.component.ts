@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 import { DatePipe } from '@angular/common';
-
 
 @Component({
   selector: 'app-view-events',
@@ -12,215 +10,225 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./view-events.component.scss'],
   providers: [DatePipe]
 })
+
 export class ViewEventsComponent implements OnInit {
   formModel: any = { status: null };
   showError: boolean = false;
   errorMessage: any;
-  eventObj: any = [];
-  assignModel: any = {};
 
-  showMessage: any;
-  responseMessage: any;
-  isUpdate: any = false;
-  eventList: any = [];
-  workShopList: any = [];
+  showMessage: boolean = false;
+  responseMessage: string = '';
+
+  eventList: any[] = [];
   userId: any;
   selectedEvent: any = {};
   status: any;
-  eventCompleted: boolean = false
+  isAlreadyEnrolled: boolean = false;
+  isEnrolling: boolean = false;
+  isCheckingEnrollment: boolean = false;
 
-  constructor(private datePipe: DatePipe, public router: Router, public httpService: HttpService, private authService: AuthService) {
-
-  }
+  constructor(
+    private datePipe: DatePipe,
+    public router: Router,
+    public httpService: HttpService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
     this.userId = userIdString ? parseInt(userIdString, 10) : null;
-    console.log('userId from localStorage:', this.userId)
     this.getEvent();
   }
 
   getEvent() {
-    this.httpService.viewAllEvents().subscribe((data: any) => {
-      this.eventList = data;
-      console.log(this.eventList);
-    }, error => {
-      this.showError = true;
-      this.errorMessage = "An error occurred.. Please try again later.";
-      console.error('Login error:', error);
-    })
+    this.httpService.viewAllEvents().subscribe({
+      next: (data: any) => {
+        this.eventList = data;
+        // Re-sync selectedEvent if one is open
+        if (this.selectedEvent?.id) {
+          this.refreshSelectedEvent();
+        }
+      },
+      error: (err: any) => {
+        this.showError = true;
+        this.errorMessage = 'Failed to load events. Please try again later.';
+      }
+    });
   }
 
-  isEnrolled(): boolean {
-    if (!this.selectedEvent || !this.selectedEvent.enrollments) {
-      return false
+  refreshSelectedEvent() {
+    const updated = this.eventList.find(e => e.id === this.selectedEvent.id);
+    if (updated) {
+      this.selectedEvent = updated;
     }
-
-    // console.log('userId:', this.userId)
-    // console.log('typeof userId:', typeof this.userId)
-    // console.log('enrollments:', this.selectedEvent.enrollments)
-
-    return this.selectedEvent.enrollments.some(
-      (e: any) => e.id === this.selectedEvent.id && e.status === 'ENROLLED' 
-      // (e: any) => {
-      //   console.log('Enrollment user id:', e.user?.id, 'type:', typeof e.user?.id)
-      //   return e.user?.id == this.userId
-      // }
-    );
   }
+
+  viewDetails(event: any) {
+  this.selectedEvent = event;
+  this.isAlreadyEnrolled = false;
+  this.isCheckingEnrollment = true; // add this flag
+  this.status = '';
+
+  this.httpService.checkEnrollment(this.selectedEvent.id, this.userId).subscribe({
+    next: (data: any) => {
+      this.isAlreadyEnrolled = data != null;
+      this.isCheckingEnrollment = false;
+    },
+    error: () => {
+      this.isAlreadyEnrolled = false;
+      this.isCheckingEnrollment = false;
+    }
+  });
+} 
 
   isCompleted(): boolean {
-    return this.selectedEvent.status === 'COMPLETED'
+    return this.selectedEvent?.status === 'COMPLETED';
   }
 
   enroll() {
-    // if (this.isEnrolled()) {
-    //   return
-    // }
+    if (this.isEnrolling || this.isAlreadyEnrolled) return; // guard
+    this.isEnrolling = true;
+
     this.httpService.EnrollParticipant(this.selectedEvent.id, this.userId).subscribe({
       next: (data: any) => {
-        console.log(data);
+        this.isAlreadyEnrolled = true;
+        this.isEnrolling = false;
         this.getEvent();
       },
       error: (err: any) => {
-        this.showMessage = true
-        this.responseMessage = 'User already enrolled!'
+        this.isEnrolling = false;
+        if (err.status === 403 || err.status === 409) {
+          // 403 = backend now blocks duplicate enroll
+          this.isAlreadyEnrolled = true;
+          this.showToast('You are already enrolled in this event.');
+        } else {
+          this.showToast('Enrollment failed. Please try again.');
+        }
       }
-    })
-  } 
-
-  viewDetails(val: any) {
-    this.selectedEvent = val;
-    this.isEnrolled()
+    });
   }
 
   saveFeedBack() {
-    debugger;
-    if (this.selectedEvent.id != null && this.formModel.content) {
-      this.showError = false;
-      const formattedTime = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
-
-      this.formModel.timestamp = formattedTime;
-      const userIdString = localStorage.getItem('userId');
-      const userId = userIdString ? parseInt(userIdString, 10) : null;
-      this.httpService.AddFeedbackByParticipants(this.selectedEvent.id, userId, this.formModel).subscribe((data: any) => {
-        this.formModel = {};
-        this.responseMessage = "Saved Successfully";
-        this.getEvent();
-        this.selectedEvent = {};
-
-      }, error => {
-        this.showError = true;
-        this.errorMessage = "An error occurred while created in. Please try again later.";
-        console.error('Login error:', error);
-      });;
+    if (!this.selectedEvent?.id || !this.formModel.content) {
+      this.showError = true;
+      this.errorMessage = 'Please write some feedback before submitting.';
+      return;
     }
+
+    this.showError = false;
+    this.formModel.timestamp = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+    const userId = this.userId;
+
+    this.httpService.AddFeedbackByParticipants(this.selectedEvent.id, userId, this.formModel).subscribe({
+      next: () => {
+        this.formModel = {};
+        this.showToast('Feedback submitted successfully!');
+        this.getEvent(); // this will also refresh selectedEvent via refreshSelectedEvent()
+      },
+      error: () => {
+        this.showError = true;
+        this.errorMessage = 'Failed to submit feedback. Please try again.';
+      }
+    });
   }
 
   checkStatus() {
-    this.status = "";
+    this.status = '';
     this.httpService.viewEventStatus(this.selectedEvent.id).subscribe({
       next: (data: any) => {
         this.status = data.status;
-        console.log(data);
-      }, error: (err: any) => {
+      },
+      error: () => {
         this.showError = true;
-        this.errorMessage = "An error occurred.. Please try again later.";
-        console.error('Login error:', err);
+        this.errorMessage = 'Failed to fetch event status.';
       }
-    });;
+    });
+  }
+
+  showToast(message: string) {
+    this.responseMessage = message;
+    this.showMessage = true;
+    setTimeout(() => {
+      this.showMessage = false;
+      this.responseMessage = '';
+    }, 3000);
   }
 
   downloadCertificate() {
-  const event = this.selectedEvent;
-  const canvas = document.createElement('canvas');
-  canvas.width = 1200;
-  canvas.height = 800;
-  const ctx = canvas.getContext('2d')!;
+    const event = this.selectedEvent;
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 800;
+    const ctx = canvas.getContext('2d')!;
 
-  // Background
-  ctx.fillStyle = '#151E27';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#151E27';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Outer gold border
-  ctx.strokeStyle = '#F0A500';
-  ctx.lineWidth = 8;
-  ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    ctx.strokeStyle = '#F0A500';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
 
-  // Inner blue border
-  ctx.strokeStyle = '#2E86AB';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
+    ctx.strokeStyle = '#2E86AB';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
 
-  // Header gradient strip
-  const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
-  grad.addColorStop(0, '#2E86AB');
-  grad.addColorStop(1, '#F0A500');
-  ctx.fillStyle = grad;
-  ctx.fillRect(36, 36, canvas.width - 72, 110);
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    grad.addColorStop(0, '#2E86AB');
+    grad.addColorStop(1, '#F0A500');
+    ctx.fillStyle = grad;
+    ctx.fillRect(36, 36, canvas.width - 72, 110);
 
-  // Brand name
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 36px serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('FinSeminar', canvas.width / 2, 105);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 36px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('FinSeminar', canvas.width / 2, 105);
 
-  // Certificate title
-  ctx.fillStyle = '#F0A500';
-  ctx.font = 'bold 50px serif';
-  ctx.fillText('Certificate of Participation', canvas.width / 2, 230);
+    ctx.fillStyle = '#F0A500';
+    ctx.font = 'bold 50px serif';
+    ctx.fillText('Certificate of Participation', canvas.width / 2, 230);
 
-  // Decorative line
-  ctx.strokeStyle = '#F0A500';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(100, 255);
-  ctx.lineTo(canvas.width - 100, 255);
-  ctx.stroke();
+    ctx.strokeStyle = '#F0A500';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(100, 255);
+    ctx.lineTo(canvas.width - 100, 255);
+    ctx.stroke();
 
-  // Body text
-  ctx.fillStyle = '#E8E8E8';
-  ctx.font = '24px serif';
-  ctx.fillText('This certifies that the participant has successfully enrolled in', canvas.width / 2, 325);
+    ctx.fillStyle = '#E8E8E8';
+    ctx.font = '24px serif';
+    ctx.fillText('This certifies that the participant has successfully enrolled in', canvas.width / 2, 325);
 
-  // Event title
-  ctx.fillStyle = '#F0A500';
-  ctx.font = 'bold 34px serif';
-  ctx.fillText(`"${event.title}"`, canvas.width / 2, 395);
+    ctx.fillStyle = '#F0A500';
+    ctx.font = 'bold 34px serif';
+    ctx.fillText(`"${event.title}"`, canvas.width / 2, 395);
 
-  // Event details
-  ctx.fillStyle = '#E8E8E8';
-  ctx.font = '22px serif';
-  ctx.fillText(`Location: ${event.location}`, canvas.width / 2, 460);
-  ctx.fillText(`Scheduled: ${event.schedule}`, canvas.width / 2, 498);
+    ctx.fillStyle = '#E8E8E8';
+    ctx.font = '22px serif';
+    ctx.fillText(`Location: ${event.location}`, canvas.width / 2, 460);
+    ctx.fillText(`Scheduled: ${event.schedule}`, canvas.width / 2, 498);
 
-  // Issued info
-  ctx.fillStyle = 'rgba(255,255,255,0.45)';
-  ctx.font = '18px serif';
-  const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
-  ctx.fillText(`Issued by FinSeminar Platform  |  Date: ${today}`, canvas.width / 2, 590);
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.font = '18px serif';
+    const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+    ctx.fillText(`Issued by FinSeminar Platform  |  Date: ${today}`, canvas.width / 2, 590);
 
-  // Bottom strip
-  ctx.fillStyle = grad;
-  ctx.fillRect(36, canvas.height - 120, canvas.width - 72, 4);
+    ctx.fillStyle = grad;
+    ctx.fillRect(36, canvas.height - 120, canvas.width - 72, 4);
 
-  // Signature lines
-  ctx.strokeStyle = '#F0A500';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(180, canvas.height - 75); ctx.lineTo(480, canvas.height - 75); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(720, canvas.height - 75); ctx.lineTo(1020, canvas.height - 75); ctx.stroke();
-  ctx.fillStyle = 'rgba(255,255,255,0.4)';
-  ctx.font = '16px serif';
-  ctx.fillText('Participant Signature', 330, canvas.height - 52);
-  ctx.fillText('Authorized Signatory', 870, canvas.height - 52);
+    ctx.strokeStyle = '#F0A500';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(180, canvas.height - 75); ctx.lineTo(480, canvas.height - 75); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(720, canvas.height - 75); ctx.lineTo(1020, canvas.height - 75); ctx.stroke();
 
-  // Trigger download
-  const link = document.createElement('a');
-  link.download = `FinSeminar_Certificate_${event.title.replace(/\s+/g, '_')}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '16px serif';
+    ctx.fillText('Participant Signature', 330, canvas.height - 52);
+    ctx.fillText('Authorized Signatory', 870, canvas.height - 52);
 
-
-
-}
+    const link = document.createElement('a');
+    link.download = `FinSeminar_Certificate_${event.title.replace(/\s+/g, '_')}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+} 

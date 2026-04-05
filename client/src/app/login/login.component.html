@@ -8,33 +8,30 @@
         <!-- Background grid lines -->
         <defs>
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none"
-              stroke="rgba(240,165,0,0.08)" stroke-width="1"/>
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(240,165,0,0.08)" stroke-width="1" />
           </pattern>
         </defs>
-        <rect width="400" height="300" fill="url(#grid)"/>
+        <rect width="400" height="300" fill="url(#grid)" />
 
         <!-- Bar Chart -->
         <g transform="translate(20, 20)">
-          <line x1="30" y1="200" x2="200" y2="200"
-            stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <line x1="30" y1="200" x2="30" y2="60"
-            stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
+          <line x1="30" y1="200" x2="200" y2="200" stroke="rgba(240,165,0,0.4)" stroke-width="2" />
+          <line x1="30" y1="200" x2="30" y2="60" stroke="rgba(240,165,0,0.4)" stroke-width="2" />
           <rect x="45" y="140" width="25" height="60" fill="rgba(46,134,171,0.7)" rx="4">
-            <animate attributeName="height" from="0" to="60" dur="1s" fill="freeze"/>
-            <animate attributeName="y" from="200" to="140" dur="1s" fill="freeze"/>
+            <animate attributeName="height" from="0" to="60" dur="1s" fill="freeze" />
+            <animate attributeName="y" from="200" to="140" dur="1s" fill="freeze" />
           </rect>
           <rect x="85" y="110" width="25" height="90" fill="rgba(240,165,0,0.8)" rx="4">
-            <animate attributeName="height" from="0" to="90" dur="1.2s" fill="freeze"/>
-            <animate attributeName="y" from="200" to="110" dur="1.2s" fill="freeze"/>
+            <animate attributeName="height" from="0" to="90" dur="1.2s" fill="freeze" />
+            <animate attributeName="y" from="200" to="110" dur="1.2s" fill="freeze" />
           </rect>
           <rect x="125" y="80" width="25" height="120" fill="rgba(46,134,171,0.7)" rx="4">
-            <animate attributeName="height" from="0" to="120" dur="1.4s" fill="freeze"/>
-            <animate attributeName="y" from="200" to="80" dur="1.4s" fill="freeze"/>
+            <animate attributeName="height" from="0" to="120" dur="1.4s" fill="freeze" />
+            <animate attributeName="y" from="200" to="80" dur="1.4s" fill="freeze" />
           </rect>
           <rect x="165" y="60" width="25" height="140" fill="rgba(240,165,0,0.8)" rx="4">
-            <animate attributeName="height" from="0" to="140" dur="1.6s" fill="freeze"/>
-            <animate attributeName="y" from="200" to="60" dur="1.6s" fill="freeze"/>
+            <animate attributeName="height" from="0" to="140" dur="1.6s" fill="freeze" />
+            <animate attributeName="y" from="200" to="60" dur="1.6s" fill="freeze" />
           </rect>
           <text x="52" y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q1</text>
           <text x="92" y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q2</text>
@@ -44,36 +41,36 @@
 
         <!-- Line Chart -->
         <g transform="translate(210, 20)">
-          <line x1="10" y1="200" x2="170" y2="200" stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <line x1="10" y1="200" x2="10" y2="60" stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <polyline points="10,180 45,150 80,120 115,90 150,60" fill="none" stroke="#F0A500"
-            stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <polygon points="10,200 10,180 45,150 80,120 115,90 150,60 150,200" fill="rgba(240,165,0,0.08)"/>
-          <circle cx="10" cy="180" r="5" fill="#F0A500"/>
-          <circle cx="45" cy="150" r="5" fill="#F0A500"/>
-          <circle cx="80" cy="120" r="5" fill="#F0A500"/>
-          <circle cx="115" cy="90" r="5" fill="#F0A500"/>
-          <circle cx="150" cy="60" r="5" fill="#2E86AB"/>
+          <line x1="10" y1="200" x2="170" y2="200" stroke="rgba(240,165,0,0.4)" stroke-width="2" />
+          <line x1="10" y1="200" x2="10" y2="60" stroke="rgba(240,165,0,0.4)" stroke-width="2" />
+          <polyline points="10,180 45,150 80,120 115,90 150,60" fill="none" stroke="#F0A500" stroke-width="3"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <polygon points="10,200 10,180 45,150 80,120 115,90 150,60 150,200" fill="rgba(240,165,0,0.08)" />
+          <circle cx="10" cy="180" r="5" fill="#F0A500" />
+          <circle cx="45" cy="150" r="5" fill="#F0A500" />
+          <circle cx="80" cy="120" r="5" fill="#F0A500" />
+          <circle cx="115" cy="90" r="5" fill="#F0A500" />
+          <circle cx="150" cy="60" r="5" fill="#2E86AB" />
         </g>
 
         <!-- Coin Stack -->
         <g transform="translate(25, 230)">
-          <ellipse cx="35" cy="55" rx="30" ry="8" fill="rgba(240,165,0,0.6)"/>
-          <rect x="5" y="35" width="60" height="20" fill="rgba(240,165,0,0.5)" rx="2"/>
-          <ellipse cx="35" cy="35" rx="30" ry="8" fill="rgba(240,165,0,0.7)"/>
-          <rect x="5" y="15" width="60" height="20" fill="rgba(240,165,0,0.4)" rx="2"/>
-          <ellipse cx="35" cy="15" rx="30" ry="8" fill="rgba(240,165,0,0.8)"/>
+          <ellipse cx="35" cy="55" rx="30" ry="8" fill="rgba(240,165,0,0.6)" />
+          <rect x="5" y="35" width="60" height="20" fill="rgba(240,165,0,0.5)" rx="2" />
+          <ellipse cx="35" cy="35" rx="30" ry="8" fill="rgba(240,165,0,0.7)" />
+          <rect x="5" y="15" width="60" height="20" fill="rgba(240,165,0,0.4)" rx="2" />
+          <ellipse cx="35" cy="15" rx="30" ry="8" fill="rgba(240,165,0,0.8)" />
           <text x="35" y="19" fill="#151E27" font-size="10" font-weight="bold" text-anchor="middle">$</text>
         </g>
 
         <!-- Pie Chart -->
         <g transform="translate(280, 220)">
-          <path d="M 50 50 L 50 10 A 40 40 0 0 1 84 28 Z" fill="rgba(240,165,0,0.85)"/>
-          <path d="M 50 50 L 84 28 A 40 40 0 0 1 84 72 Z" fill="rgba(46,134,171,0.85)"/>
-          <path d="M 50 50 L 84 72 A 40 40 0 0 1 16 72 Z" fill="rgba(240,165,0,0.45)"/>
-          <path d="M 50 50 L 16 72 A 40 40 0 0 1 16 28 Z" fill="rgba(46,134,171,0.45)"/>
-          <path d="M 50 50 L 16 28 A 40 40 0 0 1 50 10 Z" fill="rgba(255,255,255,0.2)"/>
-          <circle cx="50" cy="50" r="18" fill="#1C2B3A"/>
+          <path d="M 50 50 L 50 10 A 40 40 0 0 1 84 28 Z" fill="rgba(240,165,0,0.85)" />
+          <path d="M 50 50 L 84 28 A 40 40 0 0 1 84 72 Z" fill="rgba(46,134,171,0.85)" />
+          <path d="M 50 50 L 84 72 A 40 40 0 0 1 16 72 Z" fill="rgba(240,165,0,0.45)" />
+          <path d="M 50 50 L 16 72 A 40 40 0 0 1 16 28 Z" fill="rgba(46,134,171,0.45)" />
+          <path d="M 50 50 L 16 28 A 40 40 0 0 1 50 10 Z" fill="rgba(255,255,255,0.2)" />
+          <circle cx="50" cy="50" r="18" fill="#1C2B3A" />
           <text x="50" y="54" fill="#F0A500" font-size="10" font-weight="bold" text-anchor="middle">%</text>
         </g>
 
@@ -84,8 +81,8 @@
 
         <!-- Trend indicator -->
         <g transform="translate(170, 235)">
-          <polygon points="15,20 0,20 7.5,5" fill="rgba(46,200,100,0.7)"/>
-          <rect x="5" y="20" width="5" height="15" fill="rgba(46,200,100,0.7)"/>
+          <polygon points="15,20 0,20 7.5,5" fill="rgba(46,200,100,0.7)" />
+          <rect x="5" y="20" width="5" height="15" fill="rgba(46,200,100,0.7)" />
           <text x="25" y="30" fill="rgba(46,200,100,0.9)" font-size="11" font-weight="bold">+24%</text>
         </g>
 
@@ -155,8 +152,8 @@
           <label class="form-label">Username</label>
           <div class="input-group-custom">
             <span class="input-icon"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control custom-input"
-              placeholder="Enter your username" formControlName="username"
+            <input type="text" class="form-control custom-input" placeholder="Enter your username"
+              formControlName="username"
               [class.is-invalid]="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
           </div>
           <div class="invalid-feedback-custom"
@@ -170,8 +167,8 @@
           <label class="form-label">Password</label>
           <div class="input-group-custom">
             <span class="input-icon"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control custom-input"
-              placeholder="Enter your password" formControlName="password"
+            <input type="password" class="form-control custom-input" placeholder="Enter your password"
+              formControlName="password"
               [class.is-invalid]="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
           </div>
           <div class="invalid-feedback-custom"
@@ -193,12 +190,8 @@
             </div>
             <div class="input-group-custom mt-2">
               <span class="input-icon"><i class="bi bi-calculator"></i></span>
-              <input type="text" inputmode="numeric"
-                class="form-control custom-input"
-                placeholder="Enter your answer"
-                [(ngModel)]="captchaAnswer"
-                [ngModelOptions]="{standalone: true}"
-                [class.is-invalid]="captchaError">
+              <input type="text" inputmode="numeric" class="form-control custom-input" placeholder="Enter your answer"
+                [(ngModel)]="captchaAnswer" [ngModelOptions]="{standalone: true}" [class.is-invalid]="captchaError">
             </div>
             <div class="invalid-feedback-custom" *ngIf="captchaError">
               {{ captchaError }}

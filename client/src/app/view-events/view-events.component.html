@@ -102,15 +102,20 @@
       <div class="ve-detail-card__actions">
 
         <!-- Not enrolled -->
-        <button *ngIf="!isEnrolled()" class="ve-btn-enroll" (click)="enroll()">
-          <i class="bi bi-person-plus me-2"></i>
-          Enroll Now
-        </button>
+        <ng-container *ngIf="!isCheckingEnrollment">
+          <button *ngIf="!isAlreadyEnrolled && !isCompleted()" class="ve-btn-enroll" (click)="enroll()">
+            <i class="bi bi-person-plus me-2"></i>
+            Enroll Now
+          </button>
 
-        <span *ngIf="isEnrolled()">Enrolled!</span>
+          <button *ngIf="isAlreadyEnrolled" class="ve-btn-enrolled" disabled>
+            <i class="bi bi-check-circle me-2"></i>
+            Enrolled
+          </button>
+        </ng-container>
 
         <!-- Download Certificate -->
-        <button *ngIf="isCompleted()" (click)="downloadCertificate()" class="ve-btn-certificate">
+        <button *ngIf="isCompleted() && isAlreadyEnrolled" (click)="downloadCertificate()" class="ve-btn-certificate">
           <i class="bi bi-award"></i> Download Certificate
         </button>
 
@@ -120,10 +125,12 @@
 
       </div>
 
-      <!-- Submit Feedback -->
+      <!-- FEEDBACK -->
       <div class="ve-divider"></div>
       <div *ngIf="isCompleted()">
-        <div class="ve-feedback-form">
+
+        <!-- Submit Feedback  -->
+        <div *ngIf = "isAlreadyEnrolled" class="ve-feedback-form">
           <h4 class="ve-feedback-form__title">Leave Feedback</h4>
           <div class="ve-input-group">
             <i class="bi bi-pen"></i>

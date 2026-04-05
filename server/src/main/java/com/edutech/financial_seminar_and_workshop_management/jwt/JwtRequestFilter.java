@@ -53,13 +53,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 Claims claims = jwtUtil.extractAllClaims(jwt);
-                Collection<? extends GrantedAuthority> authorities =
-                        AuthorityUtils.createAuthorityList((String) claims.get("role"));
-
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+                if (claims != null) {
+                    String role = (String) claims.get("role");
+                    Collection<? extends GrantedAuthority> authorities =
+                            AuthorityUtils.createAuthorityList(role);
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } 
         }
 
         filterChain.doFilter(request, response);

@@ -4,6 +4,8 @@ package com.edutech.financial_seminar_and_workshop_management.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional; 
+
 import com.edutech.financial_seminar_and_workshop_management.entity.Enrollment;
 import com.edutech.financial_seminar_and_workshop_management.entity.Event;
 import com.edutech.financial_seminar_and_workshop_management.entity.User;
@@ -40,5 +42,21 @@ public class EnrollmentService {
         enrollment.setStatus("ENROLLED");
 
         return enrollmentRepository.save(enrollment);
+    }
+
+    public Enrollment getEnrollmentByUserIdAndEventId(Long userId, Long eventId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
+        Enrollment enrollment = enrollments.stream().filter(e -> 
+            e.getEvent().getId().equals(eventId)
+        )
+        .findFirst()
+        .orElse(null);
+
+        return enrollment;
+        // Optional<Enrollment> enrollment = enrollmentRepository.findByUserIdAndEventId(userId, eventId);
+        // if(enrollment.isPresent()) {
+        //     return enrollment.get();
+        // }
+        // return null;
     }
 }

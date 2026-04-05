@@ -55,6 +55,7 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             claims = null;
         }
         return claims;

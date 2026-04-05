@@ -38,6 +38,12 @@ public class ParticipantController {
         return ResponseEntity.ok(enrollment);
     }
 
+    @GetMapping("/api/participant/event/{eventId}/check-enroll")
+    public ResponseEntity<Enrollment> getEnrollment(@RequestParam Long userId, @PathVariable Long eventId) {
+        Enrollment enrollment = enrollmentService.getEnrollmentByUserIdAndEventId(userId, eventId);
+        return ResponseEntity.ok(enrollment);
+    }
+
     @GetMapping("/api/participant/event/{id}/status")
     public ResponseEntity<Event> viewEventStatus(@PathVariable Long id) {
         Event event = eventService.getEventById(id);
