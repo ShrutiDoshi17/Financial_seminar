@@ -123,10 +123,16 @@ export class ViewEventsComponent implements OnInit {
                 },
                 error: () => {
                   this.isEnrolling = false;
-                  this.showToast('Payment verified but enrollment failed. Contact support.');
+                  this.showErrorToast('Payment verified but enrollment failed. Contact support.');
                 }
               });
             })
+          },
+          "payment.failed": (response: any) => {
+            this.ngZone.run(() => {
+              this.isEnrolling = false;
+              this.showErrorToast('Payment failed. Please try again.');
+            });
           },
           prefill: {
             name: '',
@@ -138,11 +144,19 @@ export class ViewEventsComponent implements OnInit {
           },
           modal: {
             ondismiss: () => {
-              // User closed the popup without paying
-              this.isEnrolling = false;
-              this.showToast('Payment cancelled.');
+              this.ngZone.run(() => {
+                this.isEnrolling = false;
+                this.showErrorToast('Payment was not completed. Please try again.');
+              });
             }
-          }
+          },
+          "modal.escape": false,
+          notify: {
+            polling: false
+          },
+          retry: {
+            enabled: false
+          },
         };
 
         const rzp = new Razorpay(options);
@@ -150,15 +164,14 @@ export class ViewEventsComponent implements OnInit {
       },
       error: () => {
         this.isEnrolling = false;
-        this.showToast('Failed to initiate payment. Please try again.');
+        this.showErrorToast('Failed to initiate payment. Please try again.');
       }
     });
   }
 
   saveFeedBack() {
     if (!this.selectedEvent?.id || !this.formModel.content) {
-      this.showError = true;
-      this.errorMessage = 'Please write some feedback before submitting.';
+      this.showErrorToast('Please write some feedback before submitting.');
       return;
     }
 
@@ -174,8 +187,7 @@ export class ViewEventsComponent implements OnInit {
         this.getEvent(); // this will also refresh selectedEvent via refreshSelectedEvent()
       },
       error: () => {
-        this.showError = true;
-        this.errorMessage = 'Failed to submit feedback. Please try again.';
+        this.showErrorToast('Failed to submit feedback. Please try again.')
       }
     });
   }
@@ -187,8 +199,7 @@ export class ViewEventsComponent implements OnInit {
         this.status = data.status;
       },
       error: () => {
-        this.showError = true;
-        this.errorMessage = 'Failed to fetch event status.';
+        this.showErrorToast('Failed to fetch event status.');
       }
     });
   }
@@ -199,6 +210,15 @@ export class ViewEventsComponent implements OnInit {
     setTimeout(() => {
       this.showMessage = false;
       this.responseMessage = '';
+    }, 3000);
+  }
+
+  showErrorToast(message: string) {
+    this.errorMessage = message;
+    this.showError = true;
+    setTimeout(() => {
+      this.showError = false;
+      this.errorMessage = '';
     }, 3000);
   }
 

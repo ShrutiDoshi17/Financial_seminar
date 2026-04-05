@@ -17,6 +17,12 @@
     <span>{{ responseMessage }}</span>
   </div>
 
+  <!-- Error Alert -->
+  <div *ngIf="showError" class="ve-alert-error">
+    <i class="bi bi-x-circle"></i>
+    <span>{{ errorMessage }}</span>
+  </div>
+
   <!-- Main Content -->
   <div class="ve-content" [class.ve-content--split]="selectedEvent.id">
 
