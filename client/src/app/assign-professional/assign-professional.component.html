@@ -27,16 +27,16 @@
 
           <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
 
-            <!-- Select Event -->
+            <!-- Select Event — only unassigned events -->
             <div class="mb-3">
               <label class="form-label">Select Event</label>
               <div class="input-wrap">
                 <span class="input-icon"><i class="bi bi-calendar-event"></i></span>
                 <select class="custom-input" formControlName="eventId"
                   [class.is-invalid]="itemForm.get('eventId')?.invalid && itemForm.get('eventId')?.touched">
-                  <option value="" disabled selected>Choose an event</option>
+                  <option [ngValue]="null" disabled>Choose an event</option>
                   <option *ngFor="let event of eventList" [value]="event.id">
-                    {{ event.title }}
+                    {{ event.title }} — {{ getDatePart(event.schedule) }}
                   </option>
                 </select>
               </div>
@@ -44,16 +44,24 @@
                 *ngIf="itemForm.get('eventId')?.invalid && itemForm.get('eventId')?.touched">
                 Please select an event
               </div>
+              <div class="all-assigned-msg"
+                *ngIf="eventList.length === 0 && allEvents.length > 0">
+                <i class="bi bi-info-circle me-1"></i>
+                All events already have a professional assigned
+              </div>
             </div>
 
-            <!-- Select Professional — only shows unassigned ones -->
+            <!-- Select Professional — date-filtered -->
             <div class="mb-4">
               <label class="form-label">Select Professional</label>
               <div class="input-wrap">
                 <span class="input-icon"><i class="bi bi-person-workspace"></i></span>
                 <select class="custom-input" formControlName="userId"
-                  [class.is-invalid]="itemForm.get('userId')?.invalid && itemForm.get('userId')?.touched">
-                  <option value="" disabled selected>Choose a professional</option>
+                  [class.is-invalid]="itemForm.get('userId')?.invalid && itemForm.get('userId')?.touched"
+                  [disabled]="!selectedEvent">
+                  <option [ngValue]="null" disabled>
+                    {{ selectedEvent ? 'Choose a professional' : 'Select an event first' }}
+                  </option>
                   <option *ngFor="let pro of availableProfessionals" [value]="pro.id">
                     {{ pro.username }}
                   </option>
@@ -63,20 +71,42 @@
                 *ngIf="itemForm.get('userId')?.invalid && itemForm.get('userId')?.touched">
                 Please select a professional
               </div>
-              <!-- Info if all assigned -->
-              <div class="all-assigned-msg" *ngIf="availableProfessionals.length === 0 && professionalsList.length > 0">
+              <div class="all-assigned-msg"
+                *ngIf="selectedEvent && availableProfessionals.length === 0">
                 <i class="bi bi-info-circle me-1"></i>
-                All professionals have been assigned
+                All professionals are busy on {{ getDatePart(selectedEvent.schedule) }}
               </div>
             </div>
 
             <button type="submit" class="btn-submit w-100"
-              [disabled]="availableProfessionals.length === 0">
+              [disabled]="!selectedEvent || availableProfessionals.length === 0">
               <i class="bi bi-person-plus me-2"></i>Assign Professional
             </button>
 
           </form>
         </div>
+
+        <!-- Already Assigned Events Info -->
+        <div class="assigned-events-card" *ngIf="allEvents.length > 0">
+          <div class="assigned-events-header">
+            <i class="bi bi-check2-circle"></i>
+            <span>Already Assigned</span>
+          </div>
+          <div *ngFor="let event of allEvents">
+            <div class="assigned-event-item"
+              *ngIf="event.professionals && event.professionals.length > 0">
+              <div class="assigned-event-title">{{ event.title }}</div>
+              <div class="assigned-event-date">
+                <i class="bi bi-calendar2 me-1"></i>{{ getDatePart(event.schedule) }}
+              </div>
+              <div class="assigned-pro-tag"
+                *ngFor="let pro of event.professionals">
+                <i class="bi bi-person-check me-1"></i>{{ pro.username }}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- RIGHT: Professionals List -->
@@ -86,24 +116,29 @@
           <div class="list-card-header">
             <div class="d-flex align-items-center gap-2">
               <i class="bi bi-people"></i>
-              <h4>Available Professionals</h4>
+              <h4>
+                {{ selectedEvent
+                  ? 'Available on ' + getDatePart(selectedEvent.schedule)
+                  : 'All Professionals' }}
+              </h4>
             </div>
             <span class="count-badge">{{ availableProfessionals.length }} Available</span>
           </div>
 
-          <!-- Empty state — no professionals at all -->
-          <div class="empty-state" *ngIf="professionalsList.length === 0">
-            <i class="bi bi-person-x"></i>
-            <p>No professionals found</p>
+          <!-- No event selected hint -->
+          <div class="hint-msg" *ngIf="!selectedEvent">
+            <i class="bi bi-arrow-left-circle me-2"></i>
+            Select an event to see available professionals for that date
           </div>
 
-          <!-- All assigned state -->
-          <div class="empty-state" *ngIf="professionalsList.length > 0 && availableProfessionals.length === 0">
-            <i class="bi bi-person-check-fill"></i>
-            <p>All professionals have been assigned</p>
+          <!-- Empty — all busy -->
+          <div class="empty-state"
+            *ngIf="selectedEvent && availableProfessionals.length === 0">
+            <i class="bi bi-calendar-x"></i>
+            <p>No professionals available on {{ getDatePart(selectedEvent.schedule) }}</p>
           </div>
 
-          <!-- Professionals Grid — only unassigned -->
+          <!-- Professionals Grid -->
           <div class="pro-grid" *ngIf="availableProfessionals.length > 0">
             <div class="pro-card" *ngFor="let pro of availableProfessionals">
               <div class="pro-avatar">
@@ -114,7 +149,7 @@
                 <div class="pro-email">{{ pro.email }}</div>
               </div>
               <span class="pro-role-badge">
-                <i class="bi bi-briefcase me-1"></i>Professional
+                <i class="bi bi-briefcase me-1"></i>Available
               </span>
             </div>
           </div>

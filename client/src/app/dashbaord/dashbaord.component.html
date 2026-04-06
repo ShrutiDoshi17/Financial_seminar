@@ -143,12 +143,12 @@
               <th>Event Title</th>
               <th>Schedule</th>
               <th>Location</th>
+              <th>Professional</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let event of eventList; let i = index"
-              (click)="viewDetails(event)"
+            <tr *ngFor="let event of eventList; let i = index" (click)="viewDetails(event)"
               [class.selected-row]="selectedEvent?.id === event.id">
               <td>{{ i + 1 }}</td>
               <td>
@@ -166,8 +166,19 @@
                 {{ event.location }}
               </td>
               <td>
-                <span class="status-badge"
-                  [ngClass]="getStatusClass(event.status)">
+                <!-- Show assigned professionals or "Not Assigned" -->
+                <ng-container *ngIf="event.professionals && event.professionals.length > 0">
+                  <span class="pro-assigned-tag" 
+                    *ngFor="let pro of event.professionals">
+                    <i class="bi bi-person-check me-1"></i>{{ pro.username }}
+                  </span>
+                </ng-container>
+                <span class="pro-not-assigned" *ngIf="!event.professionals || event.professionals.length === 0">
+                  <i class="bi bi-dash-circle me-1"></i>Not Assigned
+                </span>
+              </td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(event.status)">
                   {{ event.status }}
                 </span>
               </td>
@@ -177,8 +188,7 @@
       </div>
 
       <!-- No Events State -->
-      <div class="empty-state"
-        *ngIf="eventList.length === 0 && !showError">
+      <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
         <i class="bi bi-calendar-x"></i>
         <h5>No Events Yet</h5>
         <p>Start by creating your first financial event</p>
@@ -302,8 +312,7 @@
             <!-- FRONT -->
             <div class="flip-card-front">
               <div class="event-card-header">
-                <span class="status-badge"
-                  [ngClass]="getStatusClass(event.status)">
+                <span class="status-badge" [ngClass]="getStatusClass(event.status)">
                   {{ event.status }}
                 </span>
                 <div class="info-icon-wrapper">
@@ -344,12 +353,10 @@
               </div>
 
               <div class="event-card-actions">
-                <button class="btn-card-action update-btn"
-                  (click)="goToUpdateStatus(); $event.stopPropagation()">
+                <button class="btn-card-action update-btn" (click)="goToUpdateStatus(); $event.stopPropagation()">
                   <i class="fas fa-sync-alt me-1"></i>Update Status
                 </button>
-                <button class="btn-card-action feedback-btn"
-                  (click)="goToAddFeedback(); $event.stopPropagation()">
+                <button class="btn-card-action feedback-btn" (click)="goToAddFeedback(); $event.stopPropagation()">
                   <i class="fas fa-comment me-1"></i>Feedback
                 </button>
               </div>
@@ -387,8 +394,7 @@
                 <div class="glass-divider"></div>
                 <div class="glass-row">
                   <span class="glass-label">Status</span>
-                  <span class="status-badge"
-                    [ngClass]="getStatusClass(event.status)">
+                  <span class="status-badge" [ngClass]="getStatusClass(event.status)">
                     {{ event.status }}
                   </span>
                 </div>
@@ -417,8 +423,7 @@
       </div>
 
       <!-- No Events State -->
-      <div class="empty-state"
-        *ngIf="eventList.length === 0 && !showError">
+      <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
         <i class="bi bi-clipboard-check"></i>
         <h5>No Assigned Events</h5>
         <p>You have not been assigned to any events yet</p>
@@ -531,8 +536,7 @@
             <!-- FRONT -->
             <div class="flip-card-front">
               <div class="event-card-header">
-                <span class="status-badge"
-                  [ngClass]="getStatusClass(event.status)">
+                <span class="status-badge" [ngClass]="getStatusClass(event.status)">
                   {{ event.status }}
                 </span>
                 <div class="info-icon-wrapper">
@@ -573,12 +577,10 @@
               </div>
 
               <div class="event-card-actions">
-                <button class="btn-card-action enroll-btn"
-                  (click)="goToViewEvents(); $event.stopPropagation()">
+                <button class="btn-card-action enroll-btn" (click)="goToViewEvents(); $event.stopPropagation()">
                   <i class="fas fa-plus me-1"></i>Enroll Now
                 </button>
-                <button class="btn-card-action status-btn"
-                  (click)="goToViewEvents(); $event.stopPropagation()">
+                <button class="btn-card-action status-btn" (click)="goToViewEvents(); $event.stopPropagation()">
                   <i class="fas fa-info-circle me-1"></i>Details
                 </button>
               </div>
@@ -616,8 +618,7 @@
                 <div class="glass-divider"></div>
                 <div class="glass-row">
                   <span class="glass-label">Status</span>
-                  <span class="status-badge"
-                    [ngClass]="getStatusClass(event.status)">
+                  <span class="status-badge" [ngClass]="getStatusClass(event.status)">
                     {{ event.status }}
                   </span>
                 </div>
@@ -646,8 +647,7 @@
       </div>
 
       <!-- No Events State -->
-      <div class="empty-state"
-        *ngIf="eventList.length === 0 && !showError">
+      <div class="empty-state" *ngIf="eventList.length === 0 && !showError">
         <i class="bi bi-search"></i>
         <h5>No Events Available</h5>
         <p>Check back later for upcoming financial workshops</p>
