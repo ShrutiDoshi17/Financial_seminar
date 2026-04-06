@@ -1,8 +1,8 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
-
 
 @Component({
   selector: 'app-registration',
@@ -16,8 +16,8 @@ export class RegistrationComponent {
   showMessage: boolean = false;
   responseMessage: any;
 
-  showError: boolean = false
-  errorMessage: any
+  showError: boolean = false;
+  errorMessage: any;
 
   constructor(public router: Router, private service: HttpService, private formBuilder: FormBuilder) {
     this.itemForm = this.formBuilder.group({
@@ -30,36 +30,28 @@ export class RegistrationComponent {
 
   onRegister() {
     if (this.itemForm.valid) {
-      const username = this.itemForm.value.username
+      const username = this.itemForm.value.username;
       this.service.checkUsernameExists(username).subscribe((exists: boolean) => {
         if (exists) {
-          this.showError = true
-          this.errorMessage = 'Username already exists.'
-
+          this.showError = true;
+          this.errorMessage = 'Username already exists.';
           setTimeout(() => {
-            this.showError = false
-            this.errorMessage = ''
-          }, 2000)
-        }
-        else {
+            this.showError = false;
+            this.errorMessage = '';
+          }, 3000);
+        } else {
           this.service.registerUser(this.itemForm.value).subscribe(data => {
-            debugger;
-            console.log(this.itemForm)
             this.showMessage = true;
-            this.responseMessage = "You are successfully registered";
+            this.responseMessage = 'You are successfully registered';
             this.itemForm.reset();
-
             setTimeout(() => {
-              this.router.navigate(['/login'])
-            }, 3000)
-          })
+              this.router.navigate(['/login']);
+            }, 3000);
+          });
         }
-      })
-    }
-    else {
+      });
+    } else {
       this.itemForm.markAllAsTouched();
     }
   }
-
-
-}
+}  
