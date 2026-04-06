@@ -46,7 +46,7 @@ export class CreateEventComponent implements OnInit {
     const userIdString = localStorage.getItem('userId');
     const userId = userIdString ? parseInt(userIdString, 10) : null;
     this.itemForm.controls["institutionId"].setValue(userId)
-    
+
     this.httpService.getEventByInstitutionId(userId).subscribe((data: any) => {
       this.eventList = data;
       console.log(this.eventList);
@@ -68,34 +68,51 @@ export class CreateEventComponent implements OnInit {
         this.showError = false;
         const userIdString = localStorage.getItem('userId');
         const userId = userIdString ? parseInt(userIdString, 10) : null;
-        this.itemForm.controls["institutionId"].setValue(userId)
+        this.itemForm.controls["institutionId"].setValue(userId);
 
         this.httpService.createEvent(this.itemForm.value).subscribe((data: any) => {
           this.itemForm.reset();
           this.getEvent();
+          this.showMessage = true;
+          this.responseMessage = 'Event created successfully!';
+          setTimeout(() => {
+            this.showMessage = false;
+            this.responseMessage = '';
+          }, 3000);
         }, error => {
           this.showError = true;
-          this.errorMessage = "An error occurred while created in. Please try again later.";
-          console.error('Login error:', error);
-
-          
-        })
-      }
-      else {
+          this.errorMessage = 'An error occurred while creating the event. Please try again later.';
+          setTimeout(() => {
+            this.showError = false;
+            this.errorMessage = '';
+          }, 3000);
+          console.error('Create event error:', error);
+        });
+      } else {
         this.showError = false;
         const userIdString = localStorage.getItem('userId');
         const userId = userIdString ? parseInt(userIdString, 10) : null;
-        this.itemForm.controls["institutionId"].setValue(userId)
+        this.itemForm.controls["institutionId"].setValue(userId);
 
         this.httpService.updateEvent(this.updateId, this.itemForm.value).subscribe((data: any) => {
           this.itemForm.reset();
           this.getEvent();
           this.updateId = null;
+          this.showMessage = true;
+          this.responseMessage = 'Event updated successfully!';
+          setTimeout(() => {
+            this.showMessage = false;
+            this.responseMessage = '';
+          }, 3000);
         }, error => {
           this.showError = true;
-          this.errorMessage = "An error occurred while created in. Please try again later.";
-          console.error('Login error:', error);
-        })
+          this.errorMessage = 'An error occurred while updating the event. Please try again later.';
+          setTimeout(() => {
+            this.showError = false;
+            this.errorMessage = '';
+          }, 3000);
+          console.error('Update event error:', error);
+        });
       }
     } else {
       this.itemForm.markAllAsTouched();

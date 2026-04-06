@@ -1,37 +1,39 @@
 <div class="page-wrapper">
+
   <!-- ✅ SUCCESS TOAST -->
   <div *ngIf="showMessage" class="toast-host">
-    <div class="toast-box toast-success">
-      <div class="toast-content">
-        <span class="toast-dot"></span>
-
-        <div class="toast-text">
-          {{ responseMessage }}
-        </div>
-
-        <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close"
-          (click)="showMessage = false">
-        </button>
+    <div class="toast-notification success-toast">
+      <div class="toast-icon">
+        <i class="bi bi-check-circle-fill"></i>
       </div>
+      <div class="toast-content">
+        <div class="toast-title">Success</div>
+        <div class="toast-message">{{ responseMessage }}</div>
+      </div>
+      <button class="toast-close-btn" (click)="showMessage = false">
+        <i class="bi bi-x"></i>
+      </button>
+      <div class="toast-progress success-progress"></div>
     </div>
   </div>
 
   <!-- ❌ ERROR TOAST -->
   <div *ngIf="showError" class="toast-host">
-    <div class="toast-box toast-error">
-      <div class="toast-content">
-        <span class="toast-dot"></span>
-
-        <div class="toast-text">
-          {{ errorMessage }}
-        </div>
-
-        <button type="button" class="btn-close btn-close-white toast-close" aria-label="Close"
-          (click)="showError = false">
-        </button>
+    <div class="toast-notification error-toast">
+      <div class="toast-icon">
+        <i class="bi bi-exclamation-circle-fill"></i>
       </div>
+      <div class="toast-content">
+        <div class="toast-title">Error</div>
+        <div class="toast-message">{{ errorMessage }}</div>
+      </div>
+      <button class="toast-close-btn" (click)="showError = false">
+        <i class="bi bi-x"></i>
+      </button>
+      <div class="toast-progress error-progress"></div>
     </div>
   </div>
+
   <div class="container-fluid py-4 px-4">
 
     <div class="row g-4">
@@ -46,16 +48,6 @@
               <h4>{{ updateId ? 'Update Event' : 'Create Event' }}</h4>
               <p>{{ updateId ? 'Edit event details below' : 'Fill in the details to create a new event' }}</p>
             </div>
-          </div>
-
-          <!-- Error Alert -->
-          <div class="alert-error" *ngIf="showError">
-            <i class="bi bi-exclamation-circle me-2"></i>{{ errorMessage }}
-          </div>
-
-          <!-- Success Alert -->
-          <div class="alert-success" *ngIf="showMessage">
-            <i class="bi bi-check-circle me-2"></i>{{ responseMessage }}
           </div>
 
           <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
@@ -207,10 +199,10 @@
       </p>
       <div class="modal-actions">
         <button class="btn-modal-cancel" (click)="cancelDelete()">
-          <i class="fas fa-times me-2"></i>Cancel
+          <i class="bi bi-x me-2"></i>Cancel
         </button>
         <button class="btn-modal-confirm" (click)="confirmDelete()">
-          <i class="fas fa-trash-alt me-2"></i>Delete
+          <i class="bi bi-trash me-2"></i>Delete
         </button>
       </div>
     </div>

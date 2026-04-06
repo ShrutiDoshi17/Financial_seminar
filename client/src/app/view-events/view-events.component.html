@@ -1,5 +1,39 @@
 <div class="ve-wrapper">
 
+  <!-- ✅ SUCCESS TOAST -->
+  <div *ngIf="showMessage" class="ve-toast-host">
+    <div class="ve-toast-notification ve-success-toast">
+      <div class="ve-toast-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <div class="ve-toast-content">
+        <div class="ve-toast-title">Success</div>
+        <div class="ve-toast-message">{{ responseMessage }}</div>
+      </div>
+      <button class="ve-toast-close-btn" (click)="showMessage = false">
+        <i class="bi bi-x"></i>
+      </button>
+      <div class="ve-toast-progress ve-success-progress"></div>
+    </div>
+  </div>
+
+  <!-- ❌ ERROR TOAST -->
+  <div *ngIf="showError" class="ve-toast-host">
+    <div class="ve-toast-notification ve-error-toast">
+      <div class="ve-toast-icon">
+        <i class="bi bi-exclamation-circle-fill"></i>
+      </div>
+      <div class="ve-toast-content">
+        <div class="ve-toast-title">Error</div>
+        <div class="ve-toast-message">{{ errorMessage }}</div>
+      </div>
+      <button class="ve-toast-close-btn" (click)="showError = false">
+        <i class="bi bi-x"></i>
+      </button>
+      <div class="ve-toast-progress ve-error-progress"></div>
+    </div>
+  </div>
+
   <!-- Page Header -->
   <div class="ve-header">
     <div class="ve-header__left">
@@ -9,18 +43,6 @@
         <p class="ve-header__sub">Browse and enroll in financial seminars</p>
       </div>
     </div>
-  </div>
-
-  <!-- Success Alert -->
-  <div *ngIf="showMessage" class="ve-alert">
-    <i class="bi bi-check-circle"></i>
-    <span>{{ responseMessage }}</span>
-  </div>
-
-  <!-- Error Alert -->
-  <div *ngIf="showError" class="ve-alert-error">
-    <i class="bi bi-x-circle"></i>
-    <span>{{ errorMessage }}</span>
   </div>
 
   <!-- Main Content -->
@@ -38,7 +60,7 @@
             placeholder="Search by title or ID..."
             [(ngModel)]="searchQuery"
             (input)="applyFilter()"
-          /> 
+          />
         </div>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
@@ -85,12 +107,12 @@
       <div class="ve-pagination" *ngIf="totalPages > 1">
         <button class="ve-page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
           <i class="bi bi-chevron-left"></i>
-          </button>
+        </button>
 
         <button *ngFor="let page of pageNumbers" class="ve-page-btn"
          [class.ve-page-btn--active]="page === currentPage" (click)="changePage(page)">
           {{ page }}
-          </button>
+        </button>
 
         <button class="ve-page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
           <i class="bi bi-chevron-right"></i>
@@ -104,7 +126,6 @@
     <!-- Event Detail Panel -->
     <div *ngIf="selectedEvent.id" class="ve-detail-card">
 
-      <!-- Title -->
       <div class="ve-detail-card__header">
         <h3 class="ve-detail-card__title">{{ selectedEvent.title }}</h3>
         <span class="ve-status-badge" [ngClass]="{
@@ -116,7 +137,6 @@
         </span>
       </div>
 
-      <!-- Info -->
       <div class="ve-detail-card__info">
         <div class="ve-info-item">
           <i class="bi bi-geo-alt"></i>
@@ -132,10 +152,8 @@
         </div>
       </div>
 
-      <!-- Actions -->
       <div class="ve-detail-card__actions">
 
-        <!-- Not enrolled -->
         <ng-container *ngIf="!isCheckingEnrollment">
           <button *ngIf="!isAlreadyEnrolled && !isCompleted()" class="ve-btn-enroll" (click)="enroll()">
             <i class="bi bi-person-plus me-2"></i>
@@ -148,7 +166,6 @@
           </button>
         </ng-container>
 
-        <!-- Download Certificate -->
         <button *ngIf="isCompleted() && isAlreadyEnrolled" (click)="downloadCertificate()" class="ve-btn-certificate">
           <i class="bi bi-award"></i> Download Certificate
         </button>
@@ -159,25 +176,22 @@
 
       </div>
 
-      <!-- FEEDBACK -->
       <div class="ve-divider"></div>
       <div *ngIf="isCompleted()">
 
-        <!-- Submit Feedback  -->
         <div *ngIf="isAlreadyEnrolled" class="ve-feedback-form">
           <h4 class="ve-feedback-form__title">Leave Feedback</h4>
           <div class="ve-input-group">
             <i class="bi bi-pen"></i>
             <textarea rows="3" name="content" class="ve-textarea" placeholder="Share your experience..."
               [(ngModel)]="formModel.content">
-          </textarea>
+            </textarea>
           </div>
           <button (click)="saveFeedBack()" class="ve-btn-submit">
             <i class="bi bi-send"></i> Submit Feedback
           </button>
         </div>
 
-        <!-- Feedback List -->
         <div class="ve-feedback-section">
           <h4 class="ve-feedback-section__title mt-4">
             <i class="bi bi-chat-dots"></i> Feedback
