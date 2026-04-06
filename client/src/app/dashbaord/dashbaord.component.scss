@@ -513,7 +513,7 @@
 .event-card-title {
   font-size: 15px;
   font-weight: 600;
-  color: #E8E8E8;
+  color: #F0A500;
   margin-bottom: 8px;
   line-height: 1.4;
 }
@@ -549,46 +549,57 @@
   i { color: #2E86AB; width: 14px; font-size: 11px; }
 }
 
-.event-card-actions { display: flex; gap: 8px; }
+/* ✅ Stack schedule into Date + Time */
+.meta-stack {
+  align-items: flex-start;   // icon aligns nicely with two lines
+}
 
-.btn-card-action {
-  flex: 1;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 12px;
+.meta-stack-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.meta-line {
+  display: block;
+}
+
+/* Make date slightly brighter than time (still same theme) */
+.meta-date {
+  color: rgba(255, 255, 255, 0.65);
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
+  letter-spacing: 0.2px;
+}
+
+.meta-time {
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 500;
+}
+
+/* ✅ Center "by ..." in the empty space */
+.event-byline {
+  margin-top: auto;                // pushes it down into the empty area
+  padding: 10px 12px;
   text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.06);    // subtle, matches your dark glass style
+  border-radius: 10px;
+}
 
-  &.update-btn {
-    background: rgba(230,126,34,0.12);
-    color: #E67E22;
-    border: 1px solid rgba(230,126,34,0.2);
-    &:hover { background: #E67E22; color: white; }
-  }
+.event-byline .by-name {
+  color: #F0A500;                  // already used in your theme
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: capitalize;
+}
 
-  &.feedback-btn {
-    background: rgba(46,134,171,0.12);
-    color: #2E86AB;
-    border: 1px solid rgba(46,134,171,0.2);
-    &:hover { background: #2E86AB; color: white; }
-  }
-
-  &.enroll-btn {
-    background: rgba(240,165,0,0.12);
-    color: #F0A500;
-    border: 1px solid rgba(240,165,0,0.2);
-    &:hover { background: #F0A500; color: #151E27; }
-  }
-
-  &.status-btn {
-    background: rgba(46,134,171,0.12);
-    color: #2E86AB;
-    border: 1px solid rgba(46,134,171,0.2);
-    &:hover { background: #2E86AB; color: white; }
-  }
+/* Optional: for TBA state */
+.event-byline.muted .by-name {
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
 }
 
 .status-badge {
@@ -961,6 +972,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  justify-content: space-between;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
   height: 100%;

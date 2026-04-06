@@ -198,4 +198,19 @@ export class DashbaordComponent implements OnInit {
     if (status === 'COMPLETED') return 'badge-completed';
     return '';
   }
+
+  getDate(schedule: string): string {
+  if (!schedule) return '';
+  // If schedule looks like "2026-04-06 10:30 AM" or "06/04/2026 10:30"
+  const parts = schedule.split(' ');
+  // date = first token
+  return parts[0] || schedule;
+}
+
+getTime(schedule: string): string {
+  if (!schedule) return '';
+  const parts = schedule.split(' ');
+  // time = everything after first token
+  return parts.slice(1).join(' ') || '';
+}
 }

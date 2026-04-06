@@ -168,8 +168,7 @@
               <td>
                 <!-- Show assigned professionals or "Not Assigned" -->
                 <ng-container *ngIf="event.professionals && event.professionals.length > 0">
-                  <span class="pro-assigned-tag" 
-                    *ngFor="let pro of event.professionals">
+                  <span class="pro-assigned-tag" *ngFor="let pro of event.professionals">
                     <i class="bi bi-person-check me-1"></i>{{ pro.username }}
                   </span>
                 </ng-container>
@@ -342,24 +341,32 @@
               <p class="event-card-desc">{{ event.description }}</p>
 
               <div class="event-card-footer">
-                <div class="event-meta">
+
+                <div class="event-meta meta-stack">
                   <i class="fas fa-clock"></i>
-                  <span>{{ event.schedule }}</span>
+
+                  <div class="meta-stack-text">
+                    <span class="meta-line meta-date">{{ getDate(event.schedule) }}</span>
+                    <span class="meta-line meta-time">{{ getTime(event.schedule) }}</span>
+                  </div>
                 </div>
+
                 <div class="event-meta">
                   <i class="fas fa-map-marker-alt"></i>
                   <span>{{ event.location }}</span>
                 </div>
+
               </div>
 
-              <div class="event-card-actions">
-                <button class="btn-card-action update-btn" (click)="goToUpdateStatus(); $event.stopPropagation()">
-                  <i class="fas fa-sync-alt me-1"></i>Update Status
-                </button>
-                <button class="btn-card-action feedback-btn" (click)="goToAddFeedback(); $event.stopPropagation()">
-                  <i class="fas fa-comment me-1"></i>Feedback
-                </button>
+
+              <div class="event-byline" *ngIf="event.professionals?.length">
+                Professional : <span class="by-name">{{ event.professionals[0]?.username }}</span>
               </div>
+
+              <div class="event-byline muted" *ngIf="!event.professionals || event.professionals.length === 0">
+                Professional : <span class="by-name">TBA</span>
+              </div>
+
 
               <div class="flip-hint">
                 <i class="fas fa-sync-alt me-1"></i>Hover to see more
@@ -566,24 +573,32 @@
               <p class="event-card-desc">{{ event.description }}</p>
 
               <div class="event-card-footer">
-                <div class="event-meta">
+
+                <div class="event-meta meta-stack">
                   <i class="fas fa-clock"></i>
-                  <span>{{ event.schedule }}</span>
+
+                  <div class="meta-stack-text">
+                    <span class="meta-line meta-date">{{ getDate(event.schedule) }}</span>
+                    <span class="meta-line meta-time">{{ getTime(event.schedule) }}</span>
+                  </div>
                 </div>
+
                 <div class="event-meta">
                   <i class="fas fa-map-marker-alt"></i>
                   <span>{{ event.location }}</span>
                 </div>
+
               </div>
 
-              <div class="event-card-actions">
-                <button class="btn-card-action enroll-btn" (click)="goToViewEvents(); $event.stopPropagation()">
-                  <i class="fas fa-plus me-1"></i>Enroll Now
-                </button>
-                <button class="btn-card-action status-btn" (click)="goToViewEvents(); $event.stopPropagation()">
-                  <i class="fas fa-info-circle me-1"></i>Details
-                </button>
+
+              <div class="event-byline" *ngIf="event.professionals?.length">
+                Professional : <span class="by-name">{{ event.professionals[0]?.username }}</span>
               </div>
+
+              <div class="event-byline muted" *ngIf="!event.professionals || event.professionals.length === 0">
+                Professional : <span class="by-name">TBA</span>
+              </div>
+
 
               <div class="flip-hint">
                 <i class="fas fa-sync-alt me-1"></i>Hover to see more
