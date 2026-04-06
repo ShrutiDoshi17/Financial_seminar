@@ -54,13 +54,8 @@
         <i class="bi bi-calendar-event"></i>
         <span>Event Listings</span>
         <div>
-          <input
-            type="text"
-            class="ve-search-input"
-            placeholder="Search by title or ID..."
-            [(ngModel)]="searchQuery"
-            (input)="applyFilter()"
-          />
+          <input type="text" class="ve-search-input" placeholder="Search by title or ID..." [(ngModel)]="searchQuery"
+            (input)="applyFilter()" />
         </div>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
@@ -94,8 +89,10 @@
                 </span>
               </td>
               <td>
-                <button class="ve-btn-details" (click)="viewDetails(event)">
-                  <i class="bi bi-eye"></i> Details
+                <button class="ve-btn-details" (click)="toggleDetails(event)">
+                  <i class="bi bi-eye" *ngIf="selectedEvent.id !== event.id"></i>
+                  <i class="bi bi-x-circle" *ngIf="selectedEvent.id === event.id"></i>
+                  {{ selectedEvent.id === event.id ? 'Close' : 'Details' }}
                 </button>
               </td>
             </tr>
@@ -109,8 +106,8 @@
           <i class="bi bi-chevron-left"></i>
         </button>
 
-        <button *ngFor="let page of pageNumbers" class="ve-page-btn"
-         [class.ve-page-btn--active]="page === currentPage" (click)="changePage(page)">
+        <button *ngFor="let page of pageNumbers" class="ve-page-btn" [class.ve-page-btn--active]="page === currentPage"
+          (click)="changePage(page)">
           {{ page }}
         </button>
 

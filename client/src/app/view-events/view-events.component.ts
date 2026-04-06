@@ -90,6 +90,14 @@ export class ViewEventsComponent implements OnInit {
     });
   }
 
+  toggleDetails(event: any) {
+  if (this.selectedEvent.id === event.id) {
+    this.selectedEvent = {};
+  } else {
+    this.viewDetails(event);
+  }
+}
+
   isCompleted(): boolean {
     return this.selectedEvent?.status === 'COMPLETED';
   }

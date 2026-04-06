@@ -229,10 +229,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
-
-  /* ✅ Center the card */
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .ve-table-card__header {
@@ -457,6 +454,13 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.ve-action-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .ve-btn-details:hover {
