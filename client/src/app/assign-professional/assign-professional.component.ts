@@ -15,7 +15,7 @@ export class AssignProfessionalComponent implements OnInit {
   showError: boolean = false;
   errorMessage: any;
   eventList: any = [];
-  allEvents: any = []; // keep full list for date conflict checks
+  allEvents: any = [];
   assignModel: any = {};
   showMessage: any;
   responseMessage: any;
@@ -33,7 +33,6 @@ export class AssignProfessionalComponent implements OnInit {
       userId:  [null, [Validators.required]]
     });
 
-    // When event selection changes, reset professional selection
     this.itemForm.get('eventId')?.valueChanges.subscribe(() => {
       this.itemForm.get('userId')?.reset();
     });
@@ -52,15 +51,13 @@ export class AssignProfessionalComponent implements OnInit {
 
     this.httpService.getEventByInstitutionId(userId).subscribe((data: any) => {
       this.allEvents = data;
-      // Only show events that have NO professional assigned yet
       this.eventList = data.filter(
         (event: any) => !event.professionals || event.professionals.length === 0
       );
-      console.log('All events:', this.allEvents);
-      console.log('Unassigned events:', this.eventList);
     }, error => {
       this.showError = true;
       this.errorMessage = "An error occurred. Please try again later.";
+      setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
       console.error('Error:', error);
     });
   }
@@ -69,54 +66,42 @@ export class AssignProfessionalComponent implements OnInit {
     this.professionalsList = [];
     this.httpService.GetAllProfessionals().subscribe((data: any) => {
       this.professionalsList = data;
-      console.log('All professionals:', this.professionalsList);
     }, error => {
       this.showError = true;
       this.errorMessage = "An error occurred. Please try again later.";
+      setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
       console.error('Error:', error);
     });
   }
 
-  // Get the date part only (e.g. "2026-04-10") from a schedule string
   getDatePart(schedule: string): string {
     if (!schedule) return '';
-    // handles both "2026-04-10T10:00" and "2026-04-10 10:00" and "2026-04-10"
     return schedule.split('T')[0].split(' ')[0];
   }
 
-  // Get the selected event object
   get selectedEvent(): any {
     const eventId = this.itemForm.get('eventId')?.value;
     return this.allEvents.find((e: any) => e.id == eventId) || null;
   }
 
-  // Get professionals who are already busy on the selected event's date
   get busyProfessionalIds(): Set<number> {
     const busy = new Set<number>();
     if (!this.selectedEvent) return busy;
 
     const selectedDate = this.getDatePart(this.selectedEvent.schedule);
-
-    // Check all events (not just unassigned) for conflicts on same date
     this.allEvents.forEach((event: any) => {
       const eventDate = this.getDatePart(event.schedule);
       if (eventDate === selectedDate && event.professionals) {
-        event.professionals.forEach((pro: any) => {
-          busy.add(pro.id);
-        });
+        event.professionals.forEach((pro: any) => { busy.add(pro.id); });
       }
     });
-
     return busy;
   }
 
-  // Returns professionals available for the selected event's date
   get availableProfessionals(): any[] {
     if (!this.selectedEvent) return this.professionalsList;
     const busy = this.busyProfessionalIds;
-    return this.professionalsList.filter(
-      (pro: any) => !busy.has(pro.id)
-    );
+    return this.professionalsList.filter((pro: any) => !busy.has(pro.id));
   }
 
   onSubmit() {
@@ -130,32 +115,26 @@ export class AssignProfessionalComponent implements OnInit {
       this.httpService.assignProfessionals(assignedEventId, assignedUserId)
         .subscribe((data: any) => {
 
-          // Find the professional object
-          const assignedPro = this.professionalsList.find(
-            (p: any) => p.id === assignedUserId
-          );
+          const assignedPro = this.professionalsList.find((p: any) => p.id === assignedUserId);
+          const eventInAll  = this.allEvents.find((e: any) => e.id === assignedEventId);
 
-          // Update the event in allEvents to include the new professional
-          const eventInAll = this.allEvents.find(
-            (e: any) => e.id === assignedEventId
-          );
           if (eventInAll && assignedPro) {
             if (!eventInAll.professionals) eventInAll.professionals = [];
             eventInAll.professionals.push(assignedPro);
           }
 
-          // Remove this event from the dropdown (it now has a professional)
-          this.eventList = this.eventList.filter(
-            (e: any) => e.id !== assignedEventId
-          );
+          this.eventList = this.eventList.filter((e: any) => e.id !== assignedEventId);
 
           this.showMessage = true;
           this.responseMessage = "Professional assigned successfully!";
           this.itemForm.reset();
 
+          setTimeout(() => { this.showMessage = false; this.responseMessage = ''; }, 3000);
+
         }, error => {
           this.showError = true;
           this.errorMessage = "An error occurred while assigning. Please try again later.";
+          setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
           console.error('Error:', error);
         });
     } else {
