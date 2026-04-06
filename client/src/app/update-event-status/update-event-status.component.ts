@@ -23,8 +23,13 @@ export class UpdateEventStatusComponent implements OnInit {
   updateId: any;
   isAddRemarks: boolean = false;
 
-  constructor(private datePipe: DatePipe, public router: Router, public httpService: HttpService, private formBuilder: FormBuilder, private authService: AuthService) {
-  }
+  constructor(
+    private datePipe: DatePipe,
+    public router: Router,
+    public httpService: HttpService,
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.getEvent();
@@ -36,64 +41,71 @@ export class UpdateEventStatusComponent implements OnInit {
     const userId = userIdString ? parseInt(userIdString, 10) : null;
     this.httpService.getEventByProfessional(userId).subscribe((data: any) => {
       this.eventList = data;
-      console.log(this.eventList);
     }, error => {
       this.showError = true;
-      this.errorMessage = "An error occurred.. Please try again later.";
-      console.error('Login error:', error);
-    });;
+      this.errorMessage = "An error occurred. Please try again later.";
+      setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
+      console.error('Error:', error);
+    });
   }
 
   addStatus(val: any) {
     this.updateId = val.id;
+    this.selectedEvent = val;
   }
 
   addRemarks(val: any) {
     this.updateId = val.id;
     this.selectedEvent = val;
-
   }
+
   updateStatus() {
     if (this.updateId != null) {
       this.showError = false;
       this.httpService.UpdateEventStatus(this.updateId, this.formModel.status).subscribe((data: any) => {
         this.getEvent();
         this.updateId = null;
-        this.showMessage = true
-        this.responseMessage = "Status updated successfully!"
+        this.selectedEvent = {};
+        this.showMessage = true;
+        this.responseMessage = "Status updated successfully!";
         setTimeout(() => {
-          this.showMessage = false
-          this.responseMessage = ''
-        }, 2000)
+          this.showMessage = false;
+          this.responseMessage = '';
+        }, 3000);
       }, error => {
-        // Handle error
         this.showError = true;
-        this.errorMessage = "An error occurred while created in. Please try again later.";
-        console.error('Login error:', error);
-      });;
+        this.errorMessage = "An error occurred while updating status. Please try again.";
+        setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
+        console.error('Error:', error);
+      });
     }
   }
 
   saveFeedBack() {
-    // debugger;
     if (this.updateId != null && this.formModel.content) {
       this.showError = false;
       const formattedTime = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
-
       this.formModel.timestamp = formattedTime;
+
       const userIdString = localStorage.getItem('userId');
       const userId = userIdString ? parseInt(userIdString, 10) : null;
-      this.httpService.AddFeedback(this.updateId, userId, this.formModel).subscribe((data: any) => {
 
+      this.httpService.AddFeedback(this.updateId, userId, this.formModel).subscribe((data: any) => {
         this.getEvent();
         this.updateId = null;
+        this.formModel = { status: null };
+        this.showMessage = true;
+        this.responseMessage = "Feedback submitted successfully!";
+        setTimeout(() => {
+          this.showMessage = false;
+          this.responseMessage = '';
+        }, 3000);
       }, error => {
         this.showError = true;
-        this.errorMessage = "An error occurred while created in. Please try again later.";
-        console.error('Login error:', error);
-      });;
+        this.errorMessage = "An error occurred while submitting feedback. Please try again.";
+        setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
+        console.error('Error:', error);
+      });
     }
   }
-
-
 }
