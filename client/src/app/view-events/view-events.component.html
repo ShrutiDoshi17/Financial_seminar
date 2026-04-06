@@ -54,8 +54,8 @@
         <i class="bi bi-calendar-event"></i>
         <span>Event Listings</span>
         <div>
-          <input type="text" class="ve-search-input" placeholder="Search by title or ID..." [(ngModel)]="searchQuery"
-            (input)="applyFilter()" />
+          <input type="text" class="ve-search-input" placeholder="Search by title or ID..."
+            [(ngModel)]="searchQuery" (input)="applyFilter()" />
         </div>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
@@ -64,21 +64,25 @@
         <table class="ve-table">
           <thead>
             <tr>
-              <th>#</th>
+              <!-- ✅ # column REMOVED -->
               <th>Title</th>
               <th>Schedule</th>
               <th>Location</th>
               <th>Status</th>
+              <th>Enroll</th>  <!-- ✅ NEW column -->
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let event of paginatedList" [class.ve-table__row--active]="selectedEvent.id === event.id">
-              <td class="ve-table__id">{{ event.id }}</td>
+            <tr *ngFor="let event of paginatedList"
+              [class.ve-table__row--active]="selectedEvent.id === event.id">
+
+              <!-- ✅ # td REMOVED -->
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>
               <td>{{ event.location }}</td>
+
               <td>
                 <span class="ve-status-badge" [ngClass]="{
                     've-status-badge--planned':   event.status === 'PLANNED',
@@ -88,6 +92,29 @@
                   {{ event.status }}
                 </span>
               </td>
+
+              <!-- ✅ NEW Enroll column -->
+              <td>
+                <button
+                  *ngIf="!enrolledEventIds.has(event.id) && enrollingEventId !== event.id"
+                  class="ve-btn-enroll-inline"
+                  (click)="enrollFromTable(event)">
+                  <i class="bi bi-person-plus"></i> Enroll Now
+                </button>
+
+                <span
+                  *ngIf="enrollingEventId === event.id"
+                  class="ve-enrolling-spinner">
+                  <i class="bi bi-arrow-repeat ve-spin"></i> Processing...
+                </span>
+
+                <span
+                  *ngIf="enrolledEventIds.has(event.id)"
+                  class="ve-enrolled-badge">
+                  <i class="bi bi-check-circle-fill"></i> Enrolled
+                </span>
+              </td>
+
               <td>
                 <button class="ve-btn-details" (click)="toggleDetails(event)">
                   <i class="bi bi-eye" *ngIf="selectedEvent.id !== event.id"></i>
@@ -95,6 +122,7 @@
                   {{ selectedEvent.id === event.id ? 'Close' : 'Details' }}
                 </button>
               </td>
+
             </tr>
           </tbody>
         </table>
@@ -105,16 +133,13 @@
         <button class="ve-page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
           <i class="bi bi-chevron-left"></i>
         </button>
-
-        <button *ngFor="let page of pageNumbers" class="ve-page-btn" [class.ve-page-btn--active]="page === currentPage"
-          (click)="changePage(page)">
+        <button *ngFor="let page of pageNumbers" class="ve-page-btn"
+          [class.ve-page-btn--active]="page === currentPage" (click)="changePage(page)">
           {{ page }}
         </button>
-
         <button class="ve-page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
           <i class="bi bi-chevron-right"></i>
         </button>
-
         <span class="ve-page-info">Page {{ currentPage }} of {{ totalPages }}</span>
       </div>
 
@@ -150,13 +175,11 @@
       </div>
 
       <div class="ve-detail-card__actions">
-
         <ng-container *ngIf="!isCheckingEnrollment">
           <button *ngIf="!isAlreadyEnrolled && !isCompleted()" class="ve-btn-enroll" (click)="enroll()">
             <i class="bi bi-person-plus me-2"></i>
             Enroll Now
           </button>
-
           <button *ngIf="isAlreadyEnrolled" class="ve-btn-enrolled" disabled>
             <i class="bi bi-check-circle me-2"></i>
             Enrolled
@@ -170,12 +193,11 @@
         <div *ngIf="status" class="ve-status-result">
           <i class="bi bi-info-circle"></i> {{ status }}
         </div>
-
       </div>
 
       <div class="ve-divider"></div>
-      <div *ngIf="isCompleted()">
 
+      <div *ngIf="isCompleted()">
         <div *ngIf="isAlreadyEnrolled" class="ve-feedback-form">
           <h4 class="ve-feedback-form__title">Leave Feedback</h4>
           <div class="ve-input-group">

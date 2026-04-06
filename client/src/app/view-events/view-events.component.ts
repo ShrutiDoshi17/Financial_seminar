@@ -34,6 +34,11 @@ export class ViewEventsComponent implements OnInit {
   isEnrolling: boolean = false;
   isCheckingEnrollment: boolean = false;
 
+  // ✅ NEW — tracks which event IDs the user is already enrolled in
+  enrolledEventIds: Set<number> = new Set();
+  // ✅ NEW — tracks which event is currently processing payment (row-level spinner)
+  enrollingEventId: number | null = null;
+
   constructor(
     private datePipe: DatePipe,
     public router: Router,
@@ -46,6 +51,93 @@ export class ViewEventsComponent implements OnInit {
     const userIdString = localStorage.getItem('userId');
     this.userId = userIdString ? parseInt(userIdString, 10) : null;
     this.getEvent();
+    this.loadEnrolledEventIds(); // ✅ NEW — load enrolled IDs on init
+  }
+
+  // ✅ NEW — fetches all event IDs user is enrolled in
+  loadEnrolledEventIds() {
+    this.httpService.getMyEnrolledEventIds(this.userId).subscribe({
+      next: (ids: number[]) => {
+        this.enrolledEventIds = new Set(ids);
+      },
+      error: () => {
+        // silent fail — table still works, just won't show badges
+      }
+    });
+  }
+
+  // ✅ NEW — called from Enroll button in the table row
+  enrollFromTable(event: any) {
+    if (this.enrollingEventId === event.id || this.enrolledEventIds.has(event.id)) return;
+    this.enrollingEventId = event.id;
+
+    const amount = 100; // ₹1 in paise
+
+    this.httpService.createPaymentOrder(amount).subscribe({
+      next: (order: any) => {
+        const options = {
+          key: order.keyId,
+          amount: order.amount,
+          currency: order.currency,
+          name: 'FinSeminar',
+          description: event.title,
+          order_id: order.orderId,
+          handler: (response: any) => {
+            const paymentData = {
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+              userId: this.userId,
+              eventId: event.id
+            };
+
+            this.ngZone.run(() => {
+              this.httpService.verifyAndEnroll(paymentData).subscribe({
+                next: () => {
+                  this.enrollingEventId = null;
+                  this.enrolledEventIds.add(event.id);
+                  // if this event is open in detail panel, sync it too
+                  if (this.selectedEvent?.id === event.id) {
+                    this.isAlreadyEnrolled = true;
+                  }
+                  this.showToast('Enrolled successfully!');
+                },
+                error: () => {
+                  this.enrollingEventId = null;
+                  this.showErrorToast('Payment verified but enrollment failed. Contact support.');
+                }
+              });
+            });
+          },
+          "payment.failed": (response: any) => {
+            this.ngZone.run(() => {
+              this.enrollingEventId = null;
+              this.showErrorToast('Payment failed. Please try again.');
+            });
+          },
+          prefill: { name: '', email: '', contact: '' },
+          theme: { color: '#2E86AB' },
+          modal: {
+            ondismiss: () => {
+              this.ngZone.run(() => {
+                this.enrollingEventId = null;
+                this.showErrorToast('Payment was not completed. Please try again.');
+              });
+            }
+          },
+          "modal.escape": false,
+          notify: { polling: false },
+          retry: { enabled: false }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      },
+      error: () => {
+        this.enrollingEventId = null;
+        this.showErrorToast('Failed to initiate payment. Please try again.');
+      }
+    });
   }
 
   getEvent() {
@@ -53,7 +145,6 @@ export class ViewEventsComponent implements OnInit {
       next: (data: any) => {
         this.eventList = data;
         this.filteredList = this.eventList;
-        // Re-sync selectedEvent if one is open
         if (this.selectedEvent?.id) {
           this.refreshSelectedEvent();
         }
@@ -75,7 +166,7 @@ export class ViewEventsComponent implements OnInit {
   viewDetails(event: any) {
     this.selectedEvent = event;
     this.isAlreadyEnrolled = false;
-    this.isCheckingEnrollment = true; // flag
+    this.isCheckingEnrollment = true;
     this.status = '';
 
     this.httpService.checkEnrollment(this.selectedEvent.id, this.userId).subscribe({
@@ -91,12 +182,12 @@ export class ViewEventsComponent implements OnInit {
   }
 
   toggleDetails(event: any) {
-  if (this.selectedEvent.id === event.id) {
-    this.selectedEvent = {};
-  } else {
-    this.viewDetails(event);
+    if (this.selectedEvent.id === event.id) {
+      this.selectedEvent = {};
+    } else {
+      this.viewDetails(event);
+    }
   }
-}
 
   isCompleted(): boolean {
     return this.selectedEvent?.status === 'COMPLETED';
@@ -113,16 +204,16 @@ export class ViewEventsComponent implements OnInit {
         event.id?.toString().includes(query) ||
         event.title?.toLowerCase().includes(query) ||
         event.location?.toLowerCase().includes(query) ||
-        event.status?.toLowerCase().includes(query) 
+        event.status?.toLowerCase().includes(query)
       );
     });
-  } 
+  }
 
   enroll() {
     if (this.isEnrolling || this.isAlreadyEnrolled) return;
     this.isEnrolling = true;
 
-    const amount = 100; // ₹1 in paise — change as needed
+    const amount = 100;
 
     this.httpService.createPaymentOrder(amount).subscribe({
       next: (order: any) => {
@@ -134,7 +225,6 @@ export class ViewEventsComponent implements OnInit {
           description: this.selectedEvent.title,
           order_id: order.orderId,
           handler: (response: any) => {
-            // Payment successful — now verify and enroll
             const paymentData = {
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: response.razorpay_payment_id,
@@ -148,15 +238,15 @@ export class ViewEventsComponent implements OnInit {
                 next: () => {
                   this.isEnrolling = false;
                   this.isAlreadyEnrolled = true;
+                  this.enrolledEventIds.add(this.selectedEvent.id); // ✅ sync table badge too
                   this.showToast('Enrolled successfully!');
-                  // this.getEvent();
                 },
                 error: () => {
                   this.isEnrolling = false;
                   this.showErrorToast('Payment verified but enrollment failed. Contact support.');
                 }
               });
-            })
+            });
           },
           "payment.failed": (response: any) => {
             this.ngZone.run(() => {
@@ -164,14 +254,8 @@ export class ViewEventsComponent implements OnInit {
               this.showErrorToast('Payment failed. Please try again.');
             });
           },
-          prefill: {
-            name: '',
-            email: '',
-            contact: ''
-          },
-          theme: {
-            color: '#2E86AB'
-          },
+          prefill: { name: '', email: '', contact: '' },
+          theme: { color: '#2E86AB' },
           modal: {
             ondismiss: () => {
               this.ngZone.run(() => {
@@ -181,12 +265,8 @@ export class ViewEventsComponent implements OnInit {
             }
           },
           "modal.escape": false,
-          notify: {
-            polling: false
-          },
-          retry: {
-            enabled: false
-          },
+          notify: { polling: false },
+          retry: { enabled: false }
         };
 
         const rzp = new Razorpay(options);
@@ -214,10 +294,10 @@ export class ViewEventsComponent implements OnInit {
       next: () => {
         this.formModel = {};
         this.showToast('Feedback submitted successfully!');
-        this.getEvent(); // this will also refresh selectedEvent via refreshSelectedEvent()
+        this.getEvent();
       },
       error: () => {
-        this.showErrorToast('Failed to submit feedback. Please try again.')
+        this.showErrorToast('Failed to submit feedback. Please try again.');
       }
     });
   }
@@ -347,4 +427,4 @@ export class ViewEventsComponent implements OnInit {
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
-} 
+}

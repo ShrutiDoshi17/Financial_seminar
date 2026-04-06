@@ -902,3 +902,37 @@ color: rgba(255, 255, 255, 0.35);
   overflow-x: auto;
   border-radius: 20px 20px 0 0;;
 }
+
+/* ✅ Enrolled badge in table */
+.ve-enrolled-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.35);
+  color: #2ECC71;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ✅ Processing spinner in table */
+.ve-enrolling-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: #F0A500;
+}
+
+.ve-spin {
+  display: inline-block;
+  animation: veSpin 1s linear infinite;
+}
+
+@keyframes veSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

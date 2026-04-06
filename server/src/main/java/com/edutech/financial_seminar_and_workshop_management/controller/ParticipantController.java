@@ -1,6 +1,5 @@
 package com.edutech.financial_seminar_and_workshop_management.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,7 @@ import com.edutech.financial_seminar_and_workshop_management.service.EventServic
 import com.edutech.financial_seminar_and_workshop_management.service.FeedbackService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ParticipantController {
@@ -54,5 +54,16 @@ public class ParticipantController {
     public ResponseEntity<Feedback> provideFeedback(@RequestParam Long userId, @PathVariable Long eventId, @RequestBody Feedback feedback) {
         Feedback providedFeedback = feedbackService.createFeedback(eventId, userId, feedback);
         return ResponseEntity.ok(providedFeedback);
+    }
+
+    // ✅ NEW ENDPOINT — returns list of event IDs the user is enrolled in
+    // Used by frontend to show "Enrolled" badge directly in the event table
+    @GetMapping("/api/participant/my-enrolled-event-ids")
+    public ResponseEntity<List<Long>> getMyEnrolledEventIds(@RequestParam Long userId) {
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByUserId(userId);
+        List<Long> eventIds = enrollments.stream()
+                .map(e -> e.getEvent().getId())
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(eventIds);
     }
 }

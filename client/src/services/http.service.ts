@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 export class HttpService {
   private apiUrl = environment.apiUrl
   httpOptions: { headers: HttpHeaders }
+  baseUrl: any;
 
   constructor(private http: HttpClient, private service: AuthService) {
     const token = service.getToken()
@@ -127,6 +128,12 @@ export class HttpService {
   verifyRegistrationOtp(email: string, otp: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/user/verify-registration-otp`, { email, otp });
   }
+
+  getMyEnrolledEventIds(userId: number): Observable<number[]> {
+  return this.http.get<number[]>(
+    `${this.baseUrl}/api/participant/my-enrolled-event-ids?userId=${userId}`
+  );
+}
 
   //   downloadCertificate(eventId: number) {
   //   return this.http.get(

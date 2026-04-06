@@ -1,10 +1,7 @@
 package com.edutech.financial_seminar_and_workshop_management.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional; 
 
 import com.edutech.financial_seminar_and_workshop_management.entity.Enrollment;
 import com.edutech.financial_seminar_and_workshop_management.entity.Event;
@@ -27,14 +24,11 @@ public class EnrollmentService {
     @Autowired
     private UserRepository userRepository;
 
-    
     public Enrollment enrollInEvent(Long userId, Long eventId) {
-        // if(enrollmentRepository.existsByEventIdAndUserId(eventId, userId)) {
-        //     throw new IllegalStateException("User already enrolled!");
-        // }
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
 
         Enrollment enrollment = new Enrollment();
         enrollment.setUser(user);
@@ -46,17 +40,14 @@ public class EnrollmentService {
 
     public Enrollment getEnrollmentByUserIdAndEventId(Long userId, Long eventId) {
         List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
-        Enrollment enrollment = enrollments.stream().filter(e -> 
-            e.getEvent().getId().equals(eventId)
-        )
-        .findFirst()
-        .orElse(null);
+        return enrollments.stream()
+                .filter(e -> e.getEvent().getId().equals(eventId))
+                .findFirst()
+                .orElse(null);
+    }
 
-        return enrollment;
-        // Optional<Enrollment> enrollment = enrollmentRepository.findByUserIdAndEventId(userId, eventId);
-        // if(enrollment.isPresent()) {
-        //     return enrollment.get();
-        // }
-        // return null;
+    // ✅ NEW METHOD — used by the new endpoint in ParticipantController
+    public List<Enrollment> getEnrollmentsByUserId(Long userId) {
+        return enrollmentRepository.findByUserId(userId);
     }
 }
