@@ -454,3 +454,19 @@ $gradient-panel: linear-gradient(160deg, #1C2B3A 0%, #151E27 100%);
   .form-title { font-size: 1.35rem; }
   .brand-content h1 { font-size: 1.6rem; }
 }
+
+/* OTP Icon */
+.otp-icon {
+width: 64px;
+height: 64px;
+border-radius: 50%;
+background: rgba(240, 165, 0, 0.1);
+border: 2px solid rgba(240, 165, 0, 0.3);
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0 auto 16px;
+font-size: 28px;
+color: #F0A500;
+}
+

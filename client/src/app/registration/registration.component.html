@@ -1,6 +1,5 @@
 <div class="register-wrapper">
-
-  <!-- ✅ SUCCESS TOAST -->
+  <!-- SUCCESS TOAST -->
   <div *ngIf="showMessage" class="toast-host">
     <div class="toast-notification success-toast">
       <div class="toast-icon">
@@ -16,8 +15,7 @@
       <div class="toast-progress success-progress"></div>
     </div>
   </div>
-
-  <!-- ❌ ERROR TOAST -->
+  <!-- ERROR TOAST -->
   <div *ngIf="showError" class="toast-host">
     <div class="toast-notification error-toast">
       <div class="toast-icon">
@@ -33,63 +31,51 @@
       <div class="toast-progress error-progress"></div>
     </div>
   </div>
-
-  <!-- ===== LEFT PANEL ===== -->
+  <!-- LEFT PANEL — 100% unchanged -->
   <div class="left-panel">
-
     <div class="finance-illustration">
       <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-
         <defs>
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(240,165,0,0.08)" stroke-width="1"/>
           </pattern>
         </defs>
         <rect width="400" height="300" fill="url(#grid)"/>
-
-        <!-- Bar Chart -->
         <g transform="translate(20, 20)">
           <line x1="30" y1="200" x2="200" y2="200" stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <line x1="30" y1="200" x2="30" y2="60"  stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <rect x="45"  y="140" width="25" height="60"  fill="rgba(46,134,171,0.7)" rx="4">
-            <animate attributeName="height" from="0" to="60"  dur="1s"   fill="freeze"/>
-            <animate attributeName="y"      from="200" to="140" dur="1s"   fill="freeze"/>
+          <line x1="30" y1="200" x2="30" y2="60" stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
+          <rect x="45" y="140" width="25" height="60" fill="rgba(46,134,171,0.7)" rx="4">
+            <animate attributeName="height" from="0" to="60" dur="1s" fill="freeze"/>
+            <animate attributeName="y" from="200" to="140" dur="1s" fill="freeze"/>
           </rect>
-          <rect x="85"  y="110" width="25" height="90"  fill="rgba(240,165,0,0.8)" rx="4">
-            <animate attributeName="height" from="0" to="90"  dur="1.2s" fill="freeze"/>
-            <animate attributeName="y"      from="200" to="110" dur="1.2s" fill="freeze"/>
+          <rect x="85" y="110" width="25" height="90" fill="rgba(240,165,0,0.8)" rx="4">
+            <animate attributeName="height" from="0" to="90" dur="1.2s" fill="freeze"/>
+            <animate attributeName="y" from="200" to="110" dur="1.2s" fill="freeze"/>
           </rect>
-          <rect x="125" y="80"  width="25" height="120" fill="rgba(46,134,171,0.7)" rx="4">
+          <rect x="125" y="80" width="25" height="120" fill="rgba(46,134,171,0.7)" rx="4">
             <animate attributeName="height" from="0" to="120" dur="1.4s" fill="freeze"/>
-            <animate attributeName="y"      from="200" to="80"  dur="1.4s" fill="freeze"/>
+            <animate attributeName="y" from="200" to="80" dur="1.4s" fill="freeze"/>
           </rect>
-          <rect x="165" y="60"  width="25" height="140" fill="rgba(240,165,0,0.8)" rx="4">
+          <rect x="165" y="60" width="25" height="140" fill="rgba(240,165,0,0.8)" rx="4">
             <animate attributeName="height" from="0" to="140" dur="1.6s" fill="freeze"/>
-            <animate attributeName="y"      from="200" to="60"  dur="1.6s" fill="freeze"/>
+            <animate attributeName="y" from="200" to="60" dur="1.6s" fill="freeze"/>
           </rect>
-          <text x="52"  y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q1</text>
-          <text x="92"  y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q2</text>
+          <text x="52" y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q1</text>
+          <text x="92" y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q2</text>
           <text x="132" y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q3</text>
           <text x="172" y="215" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle">Q4</text>
         </g>
-
-        <!-- Line Chart -->
         <g transform="translate(210, 20)">
           <line x1="10" y1="200" x2="170" y2="200" stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <line x1="10" y1="200" x2="10"  y2="60"  stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
-          <polyline points="10,180 45,150 80,120 115,90 150,60"
-            fill="none" stroke="#F0A500" stroke-width="3"
-            stroke-linecap="round" stroke-linejoin="round"/>
-          <polygon points="10,200 10,180 45,150 80,120 115,90 150,60 150,200"
-            fill="rgba(240,165,0,0.08)"/>
-          <circle cx="10"  cy="180" r="5" fill="#F0A500"/>
-          <circle cx="45"  cy="150" r="5" fill="#F0A500"/>
-          <circle cx="80"  cy="120" r="5" fill="#F0A500"/>
-          <circle cx="115" cy="90"  r="5" fill="#F0A500"/>
-          <circle cx="150" cy="60"  r="5" fill="#2E86AB"/>
+          <line x1="10" y1="200" x2="10" y2="60" stroke="rgba(240,165,0,0.4)" stroke-width="2"/>
+          <polyline points="10,180 45,150 80,120 115,90 150,60" fill="none" stroke="#F0A500" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <polygon points="10,200 10,180 45,150 80,120 115,90 150,60 150,200" fill="rgba(240,165,0,0.08)"/>
+          <circle cx="10" cy="180" r="5" fill="#F0A500"/>
+          <circle cx="45" cy="150" r="5" fill="#F0A500"/>
+          <circle cx="80" cy="120" r="5" fill="#F0A500"/>
+          <circle cx="115" cy="90" r="5" fill="#F0A500"/>
+          <circle cx="150" cy="60" r="5" fill="#2E86AB"/>
         </g>
-
-        <!-- Coin Stack -->
         <g transform="translate(25, 230)">
           <ellipse cx="35" cy="55" rx="30" ry="8" fill="rgba(240,165,0,0.6)"/>
           <rect x="5" y="35" width="60" height="20" fill="rgba(240,165,0,0.5)" rx="2"/>
@@ -98,8 +84,6 @@
           <ellipse cx="35" cy="15" rx="30" ry="8" fill="rgba(240,165,0,0.8)"/>
           <text x="35" y="19" fill="#151E27" font-size="10" font-weight="bold" text-anchor="middle">$</text>
         </g>
-
-        <!-- Pie Chart -->
         <g transform="translate(280, 220)">
           <path d="M 50 50 L 50 10 A 40 40 0 0 1 84 28 Z" fill="rgba(240,165,0,0.85)"/>
           <path d="M 50 50 L 84 28 A 40 40 0 0 1 84 72 Z" fill="rgba(46,134,171,0.85)"/>
@@ -109,28 +93,20 @@
           <circle cx="50" cy="50" r="18" fill="#1C2B3A"/>
           <text x="50" y="54" fill="#F0A500" font-size="10" font-weight="bold" text-anchor="middle">%</text>
         </g>
-
-        <!-- Floating currency symbols -->
-        <text x="195" y="50"  fill="rgba(240,165,0,0.3)"  font-size="22" font-weight="bold">$</text>
+        <text x="195" y="50" fill="rgba(240,165,0,0.3)" font-size="22" font-weight="bold">$</text>
         <text x="100" y="270" fill="rgba(46,134,171,0.3)" font-size="18" font-weight="bold">₹</text>
-        <text x="360" y="150" fill="rgba(240,165,0,0.2)"  font-size="26" font-weight="bold">€</text>
-
-        <!-- Trend indicator -->
+        <text x="360" y="150" fill="rgba(240,165,0,0.2)" font-size="26" font-weight="bold">€</text>
         <g transform="translate(170, 235)">
           <polygon points="15,20 0,20 7.5,5" fill="rgba(46,200,100,0.7)"/>
           <rect x="5" y="20" width="5" height="15" fill="rgba(46,200,100,0.7)"/>
           <text x="25" y="30" fill="rgba(46,200,100,0.9)" font-size="11" font-weight="bold">+24%</text>
         </g>
-
       </svg>
     </div>
-
     <div class="brand-content">
       <h1>Fin<span>Seminar</span></h1>
       <p>Join thousands of financial professionals and learners on one unified platform</p>
-
       <div class="role-cards">
-
         <div class="role-card" [class.role-active]="itemForm.get('role')?.value === 'INSTITUTION'">
           <div class="role-icon-wrap"><i class="bi bi-building"></i></div>
           <div class="role-info">
@@ -138,7 +114,6 @@
             <span class="role-desc">Create &amp; manage events</span>
           </div>
         </div>
-
         <div class="role-card" [class.role-active]="itemForm.get('role')?.value === 'PROFESSIONAL'">
           <div class="role-icon-wrap"><i class="bi bi-person-workspace"></i></div>
           <div class="role-info">
@@ -146,7 +121,6 @@
             <span class="role-desc">Conduct workshops</span>
           </div>
         </div>
-
         <div class="role-card" [class.role-active]="itemForm.get('role')?.value === 'PARTICIPANT'">
           <div class="role-icon-wrap"><i class="bi bi-mortarboard-fill"></i></div>
           <div class="role-info">
@@ -154,101 +128,123 @@
             <span class="role-desc">Enroll &amp; learn</span>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
-
-  <!-- ===== RIGHT PANEL ===== -->
+  <!-- RIGHT PANEL -->
   <div class="right-panel">
     <div class="form-card">
-
-      <div class="form-header">
-        <h2 class="form-title">Create Account</h2>
-        <p class="form-subtitle">Fill in the details below to get started</p>
-      </div>
-
-      <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
-
-        <!-- Username -->
-        <div class="field-group">
-          <label class="field-label">Username</label>
-          <div class="field-wrap"
-            [class.field-error-border]="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
-            <i class="bi bi-person field-icon"></i>
-            <input type="text" class="field-input" placeholder="Enter your username" formControlName="username"/>
-          </div>
-          <span class="error-msg" *ngIf="itemForm.get('username')?.errors?.['required'] && itemForm.get('username')?.touched">
-            Username is required
-          </span>
-          <span class="error-msg" *ngIf="itemForm.get('username')?.errors?.['pattern'] && itemForm.get('username')?.touched">
-            Username should start with an alphabet
-          </span>
+      <!-- ✅ STEP 1: Registration Form — your exact original -->
+      <ng-container *ngIf="!otpSent">
+        <div class="form-header">
+          <h2 class="form-title">Create Account</h2>
+          <p class="form-subtitle">Fill in the details below to get started</p>
         </div>
-
-        <!-- Email -->
-        <div class="field-group">
-          <label class="field-label">Email Address</label>
-          <div class="field-wrap"
-            [class.field-error-border]="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
-            <i class="bi bi-envelope field-icon"></i>
-            <input type="email" class="field-input" placeholder="Enter your email" formControlName="email"/>
+        <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+          <!-- Username -->
+          <div class="field-group">
+            <label class="field-label">Username</label>
+            <div class="field-wrap"
+              [class.field-error-border]="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
+              <i class="bi bi-person field-icon"></i>
+              <input type="text" class="field-input" placeholder="Enter your username" formControlName="username"/>
+            </div>
+            <span class="error-msg" *ngIf="itemForm.get('username')?.errors?.['required'] && itemForm.get('username')?.touched">
+              Username is required
+            </span>
+            <span class="error-msg" *ngIf="itemForm.get('username')?.errors?.['pattern'] && itemForm.get('username')?.touched">
+              Username should start with an alphabet
+            </span>
           </div>
-          <span class="error-msg" *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
-            <ng-container *ngIf="itemForm.get('email')?.errors?.['required']">Email is required</ng-container>
-            <ng-container *ngIf="itemForm.get('email')?.errors?.['email']">Enter a valid email address</ng-container>
-          </span>
-        </div>
-
-        <!-- Password -->
-        <div class="field-group">
-          <label class="field-label">Password</label>
-          <div class="field-wrap"
-            [class.field-error-border]="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
-            <i class="bi bi-lock field-icon"></i>
-            <input type="password" class="field-input" placeholder="Create a password" formControlName="password"/>
+          <!-- Email -->
+          <div class="field-group">
+            <label class="field-label">Email Address</label>
+            <div class="field-wrap"
+              [class.field-error-border]="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
+              <i class="bi bi-envelope field-icon"></i>
+              <input type="email" class="field-input" placeholder="Enter your email" formControlName="email"/>
+            </div>
+            <span class="error-msg" *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
+              <ng-container *ngIf="itemForm.get('email')?.errors?.['required']">Email is required</ng-container>
+              <ng-container *ngIf="itemForm.get('email')?.errors?.['email']">Enter a valid email address</ng-container>
+            </span>
           </div>
-          <span class="error-msg" *ngIf="itemForm.get('password')?.errors?.['required'] && itemForm.get('password')?.touched">
-            Password is required
-          </span>
-          <span class="error-msg" *ngIf="itemForm.get('password')?.errors?.['pattern'] && itemForm.get('password')?.touched">
-            Password must have at least 1 upper case character, lower case character, digit and special character.
-          </span>
-        </div>
-
-        <!-- Role -->
-        <div class="field-group">
-          <label class="field-label">Select Role</label>
-          <div class="field-wrap"
-            [class.field-error-border]="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
-            <i class="bi bi-person-badge field-icon"></i>
-            <select class="field-input field-select" formControlName="role">
-              <option [ngValue]="null" disabled>Select your role</option>
-              <option value="INSTITUTION">Institution</option>
-              <option value="PROFESSIONAL">Professional</option>
-              <option value="PARTICIPANT">Participant</option>
-            </select>
+          <!-- Password -->
+          <div class="field-group">
+            <label class="field-label">Password</label>
+            <div class="field-wrap"
+              [class.field-error-border]="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
+              <i class="bi bi-lock field-icon"></i>
+              <input type="password" class="field-input" placeholder="Create a password" formControlName="password"/>
+            </div>
+            <span class="error-msg" *ngIf="itemForm.get('password')?.errors?.['required'] && itemForm.get('password')?.touched">
+              Password is required
+            </span>
+            <span class="error-msg" *ngIf="itemForm.get('password')?.errors?.['pattern'] && itemForm.get('password')?.touched">
+              Password must have at least 1 upper case character, lower case character, digit and special character.
+            </span>
           </div>
-          <span class="error-msg" *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
-            Please select a role
-          </span>
+          <!-- Role -->
+          <div class="field-group">
+            <label class="field-label">Select Role</label>
+            <div class="field-wrap"
+              [class.field-error-border]="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
+              <i class="bi bi-person-badge field-icon"></i>
+              <select class="field-input field-select" formControlName="role">
+                <option [ngValue]="null" disabled>Select your role</option>
+                <option value="INSTITUTION">Institution</option>
+                <option value="PROFESSIONAL">Professional</option>
+                <option value="PARTICIPANT">Participant</option>
+              </select>
+            </div>
+            <span class="error-msg" *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
+              Please select a role
+            </span>
+          </div>
+          <!-- Submit -->
+          <button type="submit" class="btn-register">
+            <i class="bi bi-person-plus me-2"></i>
+            Create Account
+          </button>
+        </form>
+        <div class="form-footer">
+          Already have an account?
+          <a routerLink="/login" class="link-login">Sign In</a>
         </div>
-
-        <!-- Submit -->
-        <button type="submit" class="btn-register">
-          <i class="bi bi-person-plus me-2"></i>
-          Create Account
+      </ng-container>
+      <!-- ✅ STEP 2: OTP Screen — appears after form submit -->
+      <ng-container *ngIf="otpSent">
+        <div class="form-header">
+          <div class="otp-icon">
+            <i class="bi bi-envelope-check"></i>
+          </div>
+          <h2 class="form-title">Verify Your Email</h2>
+          <p class="form-subtitle">We sent a 6-digit OTP to <strong style="color: #F0A500;">{{ pendingFormData?.email }}</strong></p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Enter OTP</label>
+          <div class="field-wrap" [class.field-error-border]="otpError">
+            <i class="bi bi-shield-lock field-icon"></i>
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              class="field-input"
+              placeholder="Enter 6-digit OTP"
+              [(ngModel)]="otpValue"/>
+          </div>
+          <span class="error-msg" *ngIf="otpError">{{ otpError }}</span>
+        </div>
+        <button class="btn-register" (click)="verifyOtpAndRegister()">
+          <i class="bi bi-check-circle me-2"></i>
+          Verify &amp; Register
         </button>
-
-      </form>
-
-      <div class="form-footer">
-        Already have an account?
-        <a routerLink="/login" class="link-login">Sign In</a>
-      </div>
-
+        <div class="form-footer">
+          Wrong email?
+          <a class="link-login" style="cursor:pointer"
+            (click)="otpSent = false; otpValue = ''; otpError = ''">Go Back</a>
+        </div>
+      </ng-container>
     </div>
   </div>
-
 </div>

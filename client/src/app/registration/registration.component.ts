@@ -18,6 +18,10 @@ export class RegistrationComponent {
 
   showError: boolean = false;
   errorMessage: any;
+  otpSent: boolean = false;
+  otpValue: string = '';
+  otpError: string = '';
+  pendingFormData: any = null;
 
   constructor(public router: Router, private service: HttpService, private formBuilder: FormBuilder) {
     this.itemForm = this.formBuilder.group({
@@ -28,6 +32,34 @@ export class RegistrationComponent {
     });
   }
 
+  // onRegister() {
+  //   if (this.itemForm.valid) {
+  //     const username = this.itemForm.value.username;
+  //     this.service.checkUsernameExists(username).subscribe((exists: boolean) => {
+  //       if (exists) {
+  //         this.showError = true;
+  //         this.errorMessage = 'Username already exists.';
+  //         setTimeout(() => {
+  //           this.showError = false;
+  //           this.errorMessage = '';
+  //         }, 3000);
+  //       } else {
+  //         this.service.registerUser(this.itemForm.value).subscribe(data => {
+  //           this.showMessage = true;
+  //           this.responseMessage = 'You are successfully registered';
+  //           this.itemForm.reset();
+  //           setTimeout(() => {
+  //             this.router.navigate(['/login']);
+  //           }, 3000);
+  //         });
+  //       }
+  //     });
+  //   } else {
+  //     this.itemForm.markAllAsTouched();
+  //   }
+  // }
+
+
   onRegister() {
     if (this.itemForm.valid) {
       const username = this.itemForm.value.username;
@@ -35,23 +67,54 @@ export class RegistrationComponent {
         if (exists) {
           this.showError = true;
           this.errorMessage = 'Username already exists.';
-          setTimeout(() => {
-            this.showError = false;
-            this.errorMessage = '';
-          }, 3000);
+          setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
         } else {
-          this.service.registerUser(this.itemForm.value).subscribe(data => {
-            this.showMessage = true;
-            this.responseMessage = 'You are successfully registered';
-            this.itemForm.reset();
-            setTimeout(() => {
-              this.router.navigate(['/login']);
-            }, 3000);
+          // Save form data and send OTP to email
+          this.pendingFormData = this.itemForm.value;
+          this.service.sendRegistrationOtp(this.itemForm.value.email).subscribe({
+            next: () => {
+              this.otpSent = true;
+            },
+            error: () => {
+              this.showError = true;
+              this.errorMessage = 'Failed to send OTP. Please try again.';
+              setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
+            }
           });
         }
       });
     } else {
       this.itemForm.markAllAsTouched();
     }
+  }
+
+  verifyOtpAndRegister() {
+    if (!this.otpValue || this.otpValue.length !== 6) {
+      this.otpError = 'Please enter the 6-digit OTP sent to your email.';
+      return;
+    }
+    this.otpError = '';
+    this.service.verifyRegistrationOtp(this.pendingFormData.email, this.otpValue).subscribe({
+      next: () => {
+        // OTP verified — now register the user
+        this.service.registerUser(this.pendingFormData).subscribe({
+          next: () => {
+            this.showMessage = true;
+            this.responseMessage = 'You are successfully registered!';
+            this.itemForm.reset();
+            this.otpSent = false;
+            setTimeout(() => { this.router.navigate(['/login']); }, 3000);
+          },
+          error: () => {
+            this.showError = true;
+            this.errorMessage = 'Registration failed. Please try again.';
+            setTimeout(() => { this.showError = false; this.errorMessage = ''; }, 3000);
+          }
+        });
+      },
+      error: () => {
+        this.otpError = 'Invalid or expired OTP. Please try again.';
+      }
+    });
   }
 }  

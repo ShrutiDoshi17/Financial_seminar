@@ -22,6 +22,11 @@ export class LoginComponent {
   captchaAnswer: any = '';
   captchaError: string = '';
 
+  otpSent: boolean = false;
+  otpValue: string = '';
+  pendingUsername: string = '';
+  otpError: string = '';
+
   // Toast
   showCaptchaToast: boolean = false;
   toastMessage: string = '';
@@ -122,6 +127,7 @@ export class LoginComponent {
     }
   }
 
+  
   registration() {
     this.router.navigateByUrl('/registration');
   }

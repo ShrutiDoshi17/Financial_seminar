@@ -1,6 +1,7 @@
 package com.edutech.financial_seminar_and_workshop_management.controller;
 
-
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,4 +64,23 @@ public class RegisterAndLoginController {
 
         return ResponseEntity.ok(new LoginResponse(user.getId(),token, user.getUsername(), user.getEmail(), user.getRole()));
     }
+
+    @PostMapping("/api/user/send-otp")
+        public ResponseEntity<?> sendRegistrationOtp(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        userService.generateAndSendRegistrationOtp(email);
+        return ResponseEntity.ok(Map.of("message", "OTP sent"));
+    }
+
+@PostMapping("/api/user/verify-registration-otp")
+public ResponseEntity<?> verifyRegistrationOtp(@RequestBody Map<String, String> body) {
+    String email = body.get("email");
+    String otp = body.get("otp");
+    boolean valid = userService.verifyRegistrationOtp(email, otp);
+    if (!valid) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(Map.of("error", "Invalid or expired OTP"));
+    }
+    return ResponseEntity.ok(Map.of("verified", true));
+}
 }
