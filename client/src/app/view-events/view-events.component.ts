@@ -29,7 +29,7 @@ export class ViewEventsComponent implements OnInit {
   selectedEvent: any = {};
   status: any;
   currentPage: number = 1;
-  pageSize: number = 2;
+  pageSize: number = 4;
   isAlreadyEnrolled: boolean = false;
   isEnrolling: boolean = false;
   isCheckingEnrollment: boolean = false;
