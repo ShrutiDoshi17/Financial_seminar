@@ -10,7 +10,6 @@ import { AuthService } from './auth.service';
 export class HttpService {
   private apiUrl = environment.apiUrl
   httpOptions: { headers: HttpHeaders }
-  baseUrl: any;
 
   constructor(private http: HttpClient, private service: AuthService) {
     const token = service.getToken()
@@ -47,7 +46,6 @@ export class HttpService {
   }
 
   GetAllevents(): Observable<any> {
-    // return this.http.get<any>(`${this.apiUrl}/api/participant/events`, this.httpOptions)
     return this.http.get<any>(`${this.apiUrl}/api/finance/events`, this.httpOptions)
   }
 
@@ -63,7 +61,6 @@ export class HttpService {
     return this.http.get<any>(`${this.apiUrl}/api/institution/event/${eventId}/resources`, this.httpOptions)
   }
 
-  // Payment 
   createPaymentOrder(amount: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/participant/payment/create-order`, { amount }, this.httpOptions);
   }
@@ -72,13 +69,20 @@ export class HttpService {
     return this.http.post<any>(`${this.apiUrl}/api/participant/payment/verify-and-enroll`, paymentData, this.httpOptions);
   }
 
-
   EnrollParticipant(eventId: any, userId: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/participant/event/${eventId}/enroll?userId=${userId}`, {}, this.httpOptions)
   }
 
   checkEnrollment(eventId: any, userId: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/api/participant/event/${eventId}/check-enroll?userId=${userId}`, this.httpOptions)
+  }
+
+  // ✅ FIXED — was using this.baseUrl (undefined), now correctly uses this.apiUrl
+  getMyEnrolledEventIds(userId: number): Observable<number[]> {
+    return this.http.get<number[]>(
+      `${this.apiUrl}/api/participant/my-enrolled-event-ids?userId=${userId}`,
+      this.httpOptions
+    );
   }
 
   createEvent(details: any): Observable<any> {
@@ -128,33 +132,4 @@ export class HttpService {
   verifyRegistrationOtp(email: string, otp: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/user/verify-registration-otp`, { email, otp });
   }
-
-  getMyEnrolledEventIds(userId: number): Observable<number[]> {
-  return this.http.get<number[]>(
-    `${this.baseUrl}/api/participant/my-enrolled-event-ids?userId=${userId}`
-  );
 }
-
-  //   downloadCertificate(eventId: number) {
-  //   return this.http.get(
-  //     `/api/certificates/download/${eventId}`,
-  //     { responseType: 'blob' }
-  //   );
-  // }
-
-
-
-  // downloadCertificate(eventId: number) {
-  //   const token = localStorage.getItem('token');
-
-  //   return this.http.get(
-  //     `http://localhost:3000/api/certificates/download/${eventId}`,
-  //     {
-  //       responseType: 'blob',
-  //       headers: {
-  //         Authorization: `Bearer ${token}`
-  //       }
-  //     }
-  //   );
-  // }
-} 

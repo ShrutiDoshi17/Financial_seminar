@@ -12,7 +12,6 @@ declare var Razorpay: any
   styleUrls: ['./view-events.component.scss'],
   providers: [DatePipe]
 })
-
 export class ViewEventsComponent implements OnInit {
   formModel: any = { status: null };
   showError: boolean = false;
@@ -34,9 +33,7 @@ export class ViewEventsComponent implements OnInit {
   isEnrolling: boolean = false;
   isCheckingEnrollment: boolean = false;
 
-  // ✅ NEW — tracks which event IDs the user is already enrolled in
   enrolledEventIds: Set<number> = new Set();
-  // ✅ NEW — tracks which event is currently processing payment (row-level spinner)
   enrollingEventId: number | null = null;
 
   constructor(
@@ -50,28 +47,105 @@ export class ViewEventsComponent implements OnInit {
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
     this.userId = userIdString ? parseInt(userIdString, 10) : null;
-    this.getEvent();
-    this.loadEnrolledEventIds(); // ✅ NEW — load enrolled IDs on init
+    this.loadEnrolledEventIds(); // ✅ load first, then events
   }
 
-  // ✅ NEW — fetches all event IDs user is enrolled in
+  // ✅ Load enrolled IDs first, then load events
   loadEnrolledEventIds() {
     this.httpService.getMyEnrolledEventIds(this.userId).subscribe({
       next: (ids: number[]) => {
         this.enrolledEventIds = new Set(ids);
+        this.getEvent(); // load events AFTER enrolled IDs are ready
       },
       error: () => {
-        // silent fail — table still works, just won't show badges
+        this.getEvent(); // still load events even if this fails
       }
     });
   }
 
-  // ✅ NEW — called from Enroll button in the table row
+  getEvent() {
+    this.httpService.viewAllEvents().subscribe({
+      next: (data: any) => {
+        this.eventList = data;
+        this.filteredList = this.eventList;
+        if (this.selectedEvent?.id) {
+          this.refreshSelectedEvent();
+        }
+      },
+      error: () => {
+        this.showError = true;
+        this.errorMessage = 'Failed to load events. Please try again later.';
+      }
+    });
+  }
+
+  refreshSelectedEvent() {
+    const updated = this.eventList.find(e => e.id === this.selectedEvent.id);
+    if (updated) {
+      this.selectedEvent = updated;
+    }
+  }
+
+  viewDetails(event: any) {
+    this.selectedEvent = event;
+    this.status = '';
+
+    // ✅ Sync isAlreadyEnrolled from enrolledEventIds immediately (no flicker)
+    this.isAlreadyEnrolled = this.enrolledEventIds.has(event.id);
+    this.isCheckingEnrollment = false;
+
+    // ✅ Still verify from backend to stay accurate
+    this.httpService.checkEnrollment(this.selectedEvent.id, this.userId).subscribe({
+      next: (data: any) => {
+        const enrolled = data != null;
+        this.isAlreadyEnrolled = enrolled;
+        // Keep enrolledEventIds in sync with backend truth
+        if (enrolled) {
+          this.enrolledEventIds.add(event.id);
+        } else {
+          this.enrolledEventIds.delete(event.id);
+        }
+      },
+      error: () => {
+        // keep whatever was already set from enrolledEventIds
+      }
+    });
+  }
+
+  toggleDetails(event: any) {
+    if (this.selectedEvent.id === event.id) {
+      this.selectedEvent = {};
+    } else {
+      this.viewDetails(event);
+    }
+  }
+
+  isCompleted(): boolean {
+    return this.selectedEvent?.status === 'COMPLETED';
+  }
+
+  applyFilter() {
+    const query = this.searchQuery.trim().toLowerCase();
+    if (!query) {
+      this.filteredList = this.eventList;
+      return;
+    }
+    this.filteredList = this.eventList.filter((event: any) => {
+      return (
+        event.id?.toString().includes(query) ||
+        event.title?.toLowerCase().includes(query) ||
+        event.location?.toLowerCase().includes(query) ||
+        event.status?.toLowerCase().includes(query)
+      );
+    });
+  }
+
+  // ✅ Enroll from table row
   enrollFromTable(event: any) {
     if (this.enrollingEventId === event.id || this.enrolledEventIds.has(event.id)) return;
     this.enrollingEventId = event.id;
 
-    const amount = 100; // ₹1 in paise
+    const amount = 100;
 
     this.httpService.createPaymentOrder(amount).subscribe({
       next: (order: any) => {
@@ -96,7 +170,7 @@ export class ViewEventsComponent implements OnInit {
                 next: () => {
                   this.enrollingEventId = null;
                   this.enrolledEventIds.add(event.id);
-                  // if this event is open in detail panel, sync it too
+                  // ✅ Sync detail panel if this event is open
                   if (this.selectedEvent?.id === event.id) {
                     this.isAlreadyEnrolled = true;
                   }
@@ -140,75 +214,7 @@ export class ViewEventsComponent implements OnInit {
     });
   }
 
-  getEvent() {
-    this.httpService.viewAllEvents().subscribe({
-      next: (data: any) => {
-        this.eventList = data;
-        this.filteredList = this.eventList;
-        if (this.selectedEvent?.id) {
-          this.refreshSelectedEvent();
-        }
-      },
-      error: (err: any) => {
-        this.showError = true;
-        this.errorMessage = 'Failed to load events. Please try again later.';
-      }
-    });
-  }
-
-  refreshSelectedEvent() {
-    const updated = this.eventList.find(e => e.id === this.selectedEvent.id);
-    if (updated) {
-      this.selectedEvent = updated;
-    }
-  }
-
-  viewDetails(event: any) {
-    this.selectedEvent = event;
-    this.isAlreadyEnrolled = false;
-    this.isCheckingEnrollment = true;
-    this.status = '';
-
-    this.httpService.checkEnrollment(this.selectedEvent.id, this.userId).subscribe({
-      next: (data: any) => {
-        this.isAlreadyEnrolled = data != null;
-        this.isCheckingEnrollment = false;
-      },
-      error: () => {
-        this.isAlreadyEnrolled = false;
-        this.isCheckingEnrollment = false;
-      }
-    });
-  }
-
-  toggleDetails(event: any) {
-    if (this.selectedEvent.id === event.id) {
-      this.selectedEvent = {};
-    } else {
-      this.viewDetails(event);
-    }
-  }
-
-  isCompleted(): boolean {
-    return this.selectedEvent?.status === 'COMPLETED';
-  }
-
-  applyFilter() {
-    const query = this.searchQuery.trim().toLowerCase();
-    if (!query) {
-      this.filteredList = this.eventList;
-      return;
-    }
-    this.filteredList = this.eventList.filter((event: any) => {
-      return (
-        event.id?.toString().includes(query) ||
-        event.title?.toLowerCase().includes(query) ||
-        event.location?.toLowerCase().includes(query) ||
-        event.status?.toLowerCase().includes(query)
-      );
-    });
-  }
-
+  // ✅ Enroll from detail panel
   enroll() {
     if (this.isEnrolling || this.isAlreadyEnrolled) return;
     this.isEnrolling = true;
@@ -238,7 +244,8 @@ export class ViewEventsComponent implements OnInit {
                 next: () => {
                   this.isEnrolling = false;
                   this.isAlreadyEnrolled = true;
-                  this.enrolledEventIds.add(this.selectedEvent.id); // ✅ sync table badge too
+                  // ✅ Sync table badge too
+                  this.enrolledEventIds.add(this.selectedEvent.id);
                   this.showToast('Enrolled successfully!');
                 },
                 error: () => {
@@ -288,9 +295,7 @@ export class ViewEventsComponent implements OnInit {
     this.showError = false;
     this.formModel.timestamp = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
-    const userId = this.userId;
-
-    this.httpService.AddFeedbackByParticipants(this.selectedEvent.id, userId, this.formModel).subscribe({
+    this.httpService.AddFeedbackByParticipants(this.selectedEvent.id, this.userId, this.formModel).subscribe({
       next: () => {
         this.formModel = {};
         this.showToast('Feedback submitted successfully!');
@@ -338,7 +343,7 @@ export class ViewEventsComponent implements OnInit {
   }
 
   get totalPages(): number {
-    return Math.ceil(this.eventList.length / this.pageSize);
+    return Math.ceil(this.filteredList.length / this.pageSize);
   }
 
   get pageNumbers(): number[] {
@@ -427,4 +432,4 @@ export class ViewEventsComponent implements OnInit {
     link.href = canvas.toDataURL('image/png');
     link.click();
   }
-}
+} 
