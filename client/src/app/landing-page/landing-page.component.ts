@@ -17,9 +17,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   // Track if counters already ran
   private countersStarted: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     // Watch stats section — start counter when scrolled into view
@@ -41,37 +41,44 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   }
 
   startLandingCounters(): void {
-    this.countUp('animEvents', 500, 2000);
-    this.countUp('animProfessionals', 50, 2000);
-    this.countUp('animParticipants', 1000, 2000);
-    this.countUp('animSatisfaction', 98, 2000);
+    // Stagger each counter slightly
+    // So they dont all start at same time
+    setTimeout(() => this.countUp('animEvents', 528, 3500), 0);
+    setTimeout(() => this.countUp('animProfessionals', 45, 3500), 300);
+    setTimeout(() => this.countUp('animParticipants', 1250, 3500), 600);
+    setTimeout(() => this.countUp('animSatisfaction', 98, 3500), 900);
   }
 
   countUp(
     property: 'animEvents' | 'animProfessionals' |
-              'animParticipants' | 'animSatisfaction',
+      'animParticipants' | 'animSatisfaction',
     target: number,
     duration: number
   ): void {
-    const steps = 60;
-    const stepTime = duration / steps;
-    const increment = target / steps;
-    let current = 0;
-    let step = 0;
+    const startTime = performance.now();
+    const startValue = 0;
 
-    const timer = setInterval(() => {
-      step++;
-      current = Math.min(
-        Math.round(increment * step),
-        target
-      );
-      this[property] = current;
+    const animate = (currentTime: number) => {
+      // How much time has passed as a fraction 0→1
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
 
-      if (step >= steps || current >= target) {
+      // Ease out cubic — starts fast slows at end
+      // Feels like number settling into place
+      const eased = 1 - Math.pow(1 - progress, 6);
+
+      // Current display value
+      this[property] = Math.round(startValue + (target - startValue) * eased);
+
+      // Keep animating until done
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
         this[property] = target;
-        clearInterval(timer);
       }
-    }, stepTime);
+    };
+
+    requestAnimationFrame(animate);
   }
 
   scrollToSection(sectionId: string): void {

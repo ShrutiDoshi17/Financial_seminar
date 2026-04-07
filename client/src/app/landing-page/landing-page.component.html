@@ -83,10 +83,10 @@
         </g>
 
         <!-- Floating currency symbols -->
-        <text x="580" y="120" fill="rgba(240,165,0,0.12)" font-size="120" font-weight="bold">$</text>
-        <text x="100" y="700" fill="rgba(46,134,171,0.1)" font-size="100" font-weight="bold">₹</text>
-        <text x="980" y="700" fill="rgba(240,165,0,0.08)" font-size="130" font-weight="bold">€</text>
-        <text x="20" y="200" fill="rgba(46,134,171,0.08)" font-size="90" font-weight="bold">£</text>
+<text x="580" y="120" fill="rgba(240,165,0,0.28)" font-size="160" font-weight="bold">$</text>
+<text x="80"  y="720" fill="rgba(46,134,171,0.22)" font-size="140" font-weight="bold">₹</text>
+<text x="960" y="720" fill="rgba(240,165,0,0.20)" font-size="170" font-weight="bold">€</text>
+<text x="10"  y="220" fill="rgba(46,134,171,0.18)" font-size="130" font-weight="bold">£</text>
 
         <!-- Pie Chart top right -->
         <g transform="translate(950, 80)">
@@ -245,22 +245,30 @@
   <section class="stats-section">
     <div class="stats-grid">
       <div class="stat-item">
-        <div class="stat-number">500<span>+</span></div>
+        <div class="stat-number">
+          {{ animEvents }}<span>+</span>
+        </div>
         <div class="stat-label">Events Conducted</div>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <div class="stat-number">50<span>+</span></div>
+        <div class="stat-number">
+          {{ animProfessionals }}<span>+</span>
+        </div>
         <div class="stat-label">Expert Professionals</div>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <div class="stat-number">1000<span>+</span></div>
+        <div class="stat-number">
+          {{ animParticipants }}<span>+</span>
+        </div>
         <div class="stat-label">Active Participants</div>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <div class="stat-number">98<span>%</span></div>
+        <div class="stat-number">
+          {{ animSatisfaction }}<span>%</span>
+        </div>
         <div class="stat-label">Satisfaction Rate</div>
       </div>
     </div>
