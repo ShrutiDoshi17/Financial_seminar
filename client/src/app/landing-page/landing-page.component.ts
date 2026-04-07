@@ -43,10 +43,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   startLandingCounters(): void {
     // Stagger each counter slightly
     // So they dont all start at same time
-    setTimeout(() => this.countUp('animEvents', 528, 3500), 0);
-    setTimeout(() => this.countUp('animProfessionals', 45, 3500), 300);
-    setTimeout(() => this.countUp('animParticipants', 1250, 3500), 600);
-    setTimeout(() => this.countUp('animSatisfaction', 98, 3500), 900);
+    setTimeout(() => this.countUp('animEvents', 251, 3500), 0);
+    setTimeout(() => this.countUp('animProfessionals', 45, 3500), 0);
+    setTimeout(() => this.countUp('animParticipants', 1125, 3500), 0);
+    setTimeout(() => this.countUp('animSatisfaction', 98, 3500), 0);
   }
 
   countUp(

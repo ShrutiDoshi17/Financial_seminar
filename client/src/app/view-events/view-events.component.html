@@ -54,8 +54,8 @@
         <i class="bi bi-calendar-event"></i>
         <span>Event Listings</span>
         <div>
-          <input type="text" class="ve-search-input" placeholder="Search by title or ID..."
-            [(ngModel)]="searchQuery" (input)="applyFilter()" />
+          <input type="text" class="ve-search-input" placeholder="Search by title or ID..." [(ngModel)]="searchQuery"
+            (input)="applyFilter()" />
         </div>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
@@ -69,14 +69,13 @@
               <th>Schedule</th>
               <th>Location</th>
               <th>Status</th>
-              <th>Enroll</th>  <!-- ✅ NEW column -->
+              <th>Enroll</th> <!-- ✅ NEW column -->
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let event of paginatedList"
-              [class.ve-table__row--active]="selectedEvent.id === event.id">
+            <tr *ngFor="let event of paginatedList" [class.ve-table__row--active]="selectedEvent.id === event.id">
 
               <!-- ✅ # td REMOVED -->
               <td class="ve-table__title">{{ event.title }}</td>
@@ -93,26 +92,36 @@
                 </span>
               </td>
 
-              <!-- ✅ NEW Enroll column -->
               <td>
-                <button
-                  *ngIf="!enrolledEventIds.has(event.id) && enrollingEventId !== event.id"
-                  class="ve-btn-enroll-inline"
-                  (click)="enrollFromTable(event)">
-                  <i class="bi bi-person-plus"></i> Enroll Now
-                </button>
+                <!-- PLANNED: show Enroll Now or Enrolled -->
+                <ng-container *ngIf="event.status === 'PLANNED'">
+                  <button *ngIf="!enrolledEventIds.has(event.id) && enrollingEventId !== event.id"
+                    class="ve-btn-enroll-inline" (click)="enrollFromTable(event)">
+                    <i class="bi bi-person-plus"></i> Enroll Now
+                  </button>
 
-                <span
-                  *ngIf="enrollingEventId === event.id"
-                  class="ve-enrolling-spinner">
-                  <i class="bi bi-arrow-repeat ve-spin"></i> Processing...
-                </span>
+                  <span *ngIf="enrollingEventId === event.id" class="ve-enrolling-spinner">
+                    <i class="bi bi-arrow-repeat ve-spin"></i> Processing...
+                  </span>
 
-                <span
-                  *ngIf="enrolledEventIds.has(event.id)"
-                  class="ve-enrolled-badge">
-                  <i class="bi bi-check-circle-fill"></i> Enrolled
-                </span>
+                  <span *ngIf="enrolledEventIds.has(event.id)" class="ve-enrolled-badge">
+                    <i class="bi bi-check-circle-fill"></i> Enrolled
+                  </span>
+                </ng-container>
+
+                <!-- ONGOING: event is live -->
+                <ng-container *ngIf="event.status === 'ONGOING'">
+                  <span class="ve-live-badge">
+                    <i class="bi bi-broadcast"></i> Live Now
+                  </span>
+                </ng-container>
+
+                <!-- COMPLETED: event is over -->
+                <ng-container *ngIf="event.status === 'COMPLETED'">
+                  <span class="ve-concluded-badge">
+                    <i class="bi bi-flag-fill"></i> Concluded
+                  </span>
+                </ng-container>
               </td>
 
               <td>
@@ -133,8 +142,8 @@
         <button class="ve-page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
           <i class="bi bi-chevron-left"></i>
         </button>
-        <button *ngFor="let page of pageNumbers" class="ve-page-btn"
-          [class.ve-page-btn--active]="page === currentPage" (click)="changePage(page)">
+        <button *ngFor="let page of pageNumbers" class="ve-page-btn" [class.ve-page-btn--active]="page === currentPage"
+          (click)="changePage(page)">
           {{ page }}
         </button>
         <button class="ve-page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">

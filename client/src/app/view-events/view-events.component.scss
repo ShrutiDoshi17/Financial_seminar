@@ -936,3 +936,70 @@ color: rgba(255, 255, 255, 0.35);
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+
+/* ✅ Live Now badge */
+.ve-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(240, 165, 0, 0.12);
+  border: 1px solid rgba(240, 165, 0, 0.4);
+  color: #F0A500;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  i { animation: vePulse 1.2s ease-in-out infinite; }
+}
+
+@keyframes vePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ✅ Concluded badge */
+.ve-concluded-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ✅ Detail panel — Live message */
+.ve-detail-live-msg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(240, 165, 0, 0.08);
+  border: 1px solid rgba(240, 165, 0, 0.3);
+  color: #F0A500;
+  font-size: 0.84rem;
+  font-weight: 500;
+
+  i { animation: vePulse 1.2s ease-in-out infinite; }
+}
+
+/* ✅ Detail panel — Concluded message */
+.ve-detail-concluded-msg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.84rem;
+  font-weight: 500;
+}
