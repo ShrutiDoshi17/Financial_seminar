@@ -3,9 +3,7 @@
   <!-- ✅ SUCCESS TOAST -->
   <div *ngIf="showMessage" class="ve-toast-host">
     <div class="ve-toast-notification ve-success-toast">
-      <div class="ve-toast-icon">
-        <i class="bi bi-check-circle-fill"></i>
-      </div>
+      <div class="ve-toast-icon"><i class="bi bi-check-circle-fill"></i></div>
       <div class="ve-toast-content">
         <div class="ve-toast-title">Success</div>
         <div class="ve-toast-message">{{ responseMessage }}</div>
@@ -20,9 +18,7 @@
   <!-- ❌ ERROR TOAST -->
   <div *ngIf="showError" class="ve-toast-host">
     <div class="ve-toast-notification ve-error-toast">
-      <div class="ve-toast-icon">
-        <i class="bi bi-exclamation-circle-fill"></i>
-      </div>
+      <div class="ve-toast-icon"><i class="bi bi-exclamation-circle-fill"></i></div>
       <div class="ve-toast-content">
         <div class="ve-toast-title">Error</div>
         <div class="ve-toast-message">{{ errorMessage }}</div>
@@ -54,8 +50,8 @@
         <i class="bi bi-calendar-event"></i>
         <span>Event Listings</span>
         <div>
-          <input type="text" class="ve-search-input" placeholder="Search by title or ID..." [(ngModel)]="searchQuery"
-            (input)="applyFilter()" />
+          <input type="text" class="ve-search-input" placeholder="Search by title or ID..."
+            [(ngModel)]="searchQuery" (input)="applyFilter()" />
         </div>
         <div class="ve-count">{{ eventList.length }} events</div>
       </div>
@@ -64,20 +60,18 @@
         <table class="ve-table">
           <thead>
             <tr>
-              <!-- ✅ # column REMOVED -->
               <th>Title</th>
               <th>Schedule</th>
               <th>Location</th>
               <th>Status</th>
-              <th>Enroll</th> <!-- ✅ NEW column -->
+              <th>Enroll</th>
               <th>Action</th>
             </tr>
           </thead>
-
           <tbody>
-            <tr *ngFor="let event of paginatedList" [class.ve-table__row--active]="selectedEvent.id === event.id">
+            <tr *ngFor="let event of paginatedList"
+              [class.ve-table__row--active]="selectedEvent.id === event.id">
 
-              <!-- ✅ # td REMOVED -->
               <td class="ve-table__title">{{ event.title }}</td>
               <td>{{ event.schedule }}</td>
               <td>{{ event.location }}</td>
@@ -87,36 +81,31 @@
                     've-status-badge--planned':   event.status === 'PLANNED',
                     've-status-badge--ongoing':   event.status === 'ONGOING',
                     've-status-badge--completed': event.status === 'COMPLETED'
-                  }">
-                  {{ event.status }}
-                </span>
+                  }">{{ event.status }}</span>
               </td>
 
               <td>
-                <!-- PLANNED: show Enroll Now or Enrolled -->
                 <ng-container *ngIf="event.status === 'PLANNED'">
-                  <button *ngIf="!enrolledEventIds.has(event.id) && enrollingEventId !== event.id"
-                    class="ve-btn-enroll-inline" (click)="enrollFromTable(event)">
+                  <button
+                    *ngIf="!enrolledEventIds.has(event.id) && enrollingEventId !== event.id"
+                    class="ve-btn-enroll-inline"
+                    (click)="enrollFromTable(event)">
                     <i class="bi bi-person-plus"></i> Enroll Now
                   </button>
-
                   <span *ngIf="enrollingEventId === event.id" class="ve-enrolling-spinner">
                     <i class="bi bi-arrow-repeat ve-spin"></i> Processing...
                   </span>
-
                   <span *ngIf="enrolledEventIds.has(event.id)" class="ve-enrolled-badge">
                     <i class="bi bi-check-circle-fill"></i> Enrolled
                   </span>
                 </ng-container>
 
-                <!-- ONGOING: event is live -->
                 <ng-container *ngIf="event.status === 'ONGOING'">
                   <span class="ve-live-badge">
                     <i class="bi bi-broadcast"></i> Live Now
                   </span>
                 </ng-container>
 
-                <!-- COMPLETED: event is over -->
                 <ng-container *ngIf="event.status === 'COMPLETED'">
                   <span class="ve-concluded-badge">
                     <i class="bi bi-flag-fill"></i> Concluded
@@ -131,19 +120,17 @@
                   {{ selectedEvent.id === event.id ? 'Close' : 'Details' }}
                 </button>
               </td>
-
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Pagination -->
       <div class="ve-pagination" *ngIf="totalPages > 1">
         <button class="ve-page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
           <i class="bi bi-chevron-left"></i>
         </button>
-        <button *ngFor="let page of pageNumbers" class="ve-page-btn" [class.ve-page-btn--active]="page === currentPage"
-          (click)="changePage(page)">
+        <button *ngFor="let page of pageNumbers" class="ve-page-btn"
+          [class.ve-page-btn--active]="page === currentPage" (click)="changePage(page)">
           {{ page }}
         </button>
         <button class="ve-page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
@@ -151,10 +138,9 @@
         </button>
         <span class="ve-page-info">Page {{ currentPage }} of {{ totalPages }}</span>
       </div>
-
     </div>
 
-    <!-- Event Detail Panel -->
+    <!-- ✅ Event Detail Panel -->
     <div *ngIf="selectedEvent.id" class="ve-detail-card">
 
       <div class="ve-detail-card__header">
@@ -163,9 +149,7 @@
             've-status-badge--planned':   selectedEvent.status === 'PLANNED',
             've-status-badge--ongoing':   selectedEvent.status === 'ONGOING',
             've-status-badge--completed': selectedEvent.status === 'COMPLETED'
-          }">
-          {{ selectedEvent.status }}
-        </span>
+          }">{{ selectedEvent.status }}</span>
       </div>
 
       <div class="ve-detail-card__info">
@@ -184,20 +168,45 @@
       </div>
 
       <div class="ve-detail-card__actions">
-        <ng-container *ngIf="!isCheckingEnrollment">
-          <button *ngIf="!isAlreadyEnrolled && !isCompleted()" class="ve-btn-enroll" (click)="enroll()">
-            <i class="bi bi-person-plus me-2"></i>
-            Enroll Now
+
+        <!-- ── PLANNED ── -->
+        <ng-container *ngIf="selectedEvent.status === 'PLANNED' && !isCheckingEnrollment">
+          <button *ngIf="!isAlreadyEnrolled" class="ve-btn-enroll" (click)="enroll()">
+            <i class="bi bi-person-plus me-2"></i> Enroll Now
           </button>
           <button *ngIf="isAlreadyEnrolled" class="ve-btn-enrolled" disabled>
-            <i class="bi bi-check-circle me-2"></i>
-            Enrolled
+            <i class="bi bi-check-circle me-2"></i> Enrolled
           </button>
         </ng-container>
 
-        <button *ngIf="isCompleted() && isAlreadyEnrolled" (click)="downloadCertificate()" class="ve-btn-certificate">
-          <i class="bi bi-award"></i> Download Certificate
-        </button>
+        <!-- ── ONGOING ── -->
+        <ng-container *ngIf="selectedEvent.status === 'ONGOING'">
+          <div class="ve-detail-live-msg">
+            <i class="bi bi-broadcast"></i>
+            This event is currently live. Enrollment is closed.
+          </div>
+        </ng-container>
+
+        <!-- ── COMPLETED ── -->
+        <ng-container *ngIf="selectedEvent.status === 'COMPLETED'">
+          <div class="ve-detail-concluded-msg">
+            <i class="bi bi-flag-fill"></i>
+            This event has concluded.
+          </div>
+
+          <!-- ✅ Certificate — shown if enrolled -->
+          <button *ngIf="isAlreadyEnrolled || enrolledEventIds.has(selectedEvent.id)"
+            (click)="downloadCertificate()" class="ve-btn-certificate">
+            <i class="bi bi-award"></i> Download Certificate
+          </button>
+
+          <!-- ✅ Not enrolled message -->
+          <div *ngIf="!isAlreadyEnrolled && !enrolledEventIds.has(selectedEvent.id) && !isCheckingEnrollment"
+            class="ve-detail-concluded-msg" style="margin-top: 8px; font-size: 0.78rem;">
+            <i class="bi bi-info-circle"></i>
+            You were not enrolled in this event.
+          </div>
+        </ng-container>
 
         <div *ngIf="status" class="ve-status-result">
           <i class="bi bi-info-circle"></i> {{ status }}
@@ -206,12 +215,17 @@
 
       <div class="ve-divider"></div>
 
-      <div *ngIf="isCompleted()">
-        <div *ngIf="isAlreadyEnrolled" class="ve-feedback-form">
+      <!-- ✅ Feedback — COMPLETED only -->
+      <div *ngIf="selectedEvent.status === 'COMPLETED'">
+
+        <!-- ✅ Leave Feedback form — if enrolled -->
+        <div *ngIf="isAlreadyEnrolled || enrolledEventIds.has(selectedEvent.id)"
+          class="ve-feedback-form">
           <h4 class="ve-feedback-form__title">Leave Feedback</h4>
           <div class="ve-input-group">
             <i class="bi bi-pen"></i>
-            <textarea rows="3" name="content" class="ve-textarea" placeholder="Share your experience..."
+            <textarea rows="3" name="content" class="ve-textarea"
+              placeholder="Share your experience..."
               [(ngModel)]="formModel.content">
             </textarea>
           </div>
@@ -220,6 +234,7 @@
           </button>
         </div>
 
+        <!-- Feedback list — always shown for COMPLETED -->
         <div class="ve-feedback-section">
           <h4 class="ve-feedback-section__title mt-4">
             <i class="bi bi-chat-dots"></i> Feedback
@@ -228,6 +243,7 @@
             No feedback yet.
           </div>
           <div *ngFor="let r of selectedEvent.feedbacks" class="ve-feedback-item">
+            <h3 class="ve-feedback-item__title">{{ r.user.username }}</h3>
             <p class="ve-feedback-item__content">{{ r.content }}</p>
             <span class="ve-feedback-item__time">{{ r.timestamp }}</span>
           </div>
